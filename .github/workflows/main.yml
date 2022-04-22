@@ -1,0 +1,45 @@
+name: test and deploy
+on:
+  push:
+    branches: 
+      - main
+jobs:
+  front:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: actions/checkout@master
+      - name: front install
+        working-directory: ./front
+        run : npm i
+      - name: front test
+        working-directory: ./front
+        run : npm test
+      
+  back:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: actions/checkout@master
+      - name: back install
+        working-directory: ./back
+        run : npm i
+      - name: back test
+        working-directory: ./back
+        run : npm test
+  
+  deploy:
+    needs: [front, back]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
+          username: ${{ secrets.USERNAME }} 
+          host: ${{ secrets.SERVER }} 
+          command : cd web800 && ./push.sh && ./launch.sh
+          
+    
