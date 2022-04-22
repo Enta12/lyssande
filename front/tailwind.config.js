@@ -1,5 +1,3 @@
-const { url } = require("inspector");
-
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
