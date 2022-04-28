@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Login from './pages/login/login';
+import AppRoute from './AppRoute'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
+    <AppRoute />
   </React.StrictMode>,
   document.getElementById('root')
 );
