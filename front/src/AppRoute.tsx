@@ -4,6 +4,7 @@ import Layout from "./components/layout";
 import Login from "./pages/login/login";
 import Pj from "./pages/pj/pj";
 import AddPj from "./pages/addPj/addPj";
+import Calendar from "./pages/calendar/CalendarPage";
 
 
 function AppRoute() {
@@ -12,6 +13,7 @@ function AppRoute() {
           <Routes>
               <Route path="/pj" element={<Layout><Pj /></Layout>} />
               <Route path="/pj/new" element={<Layout><AddPj /></Layout>} />
+              <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
               <Route path="/" element={<Login />} />
           </Routes>
       </Router>

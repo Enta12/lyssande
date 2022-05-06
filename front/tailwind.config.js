@@ -8,6 +8,7 @@ module.exports = {
         orange: '#BC8034',
         lightGrey: '#C9C9C9',
         brown: '#583420',
+        lightBrown: '#765948',
         swamp: '#274747',
         beige: '#F1E5D5'
       },
@@ -17,5 +18,7 @@ module.exports = {
       }
     }
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }
