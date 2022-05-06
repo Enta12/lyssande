@@ -12,7 +12,7 @@ const Layout = (props : {children: JSX.Element, notifMessage?: string}) => {
                 {notifMessage && <Notif>{notifMessage}</Notif>}
             </div>
             
-            <section className="flex align-center justify-center py-6 bg-amber-100">{children}</section>
+            <section className="items-center flex justify-start py-6 bg-amber-100 flex-col mx-40">{children}</section>
             <Footer />
         </div>
     )
