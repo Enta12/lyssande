@@ -1,4 +1,4 @@
-import { MouseEvent, useState, useRef } from "react";
+import { MouseEvent, useState, useRef, useEffect } from "react";
 import ReactTooltip from "react-tooltip";
 import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
@@ -14,11 +14,10 @@ type Props = {
     pjs : PjType[],
     img: string,
     mapName: string,
-    heightCoefficient: number
 }
 
 
-const Map = ({img, pjs, mapName, heightCoefficient}: Props) => {
+const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
     const [currentPos, setCurrentPos] = useState([{x: -1, y:-1}]);
     const tokens: JSX.Element[] = []
@@ -37,16 +36,35 @@ const Map = ({img, pjs, mapName, heightCoefficient}: Props) => {
                 setCurrentPos(currentItem)
         }
     }
-    pjs.forEach((pj, index) => {
-        if(mapRef?.current){
-            if(currentPos[index]){
+
+    
+        pjs.forEach((pj, index) => {
+            if(mapRef?.current){
+                if(currentPos[index]?.x > 0){
+                    tokens[index] = 
+                    <Token
+                    handleClick={() => {setpjSelected(index)}}
+                    img={pjs[index].img} 
+                    pj={pjs[index]} 
+                    key={pj.name} 
+                    pos={currentPos[index]}
+                    imgCoord={{
+                            xStart: mapRef.current.x,
+                            width: mapRef.current.width,
+                            yStart: mapRef.current.y,
+                            height: mapRef.current.height
+                        }}
+                    />
+                }
+                else if(pj.position)
                 tokens[index] = 
-                <Token
-                   img={pjs[index].img} 
-                   pj={pjs[index]} 
-                   key={pj.name} 
-                   pos={currentPos[index]}
-                   imgCoord={{
+                <Token 
+                      handleClick={() => {setpjSelected(index)}}
+                    img={pj.img} 
+                    key={pj.name} 
+                    pj={pj} 
+                    pos={pj.position}
+                    imgCoord={{
                         xStart: mapRef.current.x,
                         width: mapRef.current.width,
                         yStart: mapRef.current.y,
@@ -54,21 +72,6 @@ const Map = ({img, pjs, mapName, heightCoefficient}: Props) => {
                     }}
                 />
             }
-            else if(pj.position)
-            tokens[index] = 
-            <Token   
-                img={pj.img} 
-                key={pj.name} 
-                pj={pj} 
-                pos={pj.position}
-                imgCoord={{
-                    xStart: mapRef.current.x,
-                    width: mapRef.current.width,
-                    yStart: mapRef.current.y,
-                    height: mapRef.current.height
-                }}
-            />
-        }
     })
 
     const updatePjs = () => {
@@ -90,11 +93,12 @@ const Map = ({img, pjs, mapName, heightCoefficient}: Props) => {
     )
 }
 
-const Token = ({img, pj, pos, imgCoord} : {img: string, pj: PjType, pos: Pos, imgCoord:Img }) => {
+const Token = ({img, pj, pos, imgCoord, handleClick} : {img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
     console.log("pos", pos)
     return (
             <>
-                <img 
+                <img
+                onClick={handleClick} 
                 data-tip 
                 data-for={`${pj.name}RegisterTip`}
                 src={img} 
@@ -106,6 +110,7 @@ const Token = ({img, pj, pos, imgCoord} : {img: string, pj: PjType, pos: Pos, im
                         left: `${(pos.x*imgCoord.width)+imgCoord.xStart -12}px`
                     }
                 }
+                
                 />
                 <ReactTooltip
                     id={`${pj.name}RegisterTip`} 
