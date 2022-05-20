@@ -1,15 +1,11 @@
-import { pseudoRandomBytes } from "crypto";
-import { MouseEvent, useState, useRef, SetStateAction, Dispatch } from "react";
-type Pos = {
-    x: number,
-    y: number
-}
+import { MouseEvent, useState, useRef } from "react";
+import ReactTooltip from "react-tooltip";
+import { Pos, PjType } from "../../types";
+import PjCard from "../pjCard";
+
+
 type Props = {
-    pjs : {
-        positions? : Pos,
-        name: string,
-        img: string
-    }[],
+    pjs : PjType[],
     img: string,
     mapName: string,
 
@@ -36,10 +32,10 @@ const Map = ({img, pjs, mapName}: Props) => {
     pjs.forEach((pj, index) => {
         if(mapRef?.current){
             if(currentPos[index]){
-                tokens[index] = <Token img={pjs[index].img} alt={pjs[index].name} pos={currentPos[index]} imgPos={{x: mapRef.current.x, y: mapRef.current.y}}/>
+                tokens[index] = <Token img={pjs[index].img} pj={pjs[index]} pos={currentPos[index]}/>
             }
-            else if(pj.positions)
-            tokens[index] = <Token img={pj.img} key={pj.name} alt={pj.name} pos={pj.positions} imgPos={{x: mapRef.current.x, y: mapRef.current.y}}/>
+            else if(pj.position)
+            tokens[index] = <Token img={pj.img} key={pj.name} pj={pj} pos={pj.position}/>
         }
     })
 
@@ -61,20 +57,32 @@ const Map = ({img, pjs, mapName}: Props) => {
     )
 }
 
-const Token = ({img, alt, pos, imgPos} : {img: string, alt: string, pos: Pos, imgPos: Pos}) => {
+const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
     return (
-
-            <img 
-            src={img} 
-            alt={alt} 
-            className="absolute h-6 w-6 object-cover rounded-xl border border-black"
-            style={
-                {
-                    top: `${pos.y-12}px`,
-                    left: `${pos.x-12}px`
+            <>
+                <img 
+                data-tip 
+                data-for={`${pj.name}RegisterTip`}
+                src={img} 
+                alt={pj.name} 
+                className="absolute h-6 w-6 object-cover rounded-xl border border-black"
+                style={
+                    {
+                        top: `${pos.y-12}px`,
+                        left: `${pos.x-12}px`
+                    }
                 }
-            }
-         />
+                />
+                <ReactTooltip
+                    id={`${pj.name}RegisterTip`} 
+                    place="right" 
+                    effect="solid"
+                    backgroundColor="none"
+                 >
+                    <PjCard pjData={pj} />
+                </ReactTooltip>
+            </>
+            
     ); 
 }
 
