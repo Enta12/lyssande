@@ -2,6 +2,7 @@ import { MouseEvent, useState, useRef } from "react";
 import ReactTooltip from "react-tooltip";
 import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
+import PrimaryButton from "../primary-button";
 
 
 type Props = {
@@ -32,7 +33,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     pjs.forEach((pj, index) => {
         if(mapRef?.current){
             if(currentPos[index]){
-                tokens[index] = <Token img={pjs[index].img} pj={pjs[index]} pos={currentPos[index]}/>
+                tokens[index] = <Token img={pjs[index].img} pj={pjs[index]} key={pj.name} pos={currentPos[index]}/>
             }
             else if(pj.position)
             tokens[index] = <Token img={pj.img} key={pj.name} pj={pj} pos={pj.position}/>
@@ -44,16 +45,16 @@ const Map = ({img, pjs, mapName}: Props) => {
         /* Send pjSelected */
     }
     const [pjSelected, setpjSelected] = useState(-1);
-    console.log("rendered")
     return (
-        <div>
-            <img className="" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
+        <>
+            <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
-            {pjs.map((pj, index) => {
-                return (<button onClick={() => {setpjSelected(index)}} key={pj.name}> {pj.name} </button>
-            )})}
-            {}
-        </div>
+            <div className="flex gap-4 mt-4">
+                {pjs.map((pj, index) => {
+                    return (<PrimaryButton onClick={() => {setpjSelected(index)}} key={pj.name} text={pj.name} />
+                )})}
+            </div>
+        </>
     )
 }
 
@@ -87,3 +88,9 @@ const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
 }
 
 export default Map;
+
+/*
+    80margin
+
+
+*/

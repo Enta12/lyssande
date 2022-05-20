@@ -48,7 +48,7 @@ const CalendarPage = () => {
                 
             </div>
             <div className='m-8 flex justify-center'>
-                <PrimaryButton> Envoyer</PrimaryButton>
+                <PrimaryButton text={"Envoyer"} />
             </div>
             
         </div>
