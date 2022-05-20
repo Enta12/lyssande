@@ -8,8 +8,8 @@ export const pjsMocked : PjType[]= [
         race: "Hobbit",
         level: 4,
         position: {
-            x: 1127,
-            y: 278,
+            x: 0.5,
+            y: 0.5,
         }
     },
     {
@@ -19,8 +19,8 @@ export const pjsMocked : PjType[]= [
         race: "Humain",
         level: 3,
         position: {
-            x: 1127,
-            y: 378,
+            x: 0.6,
+            y: 0.6,
         }
     },
     {
@@ -30,8 +30,8 @@ export const pjsMocked : PjType[]= [
         race: "Humain",
         level: 13,
         position: {
-            x: 600,
-            y: 278,
+            x: 0.7,
+            y: 0.7,
         }
     },
     {
@@ -41,8 +41,8 @@ export const pjsMocked : PjType[]= [
         race: "Humain",
         level: 1,
         position: {
-            x: 827,
-            y: 478,
+            x: 0.4,
+            y: 0.5,
         }
     },
     

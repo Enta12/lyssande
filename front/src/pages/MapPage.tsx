@@ -7,7 +7,7 @@ import { pjsMocked } from "../moockedData";
 const MapPage = () => {
 
     return (
-    <Map img={fanghMap} pjs={pjsMocked} mapName={"carte terre de Fangh"}/>
+        <Map img={fanghMap} pjs={pjsMocked} mapName={"carte terre de Fangh"} heightCoefficient={3163/4744}/>
     )
    
 }

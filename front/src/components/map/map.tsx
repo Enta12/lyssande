@@ -4,19 +4,23 @@ import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
 import PrimaryButton from "../primary-button";
 
-
+type Img = {
+    xStart: number;
+    width: number;
+    yStart: number;
+    height: number;
+}
 type Props = {
     pjs : PjType[],
     img: string,
     mapName: string,
-
+    heightCoefficient: number
 }
 
 
-const Map = ({img, pjs, mapName}: Props) => {
+const Map = ({img, pjs, mapName, heightCoefficient}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
     const [currentPos, setCurrentPos] = useState([{x: -1, y:-1}]);
-    
     const tokens: JSX.Element[] = []
     const placeSelectedPj = (event : MouseEvent<HTMLImageElement>) => {
         if(pjSelected !== -1 && mapRef?.current
@@ -26,17 +30,44 @@ const Map = ({img, pjs, mapName}: Props) => {
             && event.clientY < mapRef.current.y + mapRef.current.height - window.scrollY
             ) {
                 const currentItem = [...currentPos];
-                currentItem[pjSelected] = {x:event.clientX + window.scrollX,  y:event.clientY + window.scrollY};
+                currentItem[pjSelected] = {
+                    x: (event.clientX+window.scrollX-mapRef.current.x)/(mapRef.current.width), 
+                    y: (event.clientY+window.scrollY-mapRef.current.y)/(mapRef.current.height)
+                };
                 setCurrentPos(currentItem)
         }
     }
     pjs.forEach((pj, index) => {
         if(mapRef?.current){
             if(currentPos[index]){
-                tokens[index] = <Token img={pjs[index].img} pj={pjs[index]} key={pj.name} pos={currentPos[index]}/>
+                tokens[index] = 
+                <Token
+                   img={pjs[index].img} 
+                   pj={pjs[index]} 
+                   key={pj.name} 
+                   pos={currentPos[index]}
+                   imgCoord={{
+                        xStart: mapRef.current.x,
+                        width: mapRef.current.width,
+                        yStart: mapRef.current.y,
+                        height: mapRef.current.height
+                    }}
+                />
             }
             else if(pj.position)
-            tokens[index] = <Token img={pj.img} key={pj.name} pj={pj} pos={pj.position}/>
+            tokens[index] = 
+            <Token   
+                img={pj.img} 
+                key={pj.name} 
+                pj={pj} 
+                pos={pj.position}
+                imgCoord={{
+                    xStart: mapRef.current.x,
+                    width: mapRef.current.width,
+                    yStart: mapRef.current.y,
+                    height: mapRef.current.height
+                }}
+            />
         }
     })
 
@@ -45,6 +76,7 @@ const Map = ({img, pjs, mapName}: Props) => {
         /* Send pjSelected */
     }
     const [pjSelected, setpjSelected] = useState(-1);
+    console.log("window", window.innerWidth);
     return (
         <>
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
@@ -58,7 +90,8 @@ const Map = ({img, pjs, mapName}: Props) => {
     )
 }
 
-const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
+const Token = ({img, pj, pos, imgCoord} : {img: string, pj: PjType, pos: Pos, imgCoord:Img }) => {
+    console.log("pos", pos)
     return (
             <>
                 <img 
@@ -69,8 +102,8 @@ const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
                 className="absolute h-6 w-6 object-cover rounded-xl border border-black"
                 style={
                     {
-                        top: `${pos.y-12}px`,
-                        left: `${pos.x-12}px`
+                        top: `${(pos.y* imgCoord.height)+imgCoord.yStart -12}px`,
+                        left: `${(pos.x*imgCoord.width)+imgCoord.xStart -12}px`
                     }
                 }
                 />
@@ -79,6 +112,7 @@ const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
                     place="right" 
                     effect="solid"
                     backgroundColor="none"
+                    delayShow={500}
                  >
                     <PjCard pjData={pj} />
                 </ReactTooltip>
@@ -88,9 +122,3 @@ const Token = ({img, pj, pos } : {img: string, pj: PjType, pos: Pos }) => {
 }
 
 export default Map;
-
-/*
-    80margin
-
-
-*/
