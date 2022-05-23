@@ -19,7 +19,12 @@ type Props = {
 
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
+    const getWidth = () => window.innerWidth 
+        || document.documentElement.clientWidth 
+        || document.body.clientWidth;
     const [currentPos, setCurrentPos] = useState([{x: -1, y:-1}]);
+    const [pjSelected, setpjSelected] = useState(-1);
+    const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
     const placeSelectedPj = (event : MouseEvent<HTMLImageElement>) => {
         if(pjSelected !== -1 && mapRef?.current
@@ -36,8 +41,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                 setCurrentPos(currentItem)
         }
     }
-
-    
+    const createTokens = () => {
         pjs.forEach((pj, index) => {
             if(mapRef?.current){
                 if(currentPos[index]?.x > 0){
@@ -56,7 +60,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                         }}
                     />
                 }
-                else if(pj.position)
+                else if(pj.position){
                 tokens[index] = 
                 <Token 
                       handleClick={() => {setpjSelected(index)}}
@@ -70,16 +74,26 @@ const Map = ({img, pjs, mapName}: Props) => {
                         yStart: mapRef.current.y,
                         height: mapRef.current.height
                     }}
-                />
+                />}
             }
-    })
+        })
+    }
+    useEffect(() => {
+        if(height>0){
+            createTokens();
+            setpjSelected(pjSelected-1)
+        }
+        else{
+            setHeight(mapRef?.current?.height || height-1);
+        }
+    }, [mapRef, height]) //correct dependencies
 
     const updatePjs = () => {
         /* TODO */
         /* Send pjSelected */
     }
-    const [pjSelected, setpjSelected] = useState(-1);
-    console.log("window", window.innerWidth);
+    createTokens();
+    console.log("render")
     return (
         <>
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
@@ -94,7 +108,6 @@ const Map = ({img, pjs, mapName}: Props) => {
 }
 
 const Token = ({img, pj, pos, imgCoord, handleClick} : {img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
-    console.log("pos", pos)
     return (
             <>
                 <img
