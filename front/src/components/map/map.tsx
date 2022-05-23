@@ -26,6 +26,21 @@ const Map = ({img, pjs, mapName}: Props) => {
     const [pjSelected, setpjSelected] = useState(-1);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
+    const [dimensions, setDimensions] = useState({ 
+        height: window.innerHeight,
+        width: window.innerWidth
+      })
+    
+    
+    function handleResize() {
+        setDimensions({
+          height: window.innerHeight,
+          width: window.innerWidth
+        })
+    }
+
+    window.addEventListener('resize', handleResize);
+
     const placeSelectedPj = (event : MouseEvent<HTMLImageElement>) => {
         if(pjSelected !== -1 && mapRef?.current
             && event.clientX > mapRef.current.x - window.scrollX
@@ -79,14 +94,18 @@ const Map = ({img, pjs, mapName}: Props) => {
         })
     }
     useEffect(() => {
+        console.log("dimensions", dimensions)
         if(height>0){
             createTokens();
             setpjSelected(pjSelected-1)
         }
         else{
-            setHeight(mapRef?.current?.height || height-1);
+            setTimeout(function(){
+                setHeight(mapRef?.current?.height || height-1);
+            },500);
+            
         }
-    }, [mapRef, height]) //correct dependencies
+    }, [mapRef, height, dimensions]) //correct dependencies
 
     const updatePjs = () => {
         /* TODO */
