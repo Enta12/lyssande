@@ -94,7 +94,6 @@ const Map = ({img, pjs, mapName}: Props) => {
         })
     }
     useEffect(() => {
-        console.log("dimensions", dimensions)
         if(height>0){
             createTokens();
             setpjSelected(pjSelected-1)
@@ -112,7 +111,6 @@ const Map = ({img, pjs, mapName}: Props) => {
         /* Send pjSelected */
     }
     createTokens();
-    console.log("render")
     return (
         <>
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
