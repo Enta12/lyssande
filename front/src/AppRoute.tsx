@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Layout from "./components/layout";
 import Login from "./pages/login/login";
 import Pj from "./pages/pj/pj";
-import AddPj from "./pages/addPj/addPj";
+import AddPj from "./pages/pj/addPj";
 import Calendar from "./pages/calendar/CalendarPage";
 import MapPage from "./pages/MapPage";
 

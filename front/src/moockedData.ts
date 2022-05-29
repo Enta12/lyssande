@@ -1,5 +1,5 @@
 import { PjType } from "./types";
-
+export const racesMocked : string[]= ["elfe", "nain"];
 export const pjsMocked : PjType[]= [
     {
         name : "Fluffy",
