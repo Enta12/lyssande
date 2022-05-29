@@ -6,6 +6,7 @@ import Pj from "./pages/pj/pj";
 import AddPj from "./pages/pj/addPj";
 import Calendar from "./pages/calendar/CalendarPage";
 import MapPage from "./pages/MapPage";
+import FightPage from "./pages/fight/FightPage";
 
 
 function AppRoute() {
@@ -17,6 +18,7 @@ function AppRoute() {
               <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
               <Route path="/map" element={<Layout><MapPage /></Layout>} />
               <Route path="/" element={<Login />} />
+              <Route path="/fight" element={<FightPage />} />
           </Routes>
       </Router>
   );
