@@ -6,6 +6,7 @@ const Nav = () => {
             <NavLink href="/calender">Calendrier</NavLink>
             <NavLink href="/pj">Mes PJ</NavLink>
             <NavLink href="/map">Carte</NavLink>
+            <NavLink href="/fight">Combat</NavLink>
         </nav>
     )
 }

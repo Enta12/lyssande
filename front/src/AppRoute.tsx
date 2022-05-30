@@ -18,7 +18,7 @@ function AppRoute() {
               <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
               <Route path="/map" element={<Layout><MapPage /></Layout>} />
               <Route path="/" element={<Login />} />
-              <Route path="/fight" element={<FightPage />} />
+              <Route path="/fight" element={<Layout><FightPage /></Layout>} />
           </Routes>
       </Router>
   );
