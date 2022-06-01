@@ -19,9 +19,6 @@ type Props = {
 
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
-    const getWidth = () => window.innerWidth 
-        || document.documentElement.clientWidth 
-        || document.body.clientWidth;
     const [currentPos, setCurrentPos] = useState([{x: -1, y:-1}]);
     const [pjSelected, setpjSelected] = useState(-1);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
