@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react"
+import iconOpen from '../assets/openInputSelect.svg'
 
 interface Props {
     width?: string; 
@@ -33,20 +34,26 @@ const InputSelect = ({title, options, width= "3/4", height = "24"} : Props) => {
     },[selectRef]);
 
     return (
-      <div
-        className={`text-swamp w-3/4 rounded-2xl text-center text-2xl placeholder-[#274747] font-inter w-${width} bg-white`}
-      >
-        <div ref={selectRef} onClick={() => {setIsOpen(true)}} className={`flex justify-center items-center h-${height}`}>
-          {`${title}: ${optionSelected}`}
+      <div className={`w-${width} text-swamp text-center text-2xl font-inter`}>
+          <div
+            onClick={() => {setIsOpen(!isOpen)}}
+            className={`m-0 h-${height} ${isOpen? "rounded-t-2xl" : "rounded-2xl"} flex justify-between items-center px-5 bg-white`}
+          >
+            {`${title}: ${optionSelected}`}
+            <img 
+              className={isOpen? "rotate-180 transition-transform" : "transition-transform"}
+              src={iconOpen} 
+              alt="open select" 
+            />
+          </div>
+          {options.map((option, index) => <Option height={height} last={index===options.length-1} key={`${title}${index}`} name={option} display={isOpen} selectAnOption={e => {selectAnOption(e)}} />)}
+          <input readOnly type="hidden" value={optionSelected}/>
         </div>
-        {options.map((option, index) => <Option height={height} key={`${title}${index}`} name={option} display={isOpen} selectAnOption={e => {selectAnOption(e)}} />)}
-          <input readOnly className="hidden" type="text" value={optionSelected}/>
-      </div>
     )
 }
 
-const Option = ({name, display, selectAnOption, height} : {height: string, name: string, display: boolean, selectAnOption: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void}) => {
-    const classNames = `${display? "border-t flex justify-center items-center  h-" + height : "hidden"}`
+const Option = ({height, name, display, selectAnOption, last} : {height: string, last: boolean, name: string, display: boolean, selectAnOption: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void}) => {
+    const classNames = display? `h-${height} z-10 border-t flex justify-center items-center ${last?"rounded-b-2xl" : ""} bg-white` : "hidden"
     return(
         <div className={classNames} onClick={e => selectAnOption(e)}>{name}</div>
     )
