@@ -34,7 +34,7 @@ const InputSelect = ({title, options, width= "3/4", height = "24"} : Props) => {
     },[selectRef]);
 
     return (
-      <div className={`w-${width} text-swamp text-center text-2xl font-inter`}>
+      <div className={`w-${width} text-brown text-center text-2xl font-inter`}>
           <div
             onClick={() => {setIsOpen(!isOpen)}}
             className={`m-0 h-${height} ${isOpen? "rounded-t-2xl" : "rounded-2xl"} flex justify-between items-center px-5 bg-white`}
