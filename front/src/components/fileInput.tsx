@@ -20,7 +20,7 @@ const FileInput = ({width= "3/4", height = "24"} : Props) => {
             <button 
                 onClick={e => {handleClick(e)}}
                 className={
-                    `rounded-2xl text-swamp text-center text-2xl placeholder-[#274747] font-inter h-${height} w-${width} bg-white flex justify-between items-center p-6`
+                    `rounded-2xl text-center text-2xl text-brown font-inter h-${height} w-${width} bg-white flex justify-between items-center p-6`
                 }
             >
                     <div>{`PHOTO ${file? " : "+file: ""}`}</div>
