@@ -6,12 +6,14 @@ import Pj from "./pages/pj/pj";
 import AddPj from "./pages/pj/addPj/addPj";
 import Calendar from "./pages/calendar/CalendarPage";
 import MapPage from "./pages/MapPage";
+import FightPage from "./pages/fight/FightPage";
 
 
 function AppRoute() {
   return (
       <Router>
           <Routes>
+            <Route path="/fight" element={<Layout><FightPage /></Layout>} />
               <Route path="/pj" element={<Layout><Pj /></Layout>} />
               <Route path="/pj/new" element={<Layout><AddPj /></Layout>} />
               <Route path="/calendar" element={<Layout><Calendar /></Layout>} />

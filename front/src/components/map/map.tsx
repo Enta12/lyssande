@@ -19,7 +19,7 @@ type Props = {
 
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
-    const [currentPos, setCurrentPos] = useState([{x: -1, y:-1}]);
+    const [currentPos, setCurrentPos] = useState<{x: number, y: number}[]>([]);
     const [pjSelected, setpjSelected] = useState(-1);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
