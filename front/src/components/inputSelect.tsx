@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react"
+import iconOpen from '../assets/openInputSelect.svg'
 
 interface Props {
     width?: string; 
@@ -7,74 +8,55 @@ interface Props {
     title: string;
 }
 
-const InputSelect = ({title, options, width= "full", height = "24"} : Props) => {
-
+const InputSelect = ({title, options, width= "3/4", height = "24"} : Props) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [optionSelected, setOptionSelected] = useState("")
+    const selectRef = useRef<HTMLDivElement>(null);
+    const selectAnOption = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.stopPropagation();
+      setIsOpen(false);
+      setOptionSelected(e.currentTarget.innerHTML);
+      
+    }
+    useEffect(() => {
+      const onClickOutside = () => {
+        setIsOpen(false)
+      };
+      const handleClickOutside = (event: any) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+          onClickOutside && onClickOutside();
+        }
+      };
+      document.addEventListener('click', handleClickOutside, true);
+      return () => {
+        document.removeEventListener('click', handleClickOutside, true);
+      };
+    },[selectRef]);
 
     return (
-        <button 
-            className=""
-            type="button"
-            onClick={(e) => {
-                e.stopPropagation()
-                setIsOpen(!isOpen);
-            }}
-        >
-            <div className="dd-header">
-                <div className="dd-header-title">{title}</div>
-            </div>
-            <div className="dd-list">
-                {isOpen && options.map((option) => {return(<Option name={option} />)})}
-            </div>
-        </button>
+      <div className={`w-${width} text-brown text-center text-2xl font-inter`}>
+          <div
+            onClick={() => {setIsOpen(!isOpen)}}
+            className={`m-0 h-${height} ${isOpen? "rounded-t-2xl" : "rounded-2xl"} flex justify-between items-center px-5 bg-white`}
+          >
+            {`${title}: ${optionSelected}`}
+            <img 
+              className={isOpen? "rotate-180 transition-transform" : "transition-transform"}
+              src={iconOpen} 
+              alt="open select" 
+            />
+          </div>
+          {options.map((option, index) => <Option height={height} last={index===options.length-1} key={`${title}${index}`} name={option} display={isOpen} selectAnOption={e => {selectAnOption(e)}} />)}
+          <input readOnly type="hidden" value={optionSelected}/>
+        </div>
     )
 }
 
-const Option = ({name} : {name: string}) => {
+const Option = ({height, name, display, selectAnOption, last} : {height: string, last: boolean, name: string, display: boolean, selectAnOption: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void}) => {
+    const classNames = display? `h-${height} z-10 border-t flex justify-center items-center ${last?"rounded-b-2xl" : ""} bg-white` : "hidden"
     return(
-        <button className="dd-list-item">{name}</button>
+        <div className={classNames} onClick={e => selectAnOption(e)}>{name}</div>
     )
 }
 
 export default InputSelect
-
-
-
-/*<select className={`appearance-none max-w-md open:rounded-b-none rounded-2xl text-center text-2xl placeholder-[#274747] font-inter h-${height} w-${width}`}>
-            { <option value="" disabled selected>{placeholder}</option>}
-            {options.map(option => <option value={option}>{option}</option>)}
-    </select> */
-
-
-    /*
-    export default class OutsideAlerter extends Component {
-  constructor(props) {
-    super(props);
-
-    this.wrapperRef = React.createRef();
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener("mousedown", this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
-  }
-
-  /**
-   * Alert if clicked on outside of element
-   */
-  /*
-  handleClickOutside(event) {
-    if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
-      alert("You clicked outside of me!");
-    }
-  }
-
-  render() {
-    return <div ref={this.wrapperRef}>{this.props.children}</div>;
-  }
-}
-*/

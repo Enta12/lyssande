@@ -8,7 +8,7 @@ interface Props {
 const Input = ({placeholder, type, width= "3/4", height = "24"} : Props) => {
     return (
         <input className={
-            `w-3/4 rounded-2xl text-center text-2xl placeholder-[#274747] font-inter h-${height} w-${width}`
+            `rounded-2xl px-5 text-2xl placeholder-brown font-inter h-${height} w-${width}`
         }
             placeholder={placeholder} type={type}>
         </input>
