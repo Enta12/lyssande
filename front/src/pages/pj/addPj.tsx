@@ -1,3 +1,4 @@
+import FileInput from '../../components/fileInput'
 import Input from '../../components/input'
 import InputSelect from '../../components/inputSelect'
 import Title from '../../components/title'
@@ -15,7 +16,7 @@ const AddPj = () => {
                 <InputSelect height="24" title={"Alignement"} options={racesMocked}/>
                 <Input height="24" placeholder="Niveau du personnage" type="number"/>
                 <Input height="24"  placeholder="Nombre de PO" type="number"/>
-                <Input height="24" type="file"/>
+                <FileInput />
             </form>
         </div>
     )
