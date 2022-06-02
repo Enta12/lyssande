@@ -1,6 +1,7 @@
 import FileInput from '../../../components/fileInput'
 import Input from '../../../components/input'
 import InputSelect from '../../../components/inputSelect'
+import TextInput from '../../../components/textInput'
 import Title from '../../../components/title'
 import { racesMocked, jobsMocked } from '../../../moockedData'
 import AlignmentInput from './AlignmentInput'
@@ -17,7 +18,8 @@ const AddPj = () => {
                 <AlignmentInput />
                 <Input height="24" placeholder="Niveau du personnage" type="number"/>
                 <Input height="24"  placeholder="Nombre de PO" type="number"/>
-                <FileInput height="24" placeholder="Nombre de PO" type="number"/>
+                <FileInput text="PHOTO" height="24" />
+                <TextInput placeholder="HISTOIRE" />
             </form>
         </div>
     )
