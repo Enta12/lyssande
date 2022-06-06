@@ -17,7 +17,7 @@ const Pj = () => {
             { pjsMocked.map(pjData => <PjCard pjData={pjData}/>) } 
             
             <a href="/pj/new">
-                <button className="h-full w-full border-dashed h-96 w-56 border-orange border-8 rounded-2xl flex justify-center items-center">
+                <button className="border-dashed h-96 w-56 border-orange border-8 rounded-2xl flex justify-center items-center">
                     <img className="max-h-20" alt="add pj" src={addIcon} />
                 </button>
             </a>

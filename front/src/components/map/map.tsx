@@ -3,6 +3,7 @@ import ReactTooltip from "react-tooltip";
 import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
 import PrimaryButton from "../primary-button";
+import MapButton from "./mapButton";
 
 type Img = {
     xStart: number;
@@ -112,9 +113,9 @@ const Map = ({img, pjs, mapName}: Props) => {
         <>
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-16 mt-4 w-full">
                 {pjs.map((pj, index) => {
-                    return (<PrimaryButton onClick={() => {setpjSelected(index)}} key={pj.name} text={pj.name} />
+                    return (<MapButton onClick={() => {setpjSelected(index)}} key={pj.name} name={pj.name} picture={pj.img} />
                 )})}
             </div>
         </>
