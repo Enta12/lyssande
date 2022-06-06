@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { ModifierFlags } from "typescript"
 import doneIcon from "../../../assets/done.svg"
 
 type Category = "moral" | "law";
