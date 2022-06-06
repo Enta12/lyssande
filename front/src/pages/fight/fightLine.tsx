@@ -1,6 +1,14 @@
 import { ChangeEvent } from "react";
 import { FightPhaseData, Local, Protagonist } from "../../types";
 
+type Props ={
+    isSelected: boolean, 
+    index: number, 
+    protagonistList : Protagonist[], 
+    data: FightPhaseData,
+    handleChange: (e: ChangeEvent<HTMLSelectElement>, index:number) => void,
+    handleSupress: (indexToSupress: number) => void
+}
 const matrice= [
     ["1", "3", "5", "7", "9", "11", "13", "15", "17", "19", "RA", "11", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA"],
     ["1", "2", "4", "6", "8", "10", "12", "14", "16", "18", "19", "11", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA", "RA"],
@@ -27,11 +35,11 @@ const matrice= [
 ]
 const locals : Local[] = [
     'head' ,
-    'torso',
     'arm',
-    'swordArm',
     'leg',
     'genitals',
+    'torso',
+    'swordArm',
     'random'
 ]
 const localModif={
@@ -61,8 +69,16 @@ const localModif={
     }
 }
 
-const FightLine = ({isSelected, protagonistList, data, handleChange, index}: {isSelected: boolean, index: number, protagonistList : Protagonist[], data: FightPhaseData, handleChange: (e: ChangeEvent<HTMLSelectElement>, index:number) => void}) => {
-    const local = data.local === 'random'? locals[Math.floor(Math.random() * 6)]: data.local;
+const FightLine = ({isSelected, protagonistList, data, handleChange, handleSupress, index}: Props) => {
+    let roll10 = Math.floor(Math.random() * 10);
+    if (roll10 > 7){
+        roll10 = 5
+    }
+    else if (roll10 > 3){
+        roll10 = 4
+    }
+    const local = data.local === 'random'? locals[roll10]: data.local;
+
     let at = 10;
     let prd = 10;
     if(local === 'head' || local === 'torso' || local === 'swordArm' || local === 'arm' || local === 'genitals' || local === 'leg' ){
@@ -107,6 +123,7 @@ const FightLine = ({isSelected, protagonistList, data, handleChange, index}: {is
             </select>
             {local}
            { matrice[prd][at]}
+           <button onClick={e => handleSupress(index)} >Suprimer la ligne</button>
         </div>
     )   
 }

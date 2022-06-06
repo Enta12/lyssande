@@ -20,6 +20,13 @@ function FightPage() {
         }
         else setStateSelected(stateSelected + 1)
     }
+    const filterByCourage = () => {
+        const fightElementDataTemp = [...fightElementData];
+        fightElementDataTemp.sort((a, b) => {
+            return protagonistList[b.protagonistA].cou - protagonistList[a.protagonistA].cou;
+        });
+        setFightElementData(fightElementDataTemp);
+    }
     const addFightElement = () => {
         const fightElementDataTemp = [...fightElementData];
         fightElementDataTemp.push({
@@ -27,6 +34,12 @@ function FightPage() {
             protagonistB : 0,
             local: 'torso'
         })
+        setFightElementData(fightElementDataTemp);
+    }
+    const handleSupress = (indexToSupress : number) => {
+        const fightElementDataTemp = fightElementData.filter((el, index) => {
+           return index !== indexToSupress
+        });
         setFightElementData(fightElementDataTemp);
     }
     const handleChange = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
@@ -50,11 +63,12 @@ function FightPage() {
         <>
             {fightElementData.map((data, index)=> {
                 return (
-                    <FightLine isSelected={stateSelected === index} protagonistList={protagonistList} data={data} handleChange={handleChange} index={index} />
+                    <FightLine isSelected={stateSelected === index} protagonistList={protagonistList} data={data} handleChange={handleChange} handleSupress={handleSupress} index={index} key={index}/>
                 )
             })}
             <button onClick={addFightElement}>Ajouter un tour</button>
             <button onClick={nextSelected}>Tour suivant</button>
+            <button onClick = {filterByCourage}>Filtrer par courage</button>
             <ProtagonistListForm protagonistList={protagonistList} setProtagonistList={setProtagonistList} /> 
         </>
     );
