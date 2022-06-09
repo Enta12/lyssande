@@ -1,9 +1,10 @@
 import { MouseEvent, useState, useRef, useEffect } from "react";
 import ReactTooltip from "react-tooltip";
+import { playerMocked } from "../../moockedData";
 import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
-import PrimaryButton from "../primary-button";
 import MapButton from "./mapButton";
+import MapSelect from "./mapSelect";
 
 type Img = {
     xStart: number;
@@ -21,15 +22,14 @@ type Props = {
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
     const [currentPos, setCurrentPos] = useState<{x: number, y: number}[]>([]);
-    const [pjSelected, setpjSelected] = useState(-1);
+    const [pjSelected, setPjSelected] = useState(-1);
+    const [pjSorted, setPjSorted] = useState<string[]>([]);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
     const [dimensions, setDimensions] = useState({ 
         height: window.innerHeight,
         width: window.innerWidth
       })
-    
-    
     function handleResize() {
         setDimensions({
           height: window.innerHeight,
@@ -60,7 +60,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                 if(currentPos[index]?.x > 0){
                     tokens[index] = 
                     <Token
-                    handleClick={() => {setpjSelected(index)}}
+                    handleClick={() => {setPjSelected(index)}}
                     img={pjs[index].img} 
                     pj={pjs[index]} 
                     key={pj.name} 
@@ -75,8 +75,8 @@ const Map = ({img, pjs, mapName}: Props) => {
                 }
                 else if(pj.position){
                 tokens[index] = 
-                <Token 
-                      handleClick={() => {setpjSelected(index)}}
+                <Token
+                    handleClick={() => {setPjSelected(index)}}
                     img={pj.img} 
                     key={pj.name} 
                     pj={pj} 
@@ -94,7 +94,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     useEffect(() => {
         if(height>0){
             createTokens();
-            setpjSelected(pjSelected-1)
+            setPjSelected(pjSelected-1)
         }
         else{
             setTimeout(function(){
@@ -114,8 +114,18 @@ const Map = ({img, pjs, mapName}: Props) => {
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
             <div className="flex gap-16 mt-4 w-full">
+                <MapSelect players={playerMocked} value={pjSorted} handleChange={(e) => console.log(e.target.value)} />
+            </div>
+            <div className="flex gap-16 mt-4 w-full">
                 {pjs.map((pj, index) => {
-                    return (<MapButton onClick={() => {setpjSelected(index)}} key={pj.name} name={pj.name} picture={pj.img} />
+                    return (
+                    <MapButton 
+                        hidden={!pjSorted.some((selectedName) => selectedName === pj.name)}
+                        onClick={() => {setPjSelected(index)}} 
+                        key={pj.name} 
+                        name={pj.name} 
+                        picture={pj.img} 
+                    />
                 )})}
             </div>
         </>

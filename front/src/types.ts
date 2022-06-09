@@ -4,9 +4,13 @@ export type PjType = {
     job: Job,
     race: Race,
     level: number,
-    position?: Pos
+    position?: Pos,
+    player: number
 };
-
+export type Player ={
+    name: string,
+    id: number
+}
 export type Pos = {x: number, y: number}
 export type Job = 'Pirate' | 'Menestrel' | 'Mage de Tzintch' | 'Mage' | 'Noble' | 'Ingénieur';
 export type Race = 'Nain' | 'Humain' | 'Demie-elfe' | 'Elfe-noire' | 'Hobbit';
