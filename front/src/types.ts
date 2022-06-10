@@ -35,3 +35,8 @@ export type FightPhaseData = {
     protagonistB : number;
     local: Local;
 }
+export type PossibleDate = {
+    date?: Date,
+    day?: number,
+    moment: "soirée" | "journée"
+}

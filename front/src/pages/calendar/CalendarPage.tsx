@@ -41,12 +41,9 @@ const CalendarPage = () => {
     return (
         <div className='pt-8 w-full'>
             <Title title="MES DISPONIBILITE POUR LE PROCHAIN MOIS"/>
-            <div className="py-2 rounded-xl bg-lightBrown">
-                <form className='font-bubblegum text-white overflow-x-auto scrollbar-thin w-full'>
-                    <Calendar dates={dates} availability={availability}/>
-                </form>
-                
-            </div>
+            <form>
+                <Calendar dates={dates} availability={availability}/>
+            </form>
             <div className='m-8 flex justify-center'>
                 <PrimaryButton text={"Envoyer"} />
             </div>
