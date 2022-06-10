@@ -43,13 +43,13 @@ const MapSelect = ({players, handleChange, value}: Props) => {
                 Filtrer par joueur 
                 <OpenIcon className={isOpen? "rotate-180 transition-transform" : "transition-transform"} />
             </div>
-            <div className={`bg-slate-50 rounded-lg w-full absolute ${!isOpen && "hidden"} z-20`}>
+            <div className={`text-brown bg-slate-50 rounded-lg w-full absolute ${!isOpen && "hidden"} z-20`}>
                 {players.map((player, index) => {
                     return (
                         <div 
                             onClick={e => handleClick(player.id)} 
                             key={index}
-                            className={`${value.some((selectedPj) => selectedPj === player.id) && "bg-blue-500"} p-1.5 cursor-pointer ${index=== 0 && "rounded-t-lg"} ${index=== players.length-1 && "rounded-b-lg"}`}
+                            className={`${value.some((selectedPj) => selectedPj === player.id) && "bg-blue-400"} p-1.5 cursor-pointer ${index=== 0 && "rounded-t-lg"} ${index=== players.length-1 && "rounded-b-lg"}`}
                         >
                             {player.name}
                         </div>

@@ -6,6 +6,7 @@ import PjCard from "../pjCard";
 import MapButton from "./mapButton";
 import MapSelect from "./mapSelect";
 
+type MapPos = "positionFangh" | "positionCaladie" | "positionNorth" | "positionJungle" | "positionFernol" | "positionMongbolo";
 type Img = {
     xStart: number;
     width: number;
@@ -26,6 +27,24 @@ const Map = ({img, pjs, mapName}: Props) => {
     const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
+    let mapPos : MapPos = "positionFangh";
+    switch(mapName){
+        case 'Caladie' :
+            mapPos = "positionCaladie";
+            break;
+        case 'Confins du givres' :
+            mapPos = "positionNorth";
+            break;
+        case 'Jungles D\'Ammouka & Sungul' :
+            mapPos = "positionJungle";
+            break;
+        case 'Ile Mong-Bolo' :
+            mapPos = "positionMongbolo";
+            break;
+        case 'Fernol' :
+            mapPos = "positionFernol";
+            break;
+    }
     const [dimensions, setDimensions] = useState({ 
         height: window.innerHeight,
         width: window.innerWidth
@@ -76,7 +95,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                         }
                     />
                 }
-                else if(pj.position){
+                else if(pj[mapPos]){
                 tokens[index] = 
                 <Token
                     hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
@@ -84,7 +103,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                     img={pj.img} 
                     key={pj.name} 
                     pj={pj} 
-                    pos={pj.position}
+                    pos={pj[mapPos] || {x:0, y:0}}
                     imgCoord={{
                         xStart: mapRef.current.x,
                         width: mapRef.current.width,
@@ -113,10 +132,9 @@ const Map = ({img, pjs, mapName}: Props) => {
         /* Send pjSelected */
     }
     createTokens();
-    console.log("pjSortedByPlayer", pjSortedByPlayer)
     return (
         <>
-            <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
+            <img className="self-start max-h-[800px]" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
             <div className="flex gap-16 mt-4 w-full">
                 <MapSelect players={playerMocked} value={pjSortedByPlayer} handleChange={(array) => setPjSortedByPlayer(array)} />

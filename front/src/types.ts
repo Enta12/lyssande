@@ -4,12 +4,21 @@ export type PjType = {
     job: Job,
     race: Race,
     level: number,
-    position?: Pos,
+    positionFangh?: Pos,
+    positionNorth?: Pos,
+    positionJungle?: Pos,
+    positionCaladie?: Pos,
+    positionFernol?: Pos,
+    positionMongbolo?: Pos,
     player: number
 };
 export type Player ={
     name: string,
     id: number
+}
+export type WorldMap = {
+    name: string;
+    mapLink: string;
 }
 export type Pos = {x: number, y: number}
 export type Job = 'Pirate' | 'Menestrel' | 'Mage de Tzintch' | 'Mage' | 'Noble' | 'Ingénieur';

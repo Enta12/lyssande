@@ -1,4 +1,10 @@
-import { PjType, Player } from "./types";
+import { PjType, Player, WorldMap } from "./types";
+import fanghMap from './assets/maps/fangh.jpg'
+import CaladieMap from './assets/maps/caladie.jpg'
+import FrostMap from './assets/maps/frost.jpg'
+import JungleMap from './assets/maps/ammouka-sungul.jpg'
+import mongboloMap from './assets/maps/mongbolo.jpg'
+import fernolMap from './assets/maps/fernol.jpg'
 export const racesMocked : string[]= ["elfe-sylvain", "haut-elfe", "elfe-noir", "demi-elfe", "nain", "humain", "barbare", "gnome", "ogre", "orc", "gobelin", ];
 export const jobsMocked : string[]= ["Guerrier/Gladiateur", "Pretre", "Magicien", "Voleur", "Ninja/Assassin", "Menestrel", "Noble/Bourgeois", "Paladin", ];
 export const pjsMocked : PjType[]= [
@@ -8,7 +14,7 @@ export const pjsMocked : PjType[]= [
         job: "Pirate",
         race: "Hobbit",
         level: 4,
-        position: {
+        positionFangh: {
             x: 0.5,
             y: 0.5,
         },
@@ -20,7 +26,7 @@ export const pjsMocked : PjType[]= [
         job: "Mage",
         race: "Humain",
         level: 3,
-        position: {
+        positionFangh: {
             x: 0.6,
             y: 0.6,
         },
@@ -32,7 +38,7 @@ export const pjsMocked : PjType[]= [
         job: "Noble",
         race: "Humain",
         level: 13,
-        position: {
+        positionFangh: {
             x: 0.7,
             y: 0.7,
         },
@@ -45,7 +51,7 @@ export const pjsMocked : PjType[]= [
         race: "Humain",
         player: 1,
         level: 1,
-        position: {
+        positionFangh: {
             x: 0.4,
             y: 0.5,
         }
@@ -61,4 +67,30 @@ export const playerMocked : Player[]= [
         name: "Dwayne",
         id: 1
     }
-]
+];
+export const mapsMoocked : WorldMap[] = [
+    {
+        name: "Terre de Fangh",
+        mapLink: fanghMap
+    },
+    {
+        name: "Caladie",
+        mapLink: CaladieMap
+    },
+    {
+        name: "Confins du givres",
+        mapLink: FrostMap
+    },
+    {
+        name: "Jungles D\'Ammouka & Sungul",
+        mapLink: JungleMap
+    },
+    {
+        name: "Ile Mong-Bolo",
+        mapLink: mongboloMap
+    },
+    {
+        name: "Fernol",
+        mapLink: fernolMap
+    }
+];
