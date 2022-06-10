@@ -3,7 +3,7 @@ const Nav = () => {
         <nav className="">
 
             <NavLink href="/">Accueil</NavLink>
-            <NavLink href="/calender">Calendrier</NavLink>
+            <NavLink href="/calendar">Calendrier</NavLink>
             <NavLink href="/pj">Mes PJ</NavLink>
             <NavLink href="/map">Carte</NavLink>
             <NavLink href="/fight">Combat</NavLink>
