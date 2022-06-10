@@ -1,4 +1,10 @@
-import { PjType } from "./types";
+import { PjType, Player, WorldMap } from "./types";
+import fanghMap from './assets/maps/fangh.jpg'
+import CaladieMap from './assets/maps/caladie.jpg'
+import FrostMap from './assets/maps/frost.jpg'
+import JungleMap from './assets/maps/ammouka-sungul.jpg'
+import mongboloMap from './assets/maps/mongbolo.jpg'
+import fernolMap from './assets/maps/fernol.jpg'
 export const racesMocked : string[]= ["elfe-sylvain", "haut-elfe", "elfe-noir", "demi-elfe", "nain", "humain", "barbare", "gnome", "ogre", "orc", "gobelin", ];
 export const jobsMocked : string[]= ["Guerrier/Gladiateur", "Pretre", "Magicien", "Voleur", "Ninja/Assassin", "Menestrel", "Noble/Bourgeois", "Paladin", ];
 export const pjsMocked : PjType[]= [
@@ -8,10 +14,11 @@ export const pjsMocked : PjType[]= [
         job: "Pirate",
         race: "Hobbit",
         level: 4,
-        position: {
+        positionFangh: {
             x: 0.5,
             y: 0.5,
-        }
+        },
+        player: 0,
     },
     {
         name : "Jeanne D'orc",
@@ -19,10 +26,11 @@ export const pjsMocked : PjType[]= [
         job: "Mage",
         race: "Humain",
         level: 3,
-        position: {
+        positionFangh: {
             x: 0.6,
             y: 0.6,
-        }
+        },
+        player: 0
     },
     {
         name : "Mélanchon",
@@ -30,21 +38,59 @@ export const pjsMocked : PjType[]= [
         job: "Noble",
         race: "Humain",
         level: 13,
-        position: {
+        positionFangh: {
             x: 0.7,
             y: 0.7,
-        }
+        },
+        player: 0
     },
     {
         name : "Clodo",
-        img : "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.15752-9/278103532_315886990481771_5343216175235124413_n.png?_nc_cat=110&ccb=1-5&_nc_sid=ae9488&_nc_ohc=8Cwqzl1VtSYAX9r9yUr&_nc_ht=scontent-cdt1-1.xx&oh=03_AVJPqxDeToN07pPg3m3kpSXEW9zAtf3fiLWNCmZiD9HRHg&oe=628F7353",
+        img : "https://i.servimg.com/u/f65/11/55/65/81/moine_18.jpg",
         job: "Ingénieur",
         race: "Humain",
+        player: 1,
         level: 1,
-        position: {
+        positionFangh: {
             x: 0.4,
             y: 0.5,
         }
     },
     
+];
+export const playerMocked : Player[]= [
+    {
+        name: "Baptiste",
+        id: 0
+    },
+    {
+        name: "Dwayne",
+        id: 1
+    }
+];
+export const mapsMoocked : WorldMap[] = [
+    {
+        name: "Terre de Fangh",
+        mapLink: fanghMap
+    },
+    {
+        name: "Caladie",
+        mapLink: CaladieMap
+    },
+    {
+        name: "Confins du givres",
+        mapLink: FrostMap
+    },
+    {
+        name: "Jungles D\'Ammouka & Sungul",
+        mapLink: JungleMap
+    },
+    {
+        name: "Ile Mong-Bolo",
+        mapLink: mongboloMap
+    },
+    {
+        name: "Fernol",
+        mapLink: fernolMap
+    }
 ];

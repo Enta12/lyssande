@@ -1,9 +1,12 @@
 import { MouseEvent, useState, useRef, useEffect } from "react";
 import ReactTooltip from "react-tooltip";
+import { playerMocked } from "../../moockedData";
 import { Pos, PjType } from "../../types";
 import PjCard from "../pjCard";
-import PrimaryButton from "../primary-button";
+import MapButton from "./mapButton";
+import MapSelect from "./mapSelect";
 
+type MapPos = "positionFangh" | "positionCaladie" | "positionNorth" | "positionJungle" | "positionFernol" | "positionMongbolo";
 type Img = {
     xStart: number;
     width: number;
@@ -20,15 +23,32 @@ type Props = {
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
     const [currentPos, setCurrentPos] = useState<{x: number, y: number}[]>([]);
-    const [pjSelected, setpjSelected] = useState(-1);
+    const [pjSelected, setPjSelected] = useState(-1);
+    const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
+    let mapPos : MapPos = "positionFangh";
+    switch(mapName){
+        case 'Caladie' :
+            mapPos = "positionCaladie";
+            break;
+        case 'Confins du givres' :
+            mapPos = "positionNorth";
+            break;
+        case 'Jungles D\'Ammouka & Sungul' :
+            mapPos = "positionJungle";
+            break;
+        case 'Ile Mong-Bolo' :
+            mapPos = "positionMongbolo";
+            break;
+        case 'Fernol' :
+            mapPos = "positionFernol";
+            break;
+    }
     const [dimensions, setDimensions] = useState({ 
         height: window.innerHeight,
         width: window.innerWidth
       })
-    
-    
     function handleResize() {
         setDimensions({
           height: window.innerHeight,
@@ -59,27 +79,31 @@ const Map = ({img, pjs, mapName}: Props) => {
                 if(currentPos[index]?.x > 0){
                     tokens[index] = 
                     <Token
-                    handleClick={() => {setpjSelected(index)}}
-                    img={pjs[index].img} 
-                    pj={pjs[index]} 
-                    key={pj.name} 
-                    pos={currentPos[index]}
-                    imgCoord={{
-                            xStart: mapRef.current.x,
-                            width: mapRef.current.width,
-                            yStart: mapRef.current.y,
-                            height: mapRef.current.height
-                        }}
+                        hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
+                        handleClick={() => {setPjSelected(index)}}
+                        img={pjs[index].img} 
+                        pj={pjs[index]} 
+                        key={pj.name} 
+                        pos={currentPos[index]}
+                        imgCoord={
+                            {
+                                xStart: mapRef.current.x,
+                                width: mapRef.current.width,
+                                yStart: mapRef.current.y,
+                                height: mapRef.current.height
+                            }
+                        }
                     />
                 }
-                else if(pj.position){
+                else if(pj[mapPos]){
                 tokens[index] = 
-                <Token 
-                      handleClick={() => {setpjSelected(index)}}
+                <Token
+                    hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
+                    handleClick={() => {setPjSelected(index)}}
                     img={pj.img} 
                     key={pj.name} 
                     pj={pj} 
-                    pos={pj.position}
+                    pos={pj[mapPos] || {x:0, y:0}}
                     imgCoord={{
                         xStart: mapRef.current.x,
                         width: mapRef.current.width,
@@ -93,7 +117,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     useEffect(() => {
         if(height>0){
             createTokens();
-            setpjSelected(pjSelected-1)
+            setPjSelected(pjSelected-1)
         }
         else{
             setTimeout(function(){
@@ -110,27 +134,38 @@ const Map = ({img, pjs, mapName}: Props) => {
     createTokens();
     return (
         <>
-            <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
+            <img className="self-start max-h-[800px]" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
-            <div className="flex gap-4 mt-4">
+            <div className="flex gap-16 mt-4 w-full">
+                <MapSelect players={playerMocked} value={pjSortedByPlayer} handleChange={(array) => setPjSortedByPlayer(array)} />
+            </div>
+            <div className="flex gap-16 mt-4 w-full pb-5 pl-5">
+                
                 {pjs.map((pj, index) => {
-                    return (<PrimaryButton onClick={() => {setpjSelected(index)}} key={pj.name} text={pj.name} />
+                    return (
+                    <MapButton 
+                        hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
+                        onClick={() => {setPjSelected(index)}} 
+                        key={pj.name} 
+                        name={pj.name} 
+                        picture={pj.img} 
+                    />
                 )})}
             </div>
         </>
     )
 }
 
-const Token = ({img, pj, pos, imgCoord, handleClick} : {img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
+const Token = ({hidden, img, pj, pos, imgCoord, handleClick} : {hidden: boolean, img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
     return (
             <>
                 <img
                 onClick={handleClick} 
-                data-tip 
+                data-tip
                 data-for={`${pj.name}RegisterTip`}
                 src={img} 
                 alt={pj.name} 
-                className="absolute h-6 w-6 object-cover rounded-xl border border-black"
+                className={`absolute h-6 w-6 object-cover rounded-xl border border-black ${hidden && "hidden"}`}
                 style={
                     {
                         top: `${(pos.y* imgCoord.height)+imgCoord.yStart -12}px`,
