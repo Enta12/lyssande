@@ -47,7 +47,7 @@ const MapSelector = ({name, actif, index, handleChange, last}: {last: boolean, h
                 >
                 {`~ ${name} ~`}
             </div>
-            <div className={`bg-amber-100 ${actif && "rounded-bl-full"}l w-2 h-full self-end`} />
+            <div className={`bg-amber-100 ${actif && "rounded-bl-full"} w-2 h-full self-end`} />
         </div>
         
     )
