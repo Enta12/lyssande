@@ -8,12 +8,14 @@ import Calendar from "./pages/calendar/CalendarPage";
 import MapPage from "./pages/MapPage";
 import FightPage from "./pages/fight/FightPage";
 import Player from "./pages/player/player";
+import DetailPj from "./pages/pj/detailPj";
 
 
 function AppRoute() {
   return (
       <Router>
           <Routes>
+              <Route path="/pj/:id" element={<Layout><DetailPj /></Layout>} />
               <Route path="/player" element={<Layout><Player /></Layout>} />
               <Route path="/fight" element={<Layout><FightPage /></Layout>} />
               <Route path="/pj" element={<Layout><Pj /></Layout>} />

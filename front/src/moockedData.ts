@@ -18,7 +18,13 @@ export const pjsMocked : PjType[]= [
             x: 0.5,
             y: 0.5,
         },
+        gold: 12,
         player: 0,
+        story: "TS2322: Type '{ name: string; img: string; job: Pirate; race: Hobbit; level: number; positionFangh: { x: number; y: number; }; player: number; story: string; }' is not assignable to type 'PjType'.Object literal may only specify known properties, and 'story' does not exist in type 'PjType'.",
+        alignement:{
+            moral: "good",
+            law: "choatic"
+        }
     },
     {
         name : "Jeanne D'orc",
@@ -30,7 +36,13 @@ export const pjsMocked : PjType[]= [
             x: 0.6,
             y: 0.6,
         },
-        player: 0
+        player: 0,
+        alignement:{
+            moral: "good",
+            law: "choatic"
+        },
+        gold: 12,
+        story: "TS2322: Type '{ name: string; img: string; job: Pirate; race: Hobbit; level: number; positionFangh: { x: number; y: number; }; player: number; story: string; }' is not assignable to type 'PjType'.Object literal may only specify known properties, and 'story' does not exist in type 'PjType'."
     },
     {
         name : "Mélanchon",
@@ -42,7 +54,13 @@ export const pjsMocked : PjType[]= [
             x: 0.7,
             y: 0.7,
         },
-        player: 0
+        player: 0,
+        alignement:{
+            moral: "good",
+            law: "choatic"
+        },
+        gold: 12,
+        story: "TS2322: Type '{ name: string; img: string; job: Pirate; race: Hobbit; level: number; positionFangh: { x: number; y: number; }; player: number; story: string; }' is not assignable to type 'PjType'.Object literal may only specify known properties, and 'story' does not exist in type 'PjType'."
     },
     {
         name : "Clodo",
@@ -54,7 +72,13 @@ export const pjsMocked : PjType[]= [
         positionFangh: {
             x: 0.4,
             y: 0.5,
-        }
+        },
+        alignement:{
+            moral: "good",
+            law: "choatic"
+        },
+        gold: 12,
+        story: "TS2322: Type '{ name: string; img: string; job: Pirate; race: Hobbit; level: number; positionFangh: { x: number; y: number; }; player: number; story: string; }' is not assignable to type 'PjType'.Object literal may only specify known properties, and 'story' does not exist in type 'PjType'."
     },
     
 ];
