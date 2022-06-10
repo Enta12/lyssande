@@ -6,7 +6,13 @@ import PjCard from "../pjCard";
 import MapButton from "./mapButton";
 import MapSelect from "./mapSelect";
 
-type MapPos = "positionFangh" | "positionCaladie" | "positionNorth" | "positionJungle" | "positionFernol" | "positionMongbolo";
+type MapPos = 
+"positionFangh" | 
+"positionCaladie" | 
+"positionNorth" | 
+"positionJungle" | 
+"positionFernol" | 
+"positionMongbolo";
 type Img = {
     xStart: number;
     width: number;
@@ -22,7 +28,7 @@ type Props = {
 
 const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
-    const [currentPos, setCurrentPos] = useState<{x: number, y: number}[]>([]);
+    const [currentPos, setCurrentPos] = useState<{x: number, y: number, map: string}[]>([]);
     const [pjSelected, setPjSelected] = useState(-1);
     const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
@@ -68,7 +74,8 @@ const Map = ({img, pjs, mapName}: Props) => {
                 const currentItem = [...currentPos];
                 currentItem[pjSelected] = {
                     x: (event.clientX+window.scrollX-mapRef.current.x)/(mapRef.current.width), 
-                    y: (event.clientY+window.scrollY-mapRef.current.y)/(mapRef.current.height)
+                    y: (event.clientY+window.scrollY-mapRef.current.y)/(mapRef.current.height),
+                    map: mapName
                 };
                 setCurrentPos(currentItem)
         }
@@ -77,6 +84,7 @@ const Map = ({img, pjs, mapName}: Props) => {
         pjs.forEach((pj, index) => {
             if(mapRef?.current){
                 if(currentPos[index]?.x > 0){
+                    if(currentPos[index].map === mapName)
                     tokens[index] = 
                     <Token
                         hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
