@@ -10,7 +10,13 @@ export type PjType = {
     positionCaladie?: Pos,
     positionFernol?: Pos,
     positionMongbolo?: Pos,
-    player: number
+    player: number,
+    story: string
+    alignement: {
+        moral: string,
+        law: string
+    },
+    gold: number,
 };
 export type Player ={
     name: string,
