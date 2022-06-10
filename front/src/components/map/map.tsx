@@ -60,7 +60,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                 if(currentPos[index]?.x > 0){
                     tokens[index] = 
                     <Token
-                        hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
+                        hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
                         handleClick={() => {setPjSelected(index)}}
                         img={pjs[index].img} 
                         pj={pjs[index]} 
@@ -79,7 +79,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                 else if(pj.position){
                 tokens[index] = 
                 <Token
-                    hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
+                    hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
                     handleClick={() => {setPjSelected(index)}}
                     img={pj.img} 
                     key={pj.name} 
@@ -126,7 +126,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                 {pjs.map((pj, index) => {
                     return (
                     <MapButton 
-                        hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
+                        hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
                         onClick={() => {setPjSelected(index)}} 
                         key={pj.name} 
                         name={pj.name} 
