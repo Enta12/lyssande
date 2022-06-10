@@ -121,7 +121,7 @@ const Map = ({img, pjs, mapName}: Props) => {
             <div className="flex gap-16 mt-4 w-full">
                 <MapSelect players={playerMocked} value={pjSortedByPlayer} handleChange={(array) => setPjSortedByPlayer(array)} />
             </div>
-            <div className="flex gap-16 mt-4 w-full">
+            <div className="flex gap-16 mt-4 w-full pb-5 pl-5">
                 
                 {pjs.map((pj, index) => {
                     return (
@@ -143,7 +143,7 @@ const Token = ({hidden, img, pj, pos, imgCoord, handleClick} : {hidden: boolean,
             <>
                 <img
                 onClick={handleClick} 
-                data-tip 
+                data-tip
                 data-for={`${pj.name}RegisterTip`}
                 src={img} 
                 alt={pj.name} 
