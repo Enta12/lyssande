@@ -23,7 +23,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     const mapRef = useRef<HTMLImageElement>(null);
     const [currentPos, setCurrentPos] = useState<{x: number, y: number}[]>([]);
     const [pjSelected, setPjSelected] = useState(-1);
-    const [pjSorted, setPjSorted] = useState<string[]>([]);
+    const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
     const [height, setHeight] = useState(mapRef?.current?.height || 0);
     const tokens: JSX.Element[] = []
     const [dimensions, setDimensions] = useState({ 
@@ -60,22 +60,26 @@ const Map = ({img, pjs, mapName}: Props) => {
                 if(currentPos[index]?.x > 0){
                     tokens[index] = 
                     <Token
-                    handleClick={() => {setPjSelected(index)}}
-                    img={pjs[index].img} 
-                    pj={pjs[index]} 
-                    key={pj.name} 
-                    pos={currentPos[index]}
-                    imgCoord={{
-                            xStart: mapRef.current.x,
-                            width: mapRef.current.width,
-                            yStart: mapRef.current.y,
-                            height: mapRef.current.height
-                        }}
+                        hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
+                        handleClick={() => {setPjSelected(index)}}
+                        img={pjs[index].img} 
+                        pj={pjs[index]} 
+                        key={pj.name} 
+                        pos={currentPos[index]}
+                        imgCoord={
+                            {
+                                xStart: mapRef.current.x,
+                                width: mapRef.current.width,
+                                yStart: mapRef.current.y,
+                                height: mapRef.current.height
+                            }
+                        }
                     />
                 }
                 else if(pj.position){
                 tokens[index] = 
                 <Token
+                    hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
                     handleClick={() => {setPjSelected(index)}}
                     img={pj.img} 
                     key={pj.name} 
@@ -109,18 +113,20 @@ const Map = ({img, pjs, mapName}: Props) => {
         /* Send pjSelected */
     }
     createTokens();
+    console.log("pjSortedByPlayer", pjSortedByPlayer)
     return (
         <>
             <img className="w-full" src={img} alt={mapName} onClick={placeSelectedPj} ref={mapRef} />
             {tokens}
             <div className="flex gap-16 mt-4 w-full">
-                <MapSelect players={playerMocked} value={pjSorted} handleChange={(e) => console.log(e.target.value)} />
+                <MapSelect players={playerMocked} value={pjSortedByPlayer} handleChange={(array) => setPjSortedByPlayer(array)} />
             </div>
             <div className="flex gap-16 mt-4 w-full">
+                
                 {pjs.map((pj, index) => {
                     return (
                     <MapButton 
-                        hidden={!pjSorted.some((selectedName) => selectedName === pj.name)}
+                        hidden={!pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player)}
                         onClick={() => {setPjSelected(index)}} 
                         key={pj.name} 
                         name={pj.name} 
@@ -132,7 +138,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     )
 }
 
-const Token = ({img, pj, pos, imgCoord, handleClick} : {img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
+const Token = ({hidden, img, pj, pos, imgCoord, handleClick} : {hidden: boolean, img: string, pj: PjType, pos: Pos, imgCoord:Img, handleClick: () => void}) => {
     return (
             <>
                 <img
@@ -141,7 +147,7 @@ const Token = ({img, pj, pos, imgCoord, handleClick} : {img: string, pj: PjType,
                 data-for={`${pj.name}RegisterTip`}
                 src={img} 
                 alt={pj.name} 
-                className="absolute h-6 w-6 object-cover rounded-xl border border-black"
+                className={`absolute h-6 w-6 object-cover rounded-xl border border-black ${hidden && "hidden"}`}
                 style={
                     {
                         top: `${(pos.y* imgCoord.height)+imgCoord.yStart -12}px`,

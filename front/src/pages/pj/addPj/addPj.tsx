@@ -9,9 +9,9 @@ const AddPj = () => {
             <Title title="CREATIION D'UN PERSONNAGE"/>
             <form className='pt-8 w-full flex flex-col items-center gap-5'>
                 <Input height="24" placeholder="Nom du personnage" type="text"/>
-                <InputSelect height="24" placeholder={"Classe"} options={[]}/>
-                <InputSelect height="24" placeholder={"Race"} options={[]}/>
-                <InputSelect height="24" placeholder={"Alignement"} options={[]}/>
+                <InputSelect height="24" title={"Classe"} options={[]}/>
+                <InputSelect height="24" title={"Race"} options={[]}/>
+                <InputSelect height="24" title={"Alignement"} options={[]}/>
                 <Input height="24" placeholder="Niveau du personnage" type="number"/>
                 <Input height="24" placeholder="Nombre de PO" type="number"/>
                 <Input height="24" type="file"/>

@@ -1,4 +1,4 @@
-import { PjType } from "./types";
+import { PjType, Player } from "./types";
 export const racesMocked : string[]= ["elfe-sylvain", "haut-elfe", "elfe-noir", "demi-elfe", "nain", "humain", "barbare", "gnome", "ogre", "orc", "gobelin", ];
 export const jobsMocked : string[]= ["Guerrier/Gladiateur", "Pretre", "Magicien", "Voleur", "Ninja/Assassin", "Menestrel", "Noble/Bourgeois", "Paladin", ];
 export const pjsMocked : PjType[]= [
