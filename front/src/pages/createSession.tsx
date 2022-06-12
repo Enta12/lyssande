@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PjSessionSelector from "../components/pjSessionSelector";
+import PrimaryButton from "../components/primary-button";
 import { pjsMocked, playerMocked } from "../moockedData"
 
 const CreateSession = () => {
@@ -24,9 +25,10 @@ const CreateSession = () => {
         <div className="w-full flex items-center flex-col gap-4">
             {players.map((player, index) => {
                 return (
-                    <PjSessionSelector quest={lastQuest} selectedPj={selectedPjs[index]} setSelectedPj={setSelectedPj} playerIndex={index} key={index} pjs={pjs.filter(pj => pj.player === player.id)} playerName={player.name} />
+                        <PjSessionSelector quest={lastQuest} selectedPj={selectedPjs[index]} setSelectedPj={setSelectedPj} playerIndex={index} key={index} pjs={pjs.filter(pj => pj.player === player.id)} playerName={player.name} />
                 )
             })}
+            <PrimaryButton text={"Create Session"} />  
         </div>
     )
 }
