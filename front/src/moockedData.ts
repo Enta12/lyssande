@@ -14,9 +14,11 @@ export const pjsMocked : PjType[]= [
         job: "Pirate",
         race: "Hobbit",
         level: 4,
-        positionFangh: {
-            x: 0.5,
-            y: 0.5,
+        positions :{
+            positionFangh: {
+                x: 0.5,
+                y: 0.5,
+            }
         },
         gold: 12,
         player: 0,
@@ -24,7 +26,8 @@ export const pjsMocked : PjType[]= [
         alignement:{
             moral: "good",
             law: "choatic"
-        }
+        },
+        id: 0
     },
     {
         name : "Jeanne D'orc",
@@ -32,16 +35,20 @@ export const pjsMocked : PjType[]= [
         job: "Mage",
         race: "Humain",
         level: 3,
-        positionFangh: {
-            x: 0.6,
-            y: 0.6,
+        positions:{
+            positionFangh: {
+                x: 0.6,
+                y: 0.6,
+            }
         },
+        quest: 1,
         player: 0,
         alignement:{
             moral: "good",
             law: "choatic"
         },
         gold: 12,
+        id: 1,
         story: "TS2322: Type '{ name: string; img: string; job: Pirate; race: Hobbit; level: number; positionFangh: { x: number; y: number; }; player: number; story: string; }' is not assignable to type 'PjType'.Object literal may only specify known properties, and 'story' does not exist in type 'PjType'."
     },
     {
@@ -49,11 +56,15 @@ export const pjsMocked : PjType[]= [
         img : "http://www.letarnlibre.com/static/img/2014/04/15/jean_luc_melenchon_avril_2012.jpg",
         job: "Noble",
         race: "Humain",
+        id: 2,
         level: 13,
-        positionFangh: {
-            x: 0.7,
-            y: 0.7,
+        positions : {
+            positionFangh: {
+                x: 0.7,
+                y: 0.7,
+            }
         },
+        quest: 0,
         player: 0,
         alignement:{
             moral: "good",
@@ -68,11 +79,15 @@ export const pjsMocked : PjType[]= [
         job: "Ingénieur",
         race: "Humain",
         player: 1,
+        id: 3,
         level: 1,
-        positionFangh: {
-            x: 0.4,
-            y: 0.5,
+        positions : {
+            positionFangh: {
+                x: 0.4,
+                y: 0.5,
+            }
         },
+        quest: 1,
         alignement:{
             moral: "good",
             law: "choatic"

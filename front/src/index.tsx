@@ -8,7 +8,7 @@ const root = createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
     <AppRoute />
-    <div className="rounded-bl-full w-5/12 w-3/4 hidden" />
+    <div className="rounded-bl-full w-5/12 w-3/4 hidden drop-shadow" />
   </React.StrictMode>
 );
 
