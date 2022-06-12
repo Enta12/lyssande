@@ -9,7 +9,7 @@ const Players = () => {
             <Title title="LES JOUEURS" />
             <div className="mt-8 grid grid-cols-3 grid-flow-rows gap-8 ">
                 {
-                    players.map(player => <PlayerCard player={player} />)
+                    players.map((player, index) => <PlayerCard key={index} player={player} />)
                 }
             </div>
         </div>

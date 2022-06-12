@@ -19,11 +19,11 @@ const Calendar = ({dates, availability} : Props) => {
                 <thead>
                     <tr className='flex p-4'>
                         {<HeaderCase firstLine="DATES" />}
-                        {dates.map((currentDate) => {
+                        {dates.map((currentDate, index) => {
                             const day = currentDate.date?.getDay()
                             return(
                                 <>
-                                    <HeaderCase firstLine={`${days[day || currentDate.day || 0]} ${day ? currentDate.date?.getDate() : ""} ${day ? mounths[day]: ""} ` } secondLine={`en ${currentDate.moment}`} />
+                                    <HeaderCase key={`HeaderCase${index}`} firstLine={`${days[day || currentDate.day || 0]} ${day ? currentDate.date?.getDate() : ""} ${day ? mounths[day]: ""} ` } secondLine={`en ${currentDate.moment}`} />
                                 </>
                             )
                         })}
@@ -32,10 +32,10 @@ const Calendar = ({dates, availability} : Props) => {
                 <tbody>
                     <tr className='mb-4 flex p-4 bg-brown'>
                         <td className="w-40 flex flex-col justify-center items-center" > MES DISPO :</td>
-                        {availability.map( (dayAvailability) => {
+                        {availability.map( (dayAvailability, index) => {
                             return(
                                 <>
-                                    <Checkbox isEditable={true} checkboxState={dayAvailability} />
+                                    <Checkbox key={`Checkbox${index}`} isEditable={true} checkboxState={dayAvailability} />
                                 </>
                             )
                         })}
