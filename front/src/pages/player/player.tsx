@@ -41,7 +41,7 @@ const Player = () => {
             <SubTitle title="PERSONAGES" />
             <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
                 { pjs.map((pjData, index) => <PjCard key={index} pjData={pjData}/>) }
-                <a href="/pj/new">
+                <a href="/newPj">
                     <button className="border-dashed h-96 w-56 border-orange border-8 rounded-2xl flex justify-center items-center">
                         <img className="max-h-20" alt="add pj" src={addIcon} />
                     </button>

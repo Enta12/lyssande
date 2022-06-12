@@ -8,7 +8,7 @@ const Nav = () => {
             <NavLink href="/map">Carte</NavLink>
             <NavLink href="/player">Joeurs</NavLink>
             <NavLink href="/fight">Combat</NavLink>
-            <NavLink href="session/new">Créer une session</NavLink>
+            <NavLink href="newSession">Créer une session</NavLink>
         </nav>
     )
 }

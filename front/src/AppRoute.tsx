@@ -21,9 +21,9 @@ function AppRoute() {
             <Route path="/pj/:id" element={<Layout><DetailPj /></Layout>} />
             <Route path="/player" element={<Layout><Players /></Layout>} />
             <Route path="/player/:id" element={<Layout><Player /></Layout>} />
-            <Route path="/session/new" element={<Layout><CreateSession /></Layout>} />           
+            <Route path="/newSession" element={<Layout><CreateSession /></Layout>} />           
             <Route path="/fight" element={<Layout><FightPage /></Layout>} />
-            <Route path="/pj/new" element={<Layout><AddPj /></Layout>} />
+            <Route path="/newPj" element={<Layout><AddPj /></Layout>} />
             <Route path="/calendar" element={<Layout><Calendar /></Layout>} />
             <Route path="/map" element={<Layout><MapPage /></Layout>} />
             <Route path="/" element={<Login />} />
