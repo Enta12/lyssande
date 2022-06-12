@@ -21,7 +21,7 @@ const PjSessionSelector = ({quest, pjs, playerName, selectedPj, setSelectedPj, p
         e.stopPropagation();
     }
     const onCardClick = () => {
-        setIsOpen(true);
+        setIsOpen(!isOpen);
     }
     useEffect(() => {
         const onClickOutside = () => {
