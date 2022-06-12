@@ -10,6 +10,7 @@ import FightPage from "./pages/fight/FightPage";
 import Player from "./pages/player/player";
 import DetailPj from "./pages/pj/detailPj";
 import Players from "./pages/player/players";
+import CreateSession from "./pages/createSession";
 
 
 function AppRoute() {
@@ -19,7 +20,8 @@ function AppRoute() {
             <Route path="/pj" element={<Layout><Pj /></Layout>} />
             <Route path="/pj/:id" element={<Layout><DetailPj /></Layout>} />
             <Route path="/player" element={<Layout><Players /></Layout>} />
-            <Route path="/player/:id" element={<Layout><Player /></Layout>} />            
+            <Route path="/player/:id" element={<Layout><Player /></Layout>} />
+            <Route path="/session/new" element={<Layout><CreateSession /></Layout>} />           
             <Route path="/fight" element={<Layout><FightPage /></Layout>} />
             <Route path="/pj/new" element={<Layout><AddPj /></Layout>} />
             <Route path="/calendar" element={<Layout><Calendar /></Layout>} />

@@ -103,7 +103,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                         }
                     />
                 }
-                else if(pj[mapPos]){
+                else if(pj.positions[mapPos]){
                 tokens[index] = 
                 <Token
                     hidden={!(pjSortedByPlayer.length===0 || pjSortedByPlayer.some((selectedPj) => selectedPj === pj.player))}
@@ -111,7 +111,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                     img={pj.img} 
                     key={pj.name} 
                     pj={pj} 
-                    pos={pj[mapPos] || {x:0, y:0}}
+                    pos={pj.positions[mapPos] || {x:0, y:0}}
                     imgCoord={{
                         xStart: mapRef.current.x,
                         width: mapRef.current.width,

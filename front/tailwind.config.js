@@ -13,11 +13,6 @@ module.exports = {
         swamp: '#274747',
         beige: '#F1E5D5'
       },
-      keyframes: {
-        animation: {
-          'spin-slow': 'spin 3s linear infinite',
-        }
-      },
       fontFamily: {
         bubblegum : "'Bubblegum Sans', cursive",
         inter : "'Inter', sans-serif"

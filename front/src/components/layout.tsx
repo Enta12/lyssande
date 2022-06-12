@@ -6,7 +6,7 @@ import Footer from "./footer"
 const Layout = (props : {children: JSX.Element, notifMessage?: string}) => {
     const {children, notifMessage} = props
     return (
-        <div className="h-full flex justify-between flex-col bg-amber-100">
+        <div className="min-h-screen h-full flex justify-between flex-col bg-amber-100">
             <div>
                 <Header />
                 {notifMessage && <Notif>{notifMessage}</Notif>}
