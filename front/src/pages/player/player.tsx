@@ -5,6 +5,7 @@ import addIcon from '../../assets/add.svg'
 import { pjsMocked, playerMocked } from "../../moockedData"
 import Calendar from "../../components/calendar/calendar";
 import { PossibleDate } from "../../types";
+import { useParams } from "react-router-dom";
 
 type Availability = "no" | "yes" | "maybe"
 const availability : Availability[] = []
@@ -30,14 +31,16 @@ const setDates = () => {
 setDates();
 
 const Player = () => {
-    const selectedPlayer = playerMocked[0];
-    const pjs = pjsMocked.filter(pj => pj.player === 0);
+    const params = useParams();
+    const id = parseInt(params.id || "0");
+    const selectedPlayer = playerMocked[id];
+    const pjs = pjsMocked.filter(pj => pj.player === id);
     return (
         <div className='pt-8 w-full flex flex-col gap-8'>
             <Title title={selectedPlayer.name} />
             <SubTitle title="PERSONAGES" />
             <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
-                { pjs.map(pjData => <PjCard pjData={pjData}/>) }
+                { pjs.map((pjData, index) => <PjCard key={index} pjData={pjData}/>) }
                 <a href="/pj/new">
                     <button className="border-dashed h-96 w-56 border-orange border-8 rounded-2xl flex justify-center items-center">
                         <img className="max-h-20" alt="add pj" src={addIcon} />
