@@ -4,9 +4,9 @@ const Nav = () => {
 
             <NavLink href="/">Accueil</NavLink>
             <NavLink href="/calendar">Calendrier</NavLink>
-            <NavLink href="/pj">Mes PJ</NavLink>
+            <NavLink href="/pj">PJ</NavLink>
             <NavLink href="/map">Carte</NavLink>
-            <NavLink href="/player">Mon compte</NavLink>
+            <NavLink href="/player">Joeurs</NavLink>
             <NavLink href="/fight">Combat</NavLink>
         </nav>
     )
