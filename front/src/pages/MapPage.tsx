@@ -1,5 +1,5 @@
 import Map from '../components/map/map';
-import {pjsMocked, mapsMoocked} from '../moockedData';
+import {pjsMoocked, mapsMoocked} from '../moockedData';
 import React, {useState} from 'react';
 
 
@@ -28,7 +28,7 @@ const MapPage = () => {
       </div>
       <Map
         img={mapsMoocked[mapSelected].mapLink}
-        pjs={pjsMocked}
+        pjs={pjsMoocked}
         mapName={mapsMoocked[mapSelected].name}
       />
     </>

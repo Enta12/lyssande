@@ -1,10 +1,10 @@
 import PlayerCard from '../../components/playerCard';
 import Title from '../../components/title';
-import {playerMocked} from '../../moockedData';
+import {playerMoocked} from '../../moockedData';
 import React from 'react';
 
 const Players = () => {
-  const players = playerMocked;
+  const players = playerMoocked;
   return (
     <div className='pt-8 w-full flex flex-col'>
       <Title title="LES JOUEURS" />

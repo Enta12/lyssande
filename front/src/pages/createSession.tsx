@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import PjSessionSelector from '../components/pjSessionSelector';
 import PrimaryButton from '../components/primary-button';
-import {pjsMocked, playerMocked} from '../moockedData';
+import {pjsMoocked, playerMoocked} from '../moockedData';
 
 const CreateSession = () => {
-  const players = playerMocked;
-  const pjs = pjsMocked;
+  const players = playerMoocked;
+  const pjs = pjsMoocked;
   const [selectedPjs, setSelectedPjs] = useState<number[]>([]);
   const [lastQuest, setLastQuest] = useState(-1);
   const setSelectedPj = (playerIndex: number, pjIndex: number ) => {

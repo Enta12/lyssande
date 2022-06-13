@@ -1,6 +1,6 @@
 import {MouseEvent, useState, useRef, useEffect} from 'react';
 import ReactTooltip from 'react-tooltip';
-import {playerMocked} from '../../moockedData';
+import {playerMoocked} from '../../moockedData';
 import {Pos, PjType} from '../../types';
 import PjCard from '../pjCard';
 import MapButton from './mapButton';
@@ -173,7 +173,7 @@ const Map = ({img, pjs, mapName}: Props) => {
       {tokens}
       <div className='flex gap-16 mt-4 w-full'>
         <MapSelect
-          players={playerMocked}
+          players={playerMoocked}
           value={pjSortedByPlayer}
           handleChange={(array) => setPjSortedByPlayer(array)} />
       </div>

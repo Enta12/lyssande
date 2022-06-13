@@ -2,7 +2,7 @@ import PjCard from '../../components/pjCard';
 import SubTitle from '../../components/subTitle';
 import Title from '../../components/title';
 import addIcon from '../../assets/add.svg';
-import {pjsMocked, playerMocked} from '../../moockedData';
+import {pjsMoocked, playerMoocked} from '../../moockedData';
 import Calendar from '../../components/calendar/calendar';
 import {PossibleDate} from '../../types';
 import {useParams} from 'react-router-dom';
@@ -33,8 +33,8 @@ setDates();
 const Player = () => {
   const params = useParams();
   const id = parseInt(params.id || '0');
-  const selectedPlayer = playerMocked[id];
-  const pjs = pjsMocked.filter((pj) => pj.player === id);
+  const selectedPlayer = playerMoocked[id];
+  const pjs = pjsMoocked.filter((pj) => pj.player === id);
   return (
     <div className='
       pt-8
