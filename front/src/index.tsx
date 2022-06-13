@@ -1,17 +1,16 @@
 import React from 'react';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import AppRoute from './AppRoute'
-import { createRoot } from 'react-dom/client';
+import AppRoute from './AppRoute';
+import {createRoot} from 'react-dom/client';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
-  <React.StrictMode>
-    <AppRoute />
-    <div className="rounded-bl-full w-5/12 w-3/4 hidden drop-shadow" />
-  </React.StrictMode>
+    <React.StrictMode>
+      <AppRoute />
+      <div className="rounded-bl-full w-5/12 w-3/4 hidden drop-shadow" />
+    </React.StrictMode>,
 );
-
 
 
 // If you want your app to work offline and load faster, you can change

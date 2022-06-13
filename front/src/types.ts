@@ -32,9 +32,28 @@ export type WorldMap = {
     mapLink: string;
 }
 export type Pos = {x: number, y: number};
-export type Job = 'Pirate' | 'Menestrel' | 'Mage de Tzintch' | 'Mage' | 'Noble' | 'Ingénieur';
-export type Race = 'Nain' | 'Humain' | 'Demie-elfe' | 'Elfe-noire' | 'Hobbit';
-export type Local = 'head' | 'torso' | 'arm' | 'swordArm' | 'leg' | 'genitals' | 'locals' | 'random';
+export type Job =
+    'Pirate' |
+    'Menestrel' |
+    'Mage de Tzintch' |
+    'Mage' |
+    'Noble' |
+    'Ingénieur';
+export type Race =
+    'Nain' |
+    'Humain' |
+    'Demie-elfe' |
+    'Elfe-noire' |
+    'Hobbit';
+export type Local =
+    'head' |
+    'torso' |
+    'arm' |
+    'swordArm' |
+    'leg' |
+    'genitals' |
+    'locals' |
+    'random';
 export type Protagonist = {
     name: string;
     at: number;
@@ -49,5 +68,5 @@ export type FightPhaseData = {
 export type PossibleDate = {
     date?: Date,
     day?: number,
-    moment: "soirée" | "journée"
+    moment: 'soirée' | 'journée'
 }
