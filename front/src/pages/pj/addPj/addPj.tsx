@@ -1,9 +1,6 @@
-import Input from '../../../components/input';
-import InputSelect from '../../../components/inputSelect';
-import Title from '../../../components/title';
+import {Input, InputSelect, Title, TextInput} from '../../../components';
 import React from 'react';
 import AlignmentInput from './AlignmentInput';
-import TextInput from '../../../components/textInput';
 import {
   culteMoocked,
   jobsMoocked,

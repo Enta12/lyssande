@@ -53,15 +53,14 @@ const Calendar = ({dates, availability}: Props) => {
             {dates.map((currentDate, index) => {
               const day = currentDate.date?.getDay();
               return (
-                <>
+                <React.Fragment key={`HeaderCase${index}`}>
                   <HeaderCase
-                    key={`HeaderCase${index}`}
                     firstLine={`${days[day || currentDate.day || 0]} ${
                       day ? currentDate.date?.getDate() : ''
                     } ${day ? mounths[day] : ''} `}
                     secondLine={`en ${currentDate.moment}`}
                   />
-                </>
+                </React.Fragment>
               );
             })}
           </tr>
@@ -74,13 +73,12 @@ const Calendar = ({dates, availability}: Props) => {
             </td>
             {availability.map((dayAvailability, index) => {
               return (
-                <>
+                <React.Fragment key={`Checkbox${index}`}>
                   <Checkbox
-                    key={`Checkbox${index}`}
                     isEditable={true}
                     checkboxState={dayAvailability}
                   />
-                </>
+                </React.Fragment>
               );
             })}
           </tr>

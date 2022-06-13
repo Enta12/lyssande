@@ -1,6 +1,4 @@
-import Title from '../../components/title';
-import Calendar from '../../components/calendar/calendar';
-import PrimaryButton from '../../components/primary-button';
+import {Title, Calendar} from '../../components';
 import React from 'react';
 
 type Availability = 'no' | 'yes' | 'maybe'

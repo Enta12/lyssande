@@ -1,6 +1,5 @@
 import React from 'react';
-import Input from '../../components/input';
-import PrimaryButton from '../../components/primary-button';
+import {Input, PrimaryButton} from '../../components';
 
 const Login = () => {
   return (

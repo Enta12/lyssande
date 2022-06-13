@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import PjSessionSelector from '../components/pjSessionSelector';
-import PrimaryButton from '../components/primary-button';
+import {PjSessionSelector, PrimaryButton} from '../components';
 import {pjsMoocked, playerMoocked} from '../moockedData';
 
 const CreateSession = () => {

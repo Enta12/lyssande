@@ -1,5 +1,5 @@
 import addIcon from '../../assets/add.svg';
-import PjCard from '../../components/pjCard';
+import {PjCard} from '../../components';
 import {pjsMoocked} from '../../moockedData';
 import React from 'react';
 

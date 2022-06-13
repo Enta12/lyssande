@@ -1,6 +1,5 @@
 import {useParams} from 'react-router-dom';
-import DetailPjCard from '../../components/detailPjCard';
-import Title from '../../components/title';
+import {DetailPjCard, Title} from '../../components';
 import {pjsMoocked} from '../../moockedData';
 import React from 'react';
 

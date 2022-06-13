@@ -1,5 +1,4 @@
-import PlayerCard from '../../components/playerCard';
-import Title from '../../components/title';
+import {PlayerCard, Title} from '../../components';
 import {playerMoocked} from '../../moockedData';
 import React from 'react';
 

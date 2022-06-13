@@ -1,9 +1,6 @@
-import PjCard from '../../components/pjCard';
-import SubTitle from '../../components/subTitle';
-import Title from '../../components/title';
+import {PjCard, SubTitle, Title, Calendar} from '../../components';
 import addIcon from '../../assets/add.svg';
 import {pjsMoocked, playerMoocked} from '../../moockedData';
-import Calendar from '../../components/calendar/calendar';
 import {PossibleDate} from '../../types';
 import {useParams} from 'react-router-dom';
 import React from 'react';

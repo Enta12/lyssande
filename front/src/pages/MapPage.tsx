@@ -1,4 +1,4 @@
-import Map from '../components/map/map';
+import {Map} from '../components';
 import {pjsMoocked, mapsMoocked} from '../moockedData';
 import React, {useState} from 'react';
 
