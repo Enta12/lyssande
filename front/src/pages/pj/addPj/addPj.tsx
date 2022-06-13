@@ -30,7 +30,7 @@ const AddPj = () => {
           flex
           flex-col
           gap-4
-          justify-around
+          justify-between
           items-center
           flex-1
         '>

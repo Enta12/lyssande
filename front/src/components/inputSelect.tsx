@@ -33,7 +33,17 @@ const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
   }, [selectRef]);
 
   return (
-    <div className={`w-${width} text-brown text-center text-2xl font-inter`}>
+    <div
+      className={`
+        w-${width}
+        relative
+        text-brown
+        text-center
+        text-2xl
+        font-inter
+      `}
+      ref={selectRef}
+    >
       <div
         onClick={() => {
           setIsOpen(!isOpen);
@@ -58,16 +68,20 @@ const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
           alt="open select"
         />
       </div>
-      {options.map((option, index) => <Option
-        height={height}
-        last={index===options.length-1}
-        key={`${title}${index}`}
-        name={option}
-        display={isOpen}
-        selectAnOption={(e) => {
-          selectAnOption(e);
-        }}
-      />)}
+      <div
+        className="absolute w-full z-20"
+      >
+        {options.map((option, index) => <Option
+          height={height}
+          last={index===options.length-1}
+          key={`${title}${index}`}
+          name={option}
+          display={isOpen}
+          selectAnOption={(e) => {
+            selectAnOption(e);
+          }}
+        />)}
+      </div>
       <input readOnly type="hidden" value={optionSelected}/>
     </div>
   );
@@ -90,7 +104,6 @@ const Option = ({
 } : OptionProps) => {
   const classNames = display?
   `h-${height}
-  z-10
   border-t
   flex
   justify-center
