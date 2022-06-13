@@ -1,11 +1,11 @@
 import addIcon from '../../assets/add.svg';
 import PjCard from '../../components/pjCard';
-import {pjsMocked} from '../../moockedData';
+import {pjsMoocked} from '../../moockedData';
 import React from 'react';
 
 const Pj = () => {
   const EmptyCards : JSX.Element[] = [];
-  const pjData = pjsMocked;
+  const pjData = pjsMoocked;
 
   for (let i = 0; i < (4 - ((pjData.length+1)%4)); i++) {
     EmptyCards.push(
@@ -22,7 +22,7 @@ const Pj = () => {
   return (
     <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
 
-      { pjsMocked.map((pjData, index) =>
+      { pjsMoocked.map((pjData, index) =>
         <PjCard key={index} pjData={pjData}/>) }
 
       <a href="/newPj">

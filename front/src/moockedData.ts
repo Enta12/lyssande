@@ -6,7 +6,7 @@ import FrostMap from './assets/maps/frost.jpg';
 import JungleMap from './assets/maps/ammouka-sungul.jpg';
 import mongboloMap from './assets/maps/mongbolo.jpg';
 import fernolMap from './assets/maps/fernol.jpg';
-export const racesMocked : string[]= [
+export const racesMoocked : string[]= [
   'elfe-sylvain',
   'haut-elfe',
   'elfe-noir',
@@ -19,7 +19,7 @@ export const racesMocked : string[]= [
   'orc',
   'gobelin',
 ];
-export const jobsMocked : string[]= [
+export const jobsMoocked : string[]= [
   'Guerrier/Gladiateur',
   'Pretre',
   'Magicien',
@@ -29,7 +29,17 @@ export const jobsMocked : string[]= [
   'Noble/Bourgeois',
   'Paladin',
 ];
-export const pjsMocked : PjType[]= [
+export const culteMoocked : string[]= [
+  'Malgar',
+  'Tzintch',
+  'Adathie',
+  'Niourgl',
+  'Youclidth',
+  'Khornettoh',
+  'Slanoush',
+  'Lafoune',
+];
+export const pjsMoocked : PjType[]= [
   {
     name: 'Fluffy',
     img: 'https://static0.cbrimages.com/wordpress/wp-content/uploads/2021/12/Luffy-during-Onigashima-raid.jpg',
@@ -120,7 +130,7 @@ export const pjsMocked : PjType[]= [
   },
 
 ];
-export const playerMocked : Player[]= [
+export const playerMoocked : Player[]= [
   {
     name: 'Baptiste',
     id: 0,

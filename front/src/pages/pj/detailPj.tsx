@@ -1,13 +1,13 @@
 import {useParams} from 'react-router-dom';
 import DetailPjCard from '../../components/detailPjCard';
 import Title from '../../components/title';
-import {pjsMocked} from '../../moockedData';
+import {pjsMoocked} from '../../moockedData';
 import React from 'react';
 
 const DetailPj = () => {
   const params = useParams();
   const id = parseInt(params.id || '0');
-  const selectedPj = pjsMocked[id];
+  const selectedPj = pjsMoocked[id];
   return (
     <div className="flex w-full py-10">
       <div className="flex-1 flex flex-col gap-4">

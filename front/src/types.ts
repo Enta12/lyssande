@@ -2,6 +2,7 @@ export type PjType = {
     name: string,
     img: string,
     job: Job,
+    culte?: string,
     race: Race,
     level: number,
     positions:{

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import doneIcon from '../../../assets/done.svg';
 
 type Category = 'moral' | 'law';
 type Props = {
@@ -124,6 +123,8 @@ const CheckInput = ({
           value={name}
           className="
             border-swamp
+            relative
+            z-10
             border-2
             appearance-none
             w-6
@@ -133,7 +134,15 @@ const CheckInput = ({
           onChange={(e) => onChange(e)}
         />
         {checked &&
-          <img className="absolute inset-0" src={doneIcon} alt="check" />}
+          <div className="
+            absolute
+            inset-0
+            bg-transparent
+            border-brown
+            h-6
+            border-4
+            rounded-full"
+          />}
       </div>
       {name}
     </div>
