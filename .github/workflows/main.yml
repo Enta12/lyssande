@@ -40,6 +40,6 @@ jobs:
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
           username: ${{ secrets.USERNAME }} 
           host: ${{ secrets.SERVER }} 
-          command : cd lysande && ./launch.sh
+          command : cd lysande && ./deploy.sh
           
     

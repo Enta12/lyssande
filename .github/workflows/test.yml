@@ -16,6 +16,9 @@ jobs:
       - name: front test
         working-directory: ./front
         run : npm test
+      - name: front build
+        working-directory: ./front
+        run : npm run build
       
   back:
     runs-on: ubuntu-latest
