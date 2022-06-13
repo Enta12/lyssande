@@ -38,11 +38,11 @@ const MapButton = ({hidden, name, picture, onClick}: Props) => {
           flex
           flex-col-reverse
           items-center
-          rounded-b-[120rem]
+          rounded-b-[100px]
           left-[-23px]
           top-[39px]
           absolute
-          rounded-t-full
+          rounded-t-[200px]
           bg-darkBrown
           h-16
           w-32

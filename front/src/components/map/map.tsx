@@ -152,7 +152,7 @@ const Map = ({img, pjs, mapName}: Props) => {
         setHeight(mapRef?.current?.height || height-1);
       }, 500);
     }
-  }, [mapRef, height, dimensions]); // correct dependencies
+  }, [mapRef, height, dimensions]);
 
   /*
   const updatePjs = () => {
