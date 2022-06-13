@@ -7,7 +7,7 @@ interface Props {
     height?: string;
 }
 
-const Input = ({placeholder, type, width= '3/4', height = '24'} : Props) => {
+const Input = ({placeholder, type, width= '3/4', height = '12'} : Props) => {
   return (
     <input
       className={`

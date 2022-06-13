@@ -8,7 +8,7 @@ interface Props {
     title: string;
 }
 
-const InputSelect = ({title, options, width= '3/4', height = '24'} : Props) => {
+const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [optionSelected, setOptionSelected] = useState('');
   const selectRef = useRef<HTMLDivElement>(null);
