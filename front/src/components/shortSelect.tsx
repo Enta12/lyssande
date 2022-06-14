@@ -1,26 +1,27 @@
-import {Player} from '../../types';
-import {ReactComponent as OpenIcon} from '../../assets/openInputSelect.svg';
+import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
 import {useEffect, useRef, useState} from 'react';
 import React from 'react';
 
 
 type Props ={
-    players : Player[];
+    options : string[];
     value: number[];
-    handleChange: (values : number[]) => void
+    showValue?: boolean;
+    textEmpty?: string;
+    handleChange: (values : number) => void
 }
 
-const MapSelect = ({players, handleChange, value}: Props) => {
+const ShortSelect = ({
+  showValue,
+  textEmpty,
+  options,
+  handleChange,
+  value}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLInputElement>(null);
-  const handleClick= (option: number) => {
-    if (value.some((selectedPj) => selectedPj === option)) {
-      handleChange(value.filter((selectedPj) => {
-        return selectedPj !== option;
-      }));
-    } else {
-      handleChange([...value, option]);
-    }
+  const handleClick = (index: number) => {
+    setIsOpen(false);
+    handleChange(index);
   };
   useEffect(() => {
     const onClickOutside = () => {
@@ -42,7 +43,9 @@ const MapSelect = ({players, handleChange, value}: Props) => {
         className="flex justify-between p-1.5 bg-slate-300 w-64 rounded-lg"
         onClick={() =>setIsOpen(!isOpen)}
       >
-                Filtrer par joueur
+        <span className='text-swamp'>
+          {showValue? options[value[0]]: textEmpty}
+        </span>
         <OpenIcon
           className={
             isOpen?
@@ -59,20 +62,20 @@ const MapSelect = ({players, handleChange, value}: Props) => {
           absolute
           ${!isOpen && 'hidden'} z-20`
         }>
-        {players.map((player, index) => {
+        {options.map((option, index) => {
           return (
             <div
-              onClick={(e) => handleClick(player.id)}
+              onClick={(e) => handleClick(index)}
               key={index}
               className={
                 `${value.some((selectedPj) =>
-                  selectedPj === player.id) && 'bg-blue-400'}
+                  selectedPj === index) && 'bg-blue-400'}
                 p-1.5
                 cursor-pointer
                 ${index=== 0 && 'rounded-t-lg'} 
-              ${index=== players.length-1 && 'rounded-b-lg'}`}
+              ${index=== options.length-1 && 'rounded-b-lg'}`}
             >
-              {player.name}
+              {option}
             </div>
           );
         })}
@@ -80,4 +83,4 @@ const MapSelect = ({players, handleChange, value}: Props) => {
     </div>
   );
 };
-export default MapSelect;
+export default ShortSelect;
