@@ -4,7 +4,7 @@ import {playerMoocked} from '../../moockedData';
 import {Pos, PjType} from '../../types';
 import PjCard from '../pjCard';
 import MapButton from './mapButton';
-import MapSelect from './mapSelect';
+import ShortSelect from '../shortSelect';
 import React from 'react';
 
 type MapPos =
@@ -26,7 +26,6 @@ type Props = {
     mapName: string,
 }
 
-
 const Map = ({img, pjs, mapName}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
   const [currentPos, setCurrentPos] =
@@ -35,6 +34,15 @@ const Map = ({img, pjs, mapName}: Props) => {
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const tokens: JSX.Element[] = [];
+  const handleChange= (option: number) => {
+    if (pjSortedByPlayer.some((selectedPj) => selectedPj === option)) {
+      setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
+        return selectedPj !== option;
+      }));
+    } else {
+      setPjSortedByPlayer([...pjSortedByPlayer, option]);
+    }
+  };
   let mapPos : MapPos = 'positionFangh';
   switch (mapName) {
     case 'Caladie':
@@ -172,10 +180,11 @@ const Map = ({img, pjs, mapName}: Props) => {
       />
       {tokens}
       <div className='flex gap-16 mt-4 w-full'>
-        <MapSelect
-          players={playerMoocked}
+        <ShortSelect
+          textEmpty='Filtrer par joueur'
+          options={playerMoocked.map((player) => player.name)}
           value={pjSortedByPlayer}
-          handleChange={(array) => setPjSortedByPlayer(array)} />
+          handleChange={handleChange} />
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5'>
 
