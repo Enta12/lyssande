@@ -1,11 +1,10 @@
 import {MouseEvent, useState, useRef, useEffect} from 'react';
-import ReactTooltip from 'react-tooltip';
 import {playerMoocked} from '../../moockedData';
-import {Pos, PjType} from '../../types';
-import PjCard from '../pjCard';
+import {PjType} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
+import Token from './token';
 
 type MapPos =
 'positionFangh' |
@@ -14,12 +13,7 @@ type MapPos =
 'positionJungle' |
 'positionFernol' |
 'positionMongbolo';
-type Img = {
-    xStart: number;
-    width: number;
-    yStart: number;
-    height: number;
-}
+
 type Props = {
     pjs : PjType[],
     img: string,
@@ -61,36 +55,25 @@ const Map = ({img, pjs, mapName}: Props) => {
       mapPos = 'positionFernol';
       break;
   }
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  const handleResize = () => {
-    setDimensions({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
-  };
-
-  window.addEventListener('resize', handleResize);
-
-  const placeSelectedPj = (event : MouseEvent<HTMLImageElement>) => {
-    if (pjSelected !== -1 && mapRef?.current &&
+  const placeSelectedPj = (event : MouseEvent<HTMLDivElement>) => {
+    if (pjSelected > -1 && mapRef?.current &&
             event.clientX >
-              mapRef.current.x - window.scrollX &&
+              mapRef.current.offsetLeft - window.scrollX &&
             event.clientX <
-              mapRef.current.x + mapRef.current.width - window.scrollX &&
+              mapRef.current.offsetLeft + mapRef.current.clientWidth -
+              window.scrollX &&
             event.clientY >
-              mapRef.current.y - window.scrollY &&
+              mapRef.current.offsetTop - window.scrollY &&
             event.clientY <
-              mapRef.current.y + mapRef.current.height - window.scrollY
+              mapRef.current.offsetTop + mapRef.current.clientHeight -
+              window.scrollY
     ) {
       const currentItem = [...currentPos];
       currentItem[pjSelected] = {
-        x: (event.clientX+window.scrollX-mapRef.current.x)/
-          (mapRef.current.width),
-        y: (event.clientY+window.scrollY-mapRef.current.y)/
-          (mapRef.current.height),
+        x: (event.clientX+window.scrollX-mapRef.current.offsetLeft-12)/
+          (mapRef.current.clientWidth),
+        y: (event.clientY+window.scrollY-mapRef.current.offsetTop-12)/
+          (mapRef.current.clientHeight),
         map: mapName,
       };
       setCurrentPos(currentItem);
@@ -157,10 +140,10 @@ const Map = ({img, pjs, mapName}: Props) => {
       setPjSelected(pjSelected-1);
     } else {
       setTimeout(function() {
-        setHeight(mapRef?.current?.height || height-1);
+        setHeight(mapRef?.current?.clientHeight || height-1);
       }, 500);
     }
-  }, [mapRef, height, dimensions]);
+  }, [height]);
 
   /*
   const updatePjs = () => {
@@ -171,14 +154,18 @@ const Map = ({img, pjs, mapName}: Props) => {
   createTokens();
   return (
     <>
-      <img
-        className='self-start max-h-[800px]'
-        src={img}
-        alt={mapName}
-        onClick={placeSelectedPj}
+      <div
+        className='relative'
         ref={mapRef}
-      />
-      {tokens}
+      >
+        <img
+          className='self-start max-h-[800px]'
+          src={img}
+          alt={mapName}
+          onClick={placeSelectedPj}
+        />
+        {tokens}
+      </div>
       <div className='flex gap-16 mt-4 w-full'>
         <ShortSelect
           textEmpty='Filtrer par joueur'
@@ -194,7 +181,8 @@ const Map = ({img, pjs, mapName}: Props) => {
               hidden={
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(
-                      (selectedPj) => selectedPj === pj.player)
+                      (selectedPj) => selectedPj === pj.player) ||
+                  currentPos[index] || pj.positions[mapPos]
                 )}
               onClick={() => {
                 setPjSelected(index);
@@ -207,55 +195,6 @@ const Map = ({img, pjs, mapName}: Props) => {
         })}
       </div>
     </>
-  );
-};
-type TokenProps = {
-    hidden: boolean,
-    img: string,
-    pj: PjType,
-    pos: Pos,
-    imgCoord:Img,
-    handleClick: () => void
-}
-const Token = (
-    {hidden, img, pj, pos, imgCoord, handleClick} : TokenProps) => {
-  return (
-    <>
-      <img
-        onClick={handleClick}
-        data-tip
-        data-for={`${pj.name}RegisterTip`}
-        src={img}
-        alt={pj.name}
-        className={
-          `absolute
-          h-6
-          w-6
-          object-cover
-          rounded-xl
-          border
-          border-black
-          ${hidden && 'hidden'}
-        `}
-        style={
-          {
-            top: `${(pos.y* imgCoord.height)+imgCoord.yStart -12}px`,
-            left: `${(pos.x*imgCoord.width)+imgCoord.xStart -12}px`,
-          }
-        }
-
-      />
-      <ReactTooltip
-        id={`${pj.name}RegisterTip`}
-        place='right'
-        effect='solid'
-        backgroundColor='none'
-        delayShow={500}
-      >
-        <PjCard pjData={pj} />
-      </ReactTooltip>
-    </>
-
   );
 };
 
