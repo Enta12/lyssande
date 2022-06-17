@@ -6,12 +6,11 @@ export type PjType = {
     race: Race,
     level: number,
     positions:{
-        positionFangh?: Pos,
-        positionNorth?: Pos,
-        positionJungle?: Pos,
-        positionCaladie?: Pos,
-        positionFernol?: Pos,
-        positionMongbolo?: Pos,
+        coordonate : {
+            x: number,
+            y: number;
+        },
+        map: string;
     },
     quest?: number,
     player: number,

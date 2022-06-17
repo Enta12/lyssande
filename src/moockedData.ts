@@ -47,10 +47,11 @@ export const pjsMoocked : PjType[]= [
     race: 'Hobbit',
     level: 4,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.5,
         y: 0.5,
       },
+      map: 'Terre de Fangh',
     },
     gold: 12,
     player: 0,
@@ -69,10 +70,11 @@ export const pjsMoocked : PjType[]= [
     race: 'Humain',
     level: 3,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.6,
         y: 0.6,
       },
+      map: 'Terre de Fangh',
     },
     quest: 1,
     player: 0,
@@ -92,10 +94,11 @@ export const pjsMoocked : PjType[]= [
     id: 2,
     level: 13,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.7,
         y: 0.7,
       },
+      map: 'Terre de Fangh',
     },
     quest: 0,
     player: 0,
@@ -115,10 +118,11 @@ export const pjsMoocked : PjType[]= [
     id: 3,
     level: 1,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.4,
         y: 0.5,
       },
+      map: 'Terre de Fangh',
     },
     quest: 1,
     alignement: {

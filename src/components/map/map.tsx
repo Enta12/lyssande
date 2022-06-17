@@ -5,14 +5,7 @@ import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
 import Token from './token';
-
-type MapPos =
-'positionFangh' |
-'positionCaladie' |
-'positionNorth' |
-'positionJungle' |
-'positionFernol' |
-'positionMongbolo';
+import ContextMenu from './contextMenu';
 
 type Props = {
     pjs : PjType[],
@@ -20,14 +13,35 @@ type Props = {
     mapName: string,
 }
 
+type ContextMenuProps = {
+  y: string;
+  x: string;
+  pjTODO: boolean;
+}
+
 const Map = ({img, pjs, mapName}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
+  const [contexMenu, setContextMenu] =
+    useState<ContextMenuProps | null>(null);
   const [currentPos, setCurrentPos] =
-        useState<{x: number, y: number, map: string}[]>([]);
+    useState<{x: number, y: number, map: string}[]>([]);
   const [pjSelected, setPjSelected] = useState(-1);
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const tokens: JSX.Element[] = [];
+  const openContextMenu =(
+      e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+      pjTODO: boolean = false,
+  ) => {
+    e.preventDefault();
+    const xPos = e.pageX + 'px';
+    const yPos = e.pageY + 'px';
+    setContextMenu({
+      x: xPos,
+      y: yPos,
+      pjTODO: pjTODO,
+    });
+  };
   const handleChange= (option: number) => {
     if (pjSortedByPlayer.some((selectedPj) => selectedPj === option)) {
       setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
@@ -37,24 +51,6 @@ const Map = ({img, pjs, mapName}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  let mapPos : MapPos = 'positionFangh';
-  switch (mapName) {
-    case 'Caladie':
-      mapPos = 'positionCaladie';
-      break;
-    case 'Confins du givres':
-      mapPos = 'positionNorth';
-      break;
-    case 'Jungles D\'Ammouka & Sungul':
-      mapPos = 'positionJungle';
-      break;
-    case 'Ile Mong-Bolo':
-      mapPos = 'positionMongbolo';
-      break;
-    case 'Fernol':
-      mapPos = 'positionFernol';
-      break;
-  }
   const placeSelectedPj = (event : MouseEvent<HTMLDivElement>) => {
     if (pjSelected > -1 && mapRef?.current &&
             event.clientX >
@@ -70,9 +66,9 @@ const Map = ({img, pjs, mapName}: Props) => {
     ) {
       const currentItem = [...currentPos];
       currentItem[pjSelected] = {
-        x: (event.clientX+window.scrollX-mapRef.current.offsetLeft-12)/
+        x: (event.pageX-mapRef.current.offsetLeft-12)/
           (mapRef.current.clientWidth),
-        y: (event.clientY+window.scrollY-mapRef.current.offsetTop-12)/
+        y: (event.pageY-mapRef.current.offsetTop-12)/
           (mapRef.current.clientHeight),
         map: mapName,
       };
@@ -86,6 +82,7 @@ const Map = ({img, pjs, mapName}: Props) => {
           if (currentPos[index].map === mapName) {
             tokens[index] =
                     <Token
+                      setContexMenu={openContextMenu}
                       hidden={
                         !(pjSortedByPlayer.length===0 ||
                         pjSortedByPlayer.some(
@@ -107,9 +104,10 @@ const Map = ({img, pjs, mapName}: Props) => {
                       }
                     />;
           };
-        } else if (pj.positions[mapPos]) {
+        } else if (pj.positions.coordonate && pj.positions.map === mapName) {
           tokens[index] =
                 <Token
+                  setContexMenu={openContextMenu}
                   hidden={
                     !(
                       pjSortedByPlayer.length===0 ||
@@ -122,7 +120,7 @@ const Map = ({img, pjs, mapName}: Props) => {
                   img={pj.img}
                   key={pj.name}
                   pj={pj}
-                  pos={pj.positions[mapPos] || {x: 0, y: 0}}
+                  pos={pj.positions.coordonate || {x: 0, y: 0}}
                   imgCoord={{
                     xStart: mapRef.current.x,
                     width: mapRef.current.width,
@@ -159,6 +157,7 @@ const Map = ({img, pjs, mapName}: Props) => {
         ref={mapRef}
       >
         <img
+          onContextMenu={(e) => openContextMenu(e, false)}
           className='self-start max-h-[800px]'
           src={img}
           alt={mapName}
@@ -181,9 +180,9 @@ const Map = ({img, pjs, mapName}: Props) => {
               hidden={
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(
-                      (selectedPj) => selectedPj === pj.player) ||
-                  currentPos[index] || pj.positions[mapPos]
-                )}
+                      (selectedPj) => selectedPj === pj.player)) ||
+                  !!currentPos[index] || pj.positions.map === mapName
+              }
               onClick={() => {
                 setPjSelected(index);
               }}
@@ -194,6 +193,12 @@ const Map = ({img, pjs, mapName}: Props) => {
           );
         })}
       </div>
+      {contexMenu !== null && <ContextMenu
+        pjTODO={contexMenu.pjTODO}
+        y={contexMenu.y}
+        x={contexMenu.x}
+        close={() => setContextMenu(null)}
+      />}
     </>
   );
 };
