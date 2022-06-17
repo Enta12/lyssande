@@ -2,25 +2,46 @@ import React, {ComponentPropsWithoutRef} from 'react';
 
 type Props = ComponentPropsWithoutRef<'button'> & {
     text: string;
+    width?: string;
+    height?: string;
+    alterButton?: boolean;
+    short?: boolean;
+    onClick?: () => void;
+
 }
 
-const PrimaryButton = ({text, ...props} : Props) => {
+const PrimaryButton = ({
+  text,
+  alterButton,
+  height,
+  width,
+  short = false,
+  onClick,
+  ...props
+} : Props) => {
   return (
 
     <button
       {...props}
-      className="
+      className={`
         font-bubblegum
         align-center
         bg-brown
         rounded-2xl
-        h-24
-        w-80
-        border-8
-        text-2xl
-        text-lightGrey
-      ">
-      {text}
+        ${short ? 'text-lg rounded-md border-4' :
+        'text-2xl rounded-2xl border-8'}
+        ${height || 'h-24'}
+        ${width || 'w-80'}
+        ${alterButton ?
+          'bg-red-600' :
+          'text-lightGrey'}
+      `}>
+      <span className={ alterButton ?
+        'text-transparent bg-clip-text bg-gradient-to-b from-black to-red-900' :
+        ''}
+      >
+        {text}
+      </span>
     </button>
   );
 };
