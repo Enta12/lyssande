@@ -5,7 +5,7 @@ export type PjType = {
     culte?: string,
     race: Race,
     level: number,
-    positions:{
+    positions?:{
         coordonate : {
             x: number,
             y: number;

@@ -1,14 +1,31 @@
 import React, {useEffect, useRef} from 'react';
+import PrimaryButton from '../primary-button';
 import ShortSelect from '../shortSelect';
+import {ReactComponent as BackArrow} from '../../assets/back.svg';
 
 type Props = {
   y: string;
   x: string;
+  handleChange: (action: string, index: number) => void;
+  data: {
+    speed: {
+      options: string[],
+      value: number,
+    },
+    land: {
+      options: string[],
+      value: number,
+    },
+    duration: {
+      options: string[],
+      value: number,
+    }
+  }
   close: () => void;
-  pjTODO: boolean;
+  pjIndex?: number;
 }
 
-const ContextMenu = ({y, x, close}: Props) => {
+const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
   const contextMenuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -32,23 +49,46 @@ const ContextMenu = ({y, x, close}: Props) => {
       }}
     >
       <ShortSelect
-        value={[0]}
+        value={[data.speed.value]}
         showValue
-        options={[]}
-        handleChange={(e) => console.log(e)}
+        options={data.speed.options}
+        handleChange={(index) => handleChange('speed', index)}
       />
       <ShortSelect
-        value={[0]}
+        value={[data.duration.value]}
         showValue
-        options={[]}
-        handleChange={(e) => console.log(e)}
+        options={data.duration.options}
+        handleChange={(index) => handleChange('duration', index)}
       />
       <ShortSelect
-        value={[0]}
+        value={[data.land.value]}
         showValue
-        options={[]}
-        handleChange={(e) => console.log(e)}
+        options={data.land.options}
+        handleChange={(index) => handleChange('land', index)}
       />
+      {
+        pjIndex!== undefined &&
+        <>
+          <div className='relative'>
+            <BackArrow className='w-10'/>
+            <PrimaryButton
+              onClick={() => handleChange('resetToken', pjIndex)}
+              className='absolute right-0 top-0'
+              text="Reinitialisé sa position"
+              width='w-11/12'
+              height='h-10'
+              short
+            />
+          </div>
+          <PrimaryButton
+            onClick={() => handleChange('supressToken', pjIndex)}
+            text="Retirer de la carte"
+            alterButton width='w-full'
+            height='h-10'
+            short
+          />
+        </>
+      }
     </div>
   );
 };

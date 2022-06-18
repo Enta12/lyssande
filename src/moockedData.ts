@@ -170,3 +170,51 @@ export const mapsMoocked : WorldMap[] = [
     mapLink: fernolMap,
   },
 ];
+export const landsMoocked = [
+  {
+    name: 'Marécage',
+    speedMod: 0.5,
+  },
+  {
+    name: 'Montagne',
+    speedMod: 0.5,
+  },
+  {
+    name: 'Forêt',
+    speedMod: 0.75,
+  },
+  {
+    name: 'Collines',
+    speedMod: 0.75,
+  },
+  {
+    name: 'Routes, Plaines, Mer',
+    speed: 1,
+  },
+];
+export const speedMoocked = [
+  {
+    name: 'Normal, chariot 30km',
+    speedMod: 30,
+  },
+  {
+    name: 'barbares 55km',
+    speedMod: 55,
+  },
+  {
+    name: 'Cheval 50km',
+    speedMod: 50,
+  },
+  {
+    name: 'Diligence 70km',
+    speed: 70,
+  },
+  {
+    name: 'Galere',
+    speed: 60,
+  },
+  {
+    name: 'Gallion',
+    speed: 100,
+  },
+];

@@ -7,7 +7,6 @@ type Props = ComponentPropsWithoutRef<'button'> & {
     alterButton?: boolean;
     short?: boolean;
     onClick?: () => void;
-
 }
 
 const PrimaryButton = ({
@@ -17,12 +16,11 @@ const PrimaryButton = ({
   width,
   short = false,
   onClick,
-  ...props
+  className,
 } : Props) => {
   return (
-
     <button
-      {...props}
+      onClick={onClick}
       className={`
         font-bubblegum
         align-center
@@ -35,6 +33,7 @@ const PrimaryButton = ({
         ${alterButton ?
           'bg-red-600' :
           'text-lightGrey'}
+        ${className}
       `}>
       <span className={ alterButton ?
         'text-transparent bg-clip-text bg-gradient-to-b from-black to-red-900' :
