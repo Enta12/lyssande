@@ -100,18 +100,7 @@ const Map = ({img, pjs, mapName}: Props) => {
     }
   };
   const placeSelectedPj = (event : MouseEvent<HTMLDivElement>) => {
-    if (pjSelected > -1 && mapRef?.current &&
-            event.clientX >
-              mapRef.current.offsetLeft - window.scrollX &&
-            event.clientX <
-              mapRef.current.offsetLeft + mapRef.current.clientWidth -
-              window.scrollX &&
-            event.clientY >
-              mapRef.current.offsetTop - window.scrollY &&
-            event.clientY <
-              mapRef.current.offsetTop + mapRef.current.clientHeight -
-              window.scrollY
-    ) {
+    if (pjSelected > -1 && mapRef.current) {
       const currentItem = [...currentPos];
       currentItem[pjSelected] = {
         x: (event.pageX-mapRef.current.offsetLeft-12)/
