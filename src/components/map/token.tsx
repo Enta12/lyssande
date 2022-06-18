@@ -3,59 +3,92 @@ import {PjType, Pos} from '../../types';
 /* import PjCard from '../pjCard'; */
 import React from 'react';
 
-type Img = {
-    xStart: number;
-    width: number;
-    yStart: number;
-    height: number;
-}
-
 type Props = {
-    hidden: boolean,
-    img: string,
-    pj: PjType,
-    pos: Pos,
-    imgCoord: Img,
-    handleClick: () => void
+    hidden: boolean;
+    showMouvement?: boolean;
+    img: string;
+    pj: PjType;
+    pos: Pos;
+    mouvement: number;
+    handleClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    handleTokenClick: () => void;
     setContexMenu: (e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-                    pjTODO: boolean) => void
+                    pjTODO: boolean) => void;
 }
 
-const Token = (
-    {hidden, img, pj, pos, imgCoord, handleClick, setContexMenu} : Props) => {
+const Token = ({
+  hidden,
+  img,
+  pj,
+  pos,
+  handleTokenClick,
+  handleClick,
+  setContexMenu,
+  mouvement,
+  showMouvement = true,
+} : Props) => {
   const handleContextMenu =
   (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     setContexMenu(e, true);
   };
+  const position = {
+    top: `${pos.y* 100}%`,
+    left: `${pos.x*100}%`,
+  };
   return (
     <>
-      <div className='
-        bg-blue-100[.8]
-      '>
-        <img
-          onClick={handleClick}
-          onContextMenu={(e) => handleContextMenu(e)}
-          data-tip
-          data-for={`${pj.name}RegisterTip`}
-          src={img}
-          alt={pj.name}
-          className={
-            `absolute
-            h-6
-            w-6
-            object-cover
-            rounded-xl
-            border
-            border-black
-            ${hidden && 'hidden'}
-          `}
-          style={
-            {
-              top: `${pos.y* 100}%`,
-              left: `${pos.x*100}%`,
-            }
+      <div
+        onClick={(e) => handleClick(e)}
+        className='absolute'
+        style={
+          showMouvement?
+          {
+            width: `${mouvement*100}%`,
+            ...position,
+          }:
+          {
+            width: '24px',
+            ...position,
           }
-        />
+        }
+      >
+        <div
+          className={`
+          z-10
+          rounded-full
+          flex
+          justify-center
+          items-center
+          absolute
+          border-dashed
+          border-blue-500
+          ${hidden && 'hidden'}
+          ${showMouvement && 'border-2 ml-[-50%] mt-[-50%] bg-blue-500/[.2]'}
+          w-full
+          aspect-square
+        `}
+        >
+          <img
+            onClick={handleTokenClick}
+            onContextMenu={(e) => handleContextMenu(e)}
+            data-tip
+            data-for={`${pj.name}RegisterTip`}
+            src={img}
+            alt={pj.name}
+            className={`
+              relative
+              h-6
+              w-6
+              object-cover
+              rounded-xl
+              border
+              border-black
+              z-30
+              ${!showMouvement &&
+                'top-[-9px] left-[-12px]'}
+            `}
+          />
+        </div>
       </div>
       {/* <ReactTooltip
         id={`${pj.name}RegisterTip`}

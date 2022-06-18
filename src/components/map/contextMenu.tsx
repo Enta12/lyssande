@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import PrimaryButton from '../primary-button';
 import ShortSelect from '../shortSelect';
 import {ReactComponent as BackArrow} from '../../assets/back.svg';
+import {ReactComponent as Hike} from '../../assets/hike.svg';
 
 type Props = {
   y: string;
@@ -42,7 +43,7 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
   return (
     <div
       ref={contextMenuRef}
-      className='absolute bg-brown rounded-2xl p-5 flex flex-col gap-4'
+      className='absolute bg-brown rounded-2xl p-5 flex flex-col gap-4 z-50'
       style={{
         top: y,
         left: x,
@@ -76,6 +77,20 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
               className='absolute right-0 top-0'
               text="Reinitialisé sa position"
               width='w-11/12'
+              height='h-10'
+              short
+            />
+          </div>
+          <div className='relative'>
+            <Hike className='w-10 h-10'/>
+            <PrimaryButton
+              onClick={() => handleChange(
+                  'showMouvement',
+                  pjIndex,
+              )}
+              className='absolute right-0 top-0'
+              text='distance isochrome ON/OFF'
+              width='w-10/12'
               height='h-10'
               short
             />

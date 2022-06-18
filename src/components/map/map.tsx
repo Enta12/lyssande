@@ -8,9 +8,10 @@ import Token from './token';
 import ContextMenu from './contextMenu';
 
 type Props = {
-    pjs : PjType[],
-    img: string,
-    mapName: string,
+    pjs : PjType[];
+    img: string;
+    mapName: string;
+    scale: number;
 }
 
 type ContextMenuProps = {
@@ -19,27 +20,27 @@ type ContextMenuProps = {
   pjIndex?: number;
 }
 
-const formatPjToPos = (pj :PjType) => {
+const formatPjToTokenData = (pj :PjType) => {
   if (!pj.positions) return undefined;
   return {
     ...pj.positions.coordonate,
     map: pj.positions.map,
+    showMouvement: 0,
   };
 };
 
-const Map = ({img, pjs, mapName}: Props) => {
+const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
-  const [currentPos, setCurrentPos] =
-    useState(pjs.map((pj) => formatPjToPos(pj)));
+  const [tokenData, setTokenData] =
+    useState(pjs.map((pj) => formatPjToTokenData(pj)));
   const [pjSelected, setPjSelected] = useState(-1);
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
-
   const tokens: JSX.Element[] = [];
   const contextMenu = {
     speed: {
@@ -57,23 +58,37 @@ const Map = ({img, pjs, mapName}: Props) => {
     },
   };
 
-  const handleContextMenuChange = (action: string, index: number) => {
-    if (action === 'speed' || action === 'land' || action === 'duration') {
+  const handleContextMenuChange = (
+      action: string,
+      index: number,
+  ) => {
+    if (action === 'speed' ||
+        action === 'land' ||
+        action === 'duration') {
       const contextValueTemp = {...contextValue};
       contextValueTemp[action] = index;
       setContextValue(contextValueTemp);
       setContextMenu(null);
       return;
     }
-    const currentPosTemp = [...currentPos];
+    const tokenDataTemp = [...tokenData];
     switch (action) {
       case 'supressToken':
-        currentPosTemp[index] = undefined;
-        setCurrentPos(currentPosTemp);
+        tokenDataTemp[index] = undefined;
+        setTokenData(tokenDataTemp);
+        break;
+      case 'showMouvement':
+        tokenDataTemp[index] = {
+          map: tokenDataTemp[index]?.map || '',
+          x: tokenDataTemp[index]?.x || 0,
+          y: tokenDataTemp[index]?.y || 0,
+          showMouvement: tokenDataTemp[index]?.showMouvement === 1 ? 0:1,
+        };
+        setTokenData(tokenDataTemp);
         break;
       case 'resetToken':
-        currentPosTemp[index] = formatPjToPos(pjs[index]);
-        setCurrentPos(currentPosTemp);
+        tokenDataTemp[index] = formatPjToTokenData(pjs[index]);
+        setTokenData(tokenDataTemp);
     }
     setContextMenu(null);
   };
@@ -101,43 +116,43 @@ const Map = ({img, pjs, mapName}: Props) => {
   };
   const placeSelectedPj = (event : MouseEvent<HTMLDivElement>) => {
     if (pjSelected > -1 && mapRef.current) {
-      const currentItem = [...currentPos];
+      const currentItem = [...tokenData];
       currentItem[pjSelected] = {
-        x: (event.pageX-mapRef.current.offsetLeft-12)/
+        x: (event.pageX-mapRef.current.offsetLeft)/
           (mapRef.current.clientWidth),
-        y: (event.pageY-mapRef.current.offsetTop-12)/
+        y: (event.pageY-mapRef.current.offsetTop)/
           (mapRef.current.clientHeight),
         map: mapName,
+        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
       };
-      setCurrentPos(currentItem);
+      setTokenData(currentItem);
     }
   };
   const createTokens = () => {
     pjs.forEach((pj, index) => {
-      if (mapRef?.current && currentPos[index]) {
-        if (currentPos[index]?.map === mapName) {
+      if (mapRef?.current && tokenData[index]) {
+        if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
+            handleClick={placeSelectedPj}
+            showMouvement={tokenData[index]?.showMouvement === 1}
+            mouvement={
+              (((speedMoocked[contextValue.speed].speedMod) *
+                (landsMoocked[contextValue.land].speedMod) *
+                (contextValue.duration +1)) / (scale * 30))
+            }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
               !(pjSortedByPlayer.length===0 ||
               pjSortedByPlayer.some(
                   (selectedPj) => selectedPj === pj.player))}
-            handleClick={() => {
+            handleTokenClick={() => {
               setPjSelected(index);
             }}
             img={pjs[index].img}
             pj={pjs[index]}
             key={pj.name}
-            pos={currentPos[index] || {x: 0, y: 0}}
-            imgCoord={
-              {
-                xStart: mapRef.current.x,
-                width: mapRef.current.width,
-                yStart: mapRef.current.y,
-                height: mapRef.current.height,
-              }
-            }
+            pos={tokenData[index] || {x: 0, y: 0}}
           />;
         };
       }
@@ -164,7 +179,7 @@ const Map = ({img, pjs, mapName}: Props) => {
   return (
     <>
       <div
-        className='relative'
+        className='relative overflow-hidden'
         ref={mapRef}
       >
         <img
@@ -192,14 +207,14 @@ const Map = ({img, pjs, mapName}: Props) => {
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(
                       (selectedPj) => selectedPj === pj.player)) ||
-                  (!!currentPos[index] && currentPos[index]?.map === mapName)
+                  (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
               onClick={() => {
-                const pjPos = formatPjToPos(pj);
+                const pjPos = formatPjToTokenData(pj);
                 if (pjPos) {
-                  const currentPosTemp = [...currentPos];
-                  currentPosTemp[index] = pjPos;
-                  setCurrentPos(currentPosTemp);
+                  const tokenDataTemp = [...tokenData];
+                  tokenDataTemp[index] = pjPos;
+                  setTokenData(tokenDataTemp);
                 }
                 setPjSelected(index);
               }}

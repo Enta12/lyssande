@@ -195,7 +195,7 @@ export const landsMoocked = [
   },
   {
     name: 'Routes, Plaines, Mer',
-    speed: 1,
+    speedMod: 1,
   },
 ];
 export const speedMoocked = [
@@ -213,14 +213,14 @@ export const speedMoocked = [
   },
   {
     name: 'Diligence 70km',
-    speed: 70,
+    speedMod: 70,
   },
   {
     name: 'Galere',
-    speed: 60,
+    speedMod: 60,
   },
   {
     name: 'Gallion',
-    speed: 100,
+    speedMod: 100,
   },
 ];
