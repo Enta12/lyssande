@@ -2,5 +2,22 @@
 
 ## setup project
 
-docker image build -t lysande . 
-docker run -p 3000:3000 lysande
+### first setup 
+install nginx
+config nginx into reverse proxy
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name lysande.pepintrie.fr;
+    location / {
+        proxy_pass http://172.18.0.81:8081;
+        proxy_buffering off;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+create network : docker network create --subnet=172.18.0.0/16 petit
+
+### all setup
+docker build -t lysande .
+docker run -dit --name lysande --ip 172.18.0.81 --network petit lysande
