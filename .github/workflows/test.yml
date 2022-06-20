@@ -19,16 +19,3 @@ jobs:
       - name: front build
         working-directory: ./front
         run : npm run build
-      
-  back:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: actions/checkout@master
-      - name: back install
-        working-directory: ./back
-        run : npm i
-      - name: back test
-        working-directory: ./back
-        run : npm test
