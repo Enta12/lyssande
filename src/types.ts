@@ -71,3 +71,9 @@ export type PossibleDate = {
     day?: number,
     moment: 'soirée' | 'journée'
 }
+export type Auth = {
+    token: string;
+    user?: string;
+    id?: number;
+    role?: string;
+}

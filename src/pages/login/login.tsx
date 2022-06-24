@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
+import axios from 'axios';
 
 
 type Props = {
@@ -10,6 +11,18 @@ type Props = {
 const Login = ({setToken} : Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const login = () => {
+    axios.post('https://api.lysande.pepintrie.fr/auth/login',
+        {
+          email: email,
+          password: password,
+        }).then(
+        (response) => {
+          console.log(response);
+        });
+  };
+
   return (
     <div className="
       min-h-screen
@@ -45,7 +58,8 @@ const Login = ({setToken} : Props) => {
           placeholder="Mot de passe"
           type="password"
         />
-        <PrimaryButton text={'Connexion'}/>
+        <PrimaryButton onClick={login} text={'Connexion'}
+        />
       </form>
     </div>
   );

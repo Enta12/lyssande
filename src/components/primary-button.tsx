@@ -20,7 +20,10 @@ const PrimaryButton = ({
 } : Props) => {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) onClick();
+      }}
       className={`
         font-bubblegum
         align-center

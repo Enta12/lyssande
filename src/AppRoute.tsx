@@ -15,8 +15,8 @@ import CreateSession from './pages/createSession';
 
 
 const AppRoute = () => {
-  const [token, setToken] = useState('');
-  // const [username, setUserName] = useState('');
+  const [token, setToken] = useState(sessionStorage.getItem('user') || '');
+  console.log(token);
   if (!token) {
     return <Login setToken={setToken} />;
   }
@@ -33,7 +33,7 @@ const AppRoute = () => {
         <Route path='/newPj' element={<Layout><AddPj /></Layout>} />
         <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
         <Route path='/map' element={<Layout><MapPage /></Layout>} />
-        <Route path='*' element={<></>} />
+        <Route path='' element={<Layout><Players /></Layout>} />
       </Routes>
     </Router>
   );
