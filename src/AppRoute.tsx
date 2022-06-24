@@ -1,4 +1,5 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import {useState} from 'react';
 import React from 'react';
 import Layout from './components/layout';
 import Login from './pages/login/login';
@@ -14,6 +15,12 @@ import CreateSession from './pages/createSession';
 
 
 const AppRoute = () => {
+  const [token, setToken] = useState('');
+  // const [username, setUserName] = useState('');
+  if (!token) {
+    return <Login setToken={setToken} />;
+  }
+
   return (
     <Router>
       <Routes>
@@ -26,7 +33,7 @@ const AppRoute = () => {
         <Route path='/newPj' element={<Layout><AddPj /></Layout>} />
         <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
         <Route path='/map' element={<Layout><MapPage /></Layout>} />
-        <Route path='/' element={<Login />} />
+        <Route path='*' element={<></>} />
       </Routes>
     </Router>
   );
