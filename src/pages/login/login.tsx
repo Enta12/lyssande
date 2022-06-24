@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
+import {login} from '../../api/auth';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
-import axios from 'axios';
 
 
 type Props = {
@@ -11,17 +11,6 @@ type Props = {
 const Login = ({setToken} : Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const login = () => {
-    axios.post('https://api.lysande.pepintrie.fr/auth/login',
-        {
-          email: email,
-          password: password,
-        }).then(
-        (response) => {
-          console.log(response);
-        });
-  };
 
   return (
     <div className="
@@ -58,7 +47,11 @@ const Login = ({setToken} : Props) => {
           placeholder="Mot de passe"
           type="password"
         />
-        <PrimaryButton onClick={login} text={'Connexion'}
+        <PrimaryButton
+          onClick={async () => {
+            setToken(await login(email, password));
+          }}
+          text={'Connexion'}
         />
       </form>
     </div>
