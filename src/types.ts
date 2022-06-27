@@ -31,6 +31,7 @@ export type WorldMap = {
     name: string;
     mapLink: string;
     scale: number;
+    vertical: boolean;
 }
 export type Pos = {x: number, y: number};
 export type Job =

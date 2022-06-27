@@ -12,6 +12,7 @@ type Props = {
     img: string;
     mapName: string;
     scale: number;
+    vertical: boolean
 }
 
 type ContextMenuProps = {
@@ -29,7 +30,7 @@ const formatPjToTokenData = (pj :PjType) => {
   };
 };
 
-const Map = ({img, pjs, mapName, scale}: Props) => {
+const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
   const [contexMenu, setContextMenu] =
@@ -114,18 +115,18 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     }
   };
   const placeSelectedPj = (
-      pjSelectedv2: number,
+      pjSelected: number,
       event : MouseEvent<HTMLDivElement>,
   ) => {
-    if (pjSelectedv2 > -1 && mapRef.current) {
+    if (pjSelected > -1 && mapRef.current) {
       const currentItem = [...tokenData];
-      currentItem[pjSelectedv2] = {
-        x: (event.pageX-mapRef.current.offsetLeft)/
+      currentItem[pjSelected] = {
+        x: (event.pageX-mapRef.current.offsetLeft-12)/
           (mapRef.current.clientWidth),
-        y: (event.pageY-mapRef.current.offsetTop)/
+        y: (event.pageY-mapRef.current.offsetTop-12)/
           (mapRef.current.clientHeight),
         map: mapName,
-        showMouvement: currentItem[pjSelectedv2]?.showMouvement || 0,
+        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
       };
       setTokenData(currentItem);
     }
@@ -136,6 +137,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
+            vertical={vertical}
             handleOnDrag={(e) => placeSelectedPj(index, e)}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={

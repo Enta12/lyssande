@@ -3,7 +3,14 @@ import {PjType, Pos} from '../../types';
 /* import PjCard from '../pjCard'; */
 import React from 'react';
 
+type Style = {
+  top: string;
+  left: string;
+  width?: string;
+  height?: string;
+};
 type Props = {
+    vertical: boolean;
     hidden: boolean;
     showMouvement?: boolean;
     img: string;
@@ -16,6 +23,7 @@ type Props = {
 }
 
 const Token = ({
+  vertical,
   hidden,
   img,
   pj,
@@ -29,25 +37,28 @@ const Token = ({
   (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     setContexMenu(e, true);
   };
-  const position = {
+  const style: Style = {
     top: `${pos.y* 100}%`,
     left: `${pos.x*100}%`,
   };
+  if (showMouvement) {
+    vertical ?
+    style.height = `${mouvement*100}%`:
+    style.width = `${mouvement*100}%`;
+    console.log(style);
+  } else {
+    style.width = '24px';
+  }
+
   return (
     <>
       <div
-        className='absolute'
-        style={
-          showMouvement?
-          {
-            width: `${mouvement*100}%`,
-            ...position,
-          }:
-          {
-            width: '24px',
-            ...position,
-          }
-        }
+        onDrag={(e) => e.preventDefault()}
+        onDragEnter={(e) => e.preventDefault()}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => e.preventDefault()}
+        className='absolute z-10'
+        style={style}
       >
         <div
           className={`
@@ -66,6 +77,10 @@ const Token = ({
         `}
         >
           <img
+            onDrop={(e) => {
+              e.preventDefault();
+              console.log('regroup TODO');
+            }}
             onContextMenu={(e) => handleContextMenu(e)}
             data-tip
             data-for={`${pj.name}RegisterTip`}
@@ -73,7 +88,7 @@ const Token = ({
             alt={pj.name}
             onDragEnd={(e) => handleOnDrag(e)}
             className={`
-              relative
+              absolute
               h-6
               w-6
               object-cover
@@ -81,8 +96,6 @@ const Token = ({
               border
               border-black
               z-30
-              ${!showMouvement &&
-                'top-[-9px] left-[-12px]'}
             `}
           />
         </div>
