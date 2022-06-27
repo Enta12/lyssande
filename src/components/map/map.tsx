@@ -12,7 +12,6 @@ type Props = {
     img: string;
     mapName: string;
     scale: number;
-    vertical: boolean
 }
 
 type ContextMenuProps = {
@@ -30,9 +29,10 @@ const formatPjToTokenData = (pj :PjType) => {
   };
 };
 
-const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
+const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
+  const [test, setTest] =useState(0);
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
   const [tokenData, setTokenData] =
@@ -121,9 +121,9 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
     if (pjSelected > -1 && mapRef.current) {
       const currentItem = [...tokenData];
       currentItem[pjSelected] = {
-        x: (event.pageX-mapRef.current.offsetLeft-12)/
+        x: (event.pageX-mapRef.current.offsetLeft)/
           (mapRef.current.clientWidth),
-        y: (event.pageY-mapRef.current.offsetTop-12)/
+        y: (event.pageY-mapRef.current.offsetTop)/
           (mapRef.current.clientHeight),
         map: mapName,
         showMouvement: currentItem[pjSelected]?.showMouvement || 0,
@@ -137,13 +137,12 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
         if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
-            vertical={vertical}
             handleOnDrag={(e) => placeSelectedPj(index, e)}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
                 (landsMoocked[contextValue.land].speedMod) *
-                (contextValue.duration +1)) / (scale * 30))
+                (contextValue.duration +1))*2 / (scale * 30))
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
@@ -179,6 +178,10 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
   createTokens();
   return (
     <>
+      <input type="number" value={test} onChange={
+        (e) => setTest(parseInt(e.target.value || '0'))
+      } />
+      <button onClick={() => setTest(test- 0.1)} >-0.1</button>
       <div
         className='relative overflow-hidden'
         ref={mapRef}

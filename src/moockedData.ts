@@ -147,39 +147,33 @@ export const playerMoocked : Player[]= [
 export const mapsMoocked : WorldMap[] = [
   {
     name: 'Terre de Fangh',
-    scale: 9.24,
+    scale: 10.7,
     mapLink: fanghMap,
-    vertical: false,
   },
   {
     name: 'Caladie',
-    scale: 25.62,
+    scale: 3.9,
     mapLink: CaladieMap,
-    vertical: true,
   },
   {
     name: 'Confins du givres',
-    scale: 6.05,
+    scale: 16,
     mapLink: FrostMap,
-    vertical: false,
   },
   {
     name: 'Jungles D\'Ammouka & Sungul',
-    scale: 22.69,
+    scale: 4.4,
     mapLink: JungleMap,
-    vertical: true,
   },
   {
     name: 'Ile Mong-Bolo',
-    scale: 19.72,
+    scale: 5.1,
     mapLink: mongboloMap,
-    vertical: false,
   },
   {
     name: 'Fernol',
-    scale: 25.62,
+    scale: 3.9,
     mapLink: fernolMap,
-    vertical: true,
   },
 ];
 export const landsMoocked = [

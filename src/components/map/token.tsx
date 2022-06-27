@@ -10,7 +10,6 @@ type Style = {
   height?: string;
 };
 type Props = {
-    vertical: boolean;
     hidden: boolean;
     showMouvement?: boolean;
     img: string;
@@ -23,7 +22,6 @@ type Props = {
 }
 
 const Token = ({
-  vertical,
   hidden,
   img,
   pj,
@@ -42,10 +40,7 @@ const Token = ({
     left: `${pos.x*100}%`,
   };
   if (showMouvement) {
-    vertical ?
-    style.height = `${mouvement*100}%`:
     style.width = `${mouvement*100}%`;
-    console.log(style);
   } else {
     style.width = '24px';
   }
