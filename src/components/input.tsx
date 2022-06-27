@@ -5,9 +5,27 @@ interface Props {
     type: string;
     width?: string;
     height?: string;
+    value?: number | string;
+    setValueString?: (newValue: string) => void;
+    setValueNumber?: (newValue: string) => void;
 }
 
-const Input = ({placeholder, type, width= '3/4', height = '12'} : Props) => {
+const Input = ({
+  value,
+  setValueString,
+  setValueNumber,
+  placeholder,
+  type,
+  width= '3/4',
+  height = '12',
+} : Props) => {
+  let setValue : (value: any) => void;
+  if (!setValueString && !setValueNumber) {
+    setValue = () => console.error('no SetValue');
+  } else {
+    setValue = type === 'number' ? setValueNumber ||
+    console.error : setValueString || console.error;
+  }
   return (
     <input
       className={`
@@ -19,8 +37,10 @@ const Input = ({placeholder, type, width= '3/4', height = '12'} : Props) => {
         w-${width}
       `}
       placeholder={placeholder}
-      type={type}>
-    </input>
+      type={type}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
   );
 };
 

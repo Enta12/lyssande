@@ -1,39 +1,110 @@
 import {MouseEvent, useState, useRef, useEffect} from 'react';
-import ReactTooltip from 'react-tooltip';
-import {playerMoocked} from '../../moockedData';
-import {Pos, PjType} from '../../types';
-import PjCard from '../pjCard';
+import {landsMoocked, playerMoocked, speedMoocked} from '../../moockedData';
+import {PjType} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
+import Token from './token';
+import ContextMenu from './contextMenu';
 
-type MapPos =
-'positionFangh' |
-'positionCaladie' |
-'positionNorth' |
-'positionJungle' |
-'positionFernol' |
-'positionMongbolo';
-type Img = {
-    xStart: number;
-    width: number;
-    yStart: number;
-    height: number;
-}
 type Props = {
-    pjs : PjType[],
-    img: string,
-    mapName: string,
+    pjs : PjType[];
+    img: string;
+    mapName: string;
+    scale: number;
+    vertical: boolean
 }
 
-const Map = ({img, pjs, mapName}: Props) => {
+type ContextMenuProps = {
+  y: string;
+  x: string;
+  pjIndex?: number;
+}
+
+const formatPjToTokenData = (pj :PjType) => {
+  if (!pj.positions) return undefined;
+  return {
+    ...pj.positions.coordonate,
+    map: pj.positions.map,
+    showMouvement: 0,
+  };
+};
+
+const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
-  const [currentPos, setCurrentPos] =
-        useState<{x: number, y: number, map: string}[]>([]);
-  const [pjSelected, setPjSelected] = useState(-1);
+
+  const [contexMenu, setContextMenu] =
+    useState<ContextMenuProps | null>(null);
+  const [tokenData, setTokenData] =
+    useState(pjs.map((pj) => formatPjToTokenData(pj)));
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
+  const [contextValue, setContextValue] =
+      useState({speed: 0, land: 0, duration: 0});
   const tokens: JSX.Element[] = [];
+  const contextMenu = {
+    speed: {
+      options: speedMoocked.map((speed) => speed.name),
+      value: contextValue.speed,
+    },
+    land: {
+      options: landsMoocked.map((land) => land.name),
+      value: contextValue.land,
+    },
+    duration: {
+      options: new Array(10).fill('').map(
+          (duration, index) => `${index+1} jour`),
+      value: contextValue.duration,
+    },
+  };
+
+  const handleContextMenuChange = (
+      action: string,
+      index: number,
+  ) => {
+    if (action === 'speed' ||
+        action === 'land' ||
+        action === 'duration') {
+      const contextValueTemp = {...contextValue};
+      contextValueTemp[action] = index;
+      setContextValue(contextValueTemp);
+      setContextMenu(null);
+      return;
+    }
+    const tokenDataTemp = [...tokenData];
+    switch (action) {
+      case 'supressToken':
+        tokenDataTemp[index] = undefined;
+        setTokenData(tokenDataTemp);
+        break;
+      case 'showMouvement':
+        tokenDataTemp[index] = {
+          map: tokenDataTemp[index]?.map || '',
+          x: tokenDataTemp[index]?.x || 0,
+          y: tokenDataTemp[index]?.y || 0,
+          showMouvement: tokenDataTemp[index]?.showMouvement === 1 ? 0:1,
+        };
+        setTokenData(tokenDataTemp);
+        break;
+      case 'resetToken':
+        tokenDataTemp[index] = formatPjToTokenData(pjs[index]);
+        setTokenData(tokenDataTemp);
+    }
+    setContextMenu(null);
+  };
+  const openContextMenu =(
+      e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+      pjIndex?: number,
+  ) => {
+    e.preventDefault();
+    const xPos = e.pageX + 'px';
+    const yPos = e.pageY + 'px';
+    setContextMenu({
+      x: xPos,
+      y: yPos,
+      pjIndex: pjIndex,
+    });
+  };
   const handleChange= (option: number) => {
     if (pjSortedByPlayer.some((selectedPj) => selectedPj === option)) {
       setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
@@ -43,124 +114,61 @@ const Map = ({img, pjs, mapName}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  let mapPos : MapPos = 'positionFangh';
-  switch (mapName) {
-    case 'Caladie':
-      mapPos = 'positionCaladie';
-      break;
-    case 'Confins du givres':
-      mapPos = 'positionNorth';
-      break;
-    case 'Jungles D\'Ammouka & Sungul':
-      mapPos = 'positionJungle';
-      break;
-    case 'Ile Mong-Bolo':
-      mapPos = 'positionMongbolo';
-      break;
-    case 'Fernol':
-      mapPos = 'positionFernol';
-      break;
-  }
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  });
-  const handleResize = () => {
-    setDimensions({
-      height: window.innerHeight,
-      width: window.innerWidth,
-    });
-  };
-
-  window.addEventListener('resize', handleResize);
-
-  const placeSelectedPj = (event : MouseEvent<HTMLImageElement>) => {
-    if (pjSelected !== -1 && mapRef?.current &&
-            event.clientX >
-              mapRef.current.x - window.scrollX &&
-            event.clientX <
-              mapRef.current.x + mapRef.current.width - window.scrollX &&
-            event.clientY >
-              mapRef.current.y - window.scrollY &&
-            event.clientY <
-              mapRef.current.y + mapRef.current.height - window.scrollY
-    ) {
-      const currentItem = [...currentPos];
+  const placeSelectedPj = (
+      pjSelected: number,
+      event : MouseEvent<HTMLDivElement>,
+  ) => {
+    if (pjSelected > -1 && mapRef.current) {
+      const currentItem = [...tokenData];
       currentItem[pjSelected] = {
-        x: (event.clientX+window.scrollX-mapRef.current.x)/
-          (mapRef.current.width),
-        y: (event.clientY+window.scrollY-mapRef.current.y)/
-          (mapRef.current.height),
+        x: (event.pageX-mapRef.current.offsetLeft-12)/
+          (mapRef.current.clientWidth),
+        y: (event.pageY-mapRef.current.offsetTop-12)/
+          (mapRef.current.clientHeight),
         map: mapName,
+        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
       };
-      setCurrentPos(currentItem);
+      setTokenData(currentItem);
     }
   };
   const createTokens = () => {
     pjs.forEach((pj, index) => {
-      if (mapRef?.current) {
-        if (currentPos[index]?.x > 0) {
-          if (currentPos[index].map === mapName) {
-            tokens[index] =
-                    <Token
-                      hidden={
-                        !(pjSortedByPlayer.length===0 ||
-                        pjSortedByPlayer.some(
-                            (selectedPj) => selectedPj === pj.player))}
-                      handleClick={() => {
-                        setPjSelected(index);
-                      }}
-                      img={pjs[index].img}
-                      pj={pjs[index]}
-                      key={pj.name}
-                      pos={currentPos[index]}
-                      imgCoord={
-                        {
-                          xStart: mapRef.current.x,
-                          width: mapRef.current.width,
-                          yStart: mapRef.current.y,
-                          height: mapRef.current.height,
-                        }
-                      }
-                    />;
-          };
-        } else if (pj.positions[mapPos]) {
+      if (mapRef?.current && tokenData[index]) {
+        if (tokenData[index]?.map === mapName) {
           tokens[index] =
-                <Token
-                  hidden={
-                    !(
-                      pjSortedByPlayer.length===0 ||
-                      pjSortedByPlayer.some(
-                          (selectedPj) => selectedPj === pj.player)
-                    )}
-                  handleClick={() => {
-                    setPjSelected(index);
-                  }}
-                  img={pj.img}
-                  key={pj.name}
-                  pj={pj}
-                  pos={pj.positions[mapPos] || {x: 0, y: 0}}
-                  imgCoord={{
-                    xStart: mapRef.current.x,
-                    width: mapRef.current.width,
-                    yStart: mapRef.current.y,
-                    height: mapRef.current.height,
-                  }}
-                />;
-        }
+          <Token
+            vertical={vertical}
+            handleOnDrag={(e) => placeSelectedPj(index, e)}
+            showMouvement={tokenData[index]?.showMouvement === 1}
+            mouvement={
+              (((speedMoocked[contextValue.speed].speedMod) *
+                (landsMoocked[contextValue.land].speedMod) *
+                (contextValue.duration +1)) / (scale * 30))
+            }
+            setContexMenu={(e) => openContextMenu(e, index)}
+            hidden={
+              !(pjSortedByPlayer.length===0 ||
+              pjSortedByPlayer.some(
+                  (selectedPj) => selectedPj === pj.player))}
+            img={pjs[index].img}
+            pj={pjs[index]}
+            key={pj.name}
+            pos={tokenData[index] || {x: 0, y: 0}}
+          />;
+        };
       }
     });
   };
   useEffect(() => {
     if (height>0) {
       createTokens();
-      setPjSelected(pjSelected-1);
+      setContextValue({...contextValue});
     } else {
       setTimeout(function() {
-        setHeight(mapRef?.current?.height || height-1);
+        setHeight(mapRef?.current?.clientHeight || height-1);
       }, 500);
     }
-  }, [mapRef, height, dimensions]);
+  }, [height]);
 
   /*
   const updatePjs = () => {
@@ -171,14 +179,22 @@ const Map = ({img, pjs, mapName}: Props) => {
   createTokens();
   return (
     <>
-      <img
-        className='self-start max-h-[800px]'
-        src={img}
-        alt={mapName}
-        onClick={placeSelectedPj}
+      <div
+        className='relative overflow-hidden'
         ref={mapRef}
-      />
-      {tokens}
+      >
+        <img
+          onDrag={(e) => e.preventDefault()}
+          onDragEnter={(e) => e.preventDefault()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => e.preventDefault()}
+          onContextMenu={(e) => openContextMenu(e)}
+          className='self-start max-h-[800px]'
+          src={img}
+          alt={mapName}
+        />
+        {tokens}
+      </div>
       <div className='flex gap-16 mt-4 w-full'>
         <ShortSelect
           textEmpty='Filtrer par joueur'
@@ -194,11 +210,10 @@ const Map = ({img, pjs, mapName}: Props) => {
               hidden={
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(
-                      (selectedPj) => selectedPj === pj.player)
-                )}
-              onClick={() => {
-                setPjSelected(index);
-              }}
+                      (selectedPj) => selectedPj === pj.player)) ||
+                  (!!tokenData[index] && tokenData[index]?.map === mapName)
+              }
+              handleOnDrag={(e) => placeSelectedPj(index, e)}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
@@ -206,56 +221,15 @@ const Map = ({img, pjs, mapName}: Props) => {
           );
         })}
       </div>
+      {contexMenu !== null && <ContextMenu
+        data={contextMenu}
+        handleChange={handleContextMenuChange}
+        pjIndex={contexMenu.pjIndex}
+        y={contexMenu.y}
+        x={contexMenu.x}
+        close={() => setContextMenu(null)}
+      />}
     </>
-  );
-};
-type TokenProps = {
-    hidden: boolean,
-    img: string,
-    pj: PjType,
-    pos: Pos,
-    imgCoord:Img,
-    handleClick: () => void
-}
-const Token = (
-    {hidden, img, pj, pos, imgCoord, handleClick} : TokenProps) => {
-  return (
-    <>
-      <img
-        onClick={handleClick}
-        data-tip
-        data-for={`${pj.name}RegisterTip`}
-        src={img}
-        alt={pj.name}
-        className={
-          `absolute
-          h-6
-          w-6
-          object-cover
-          rounded-xl
-          border
-          border-black
-          ${hidden && 'hidden'}
-        `}
-        style={
-          {
-            top: `${(pos.y* imgCoord.height)+imgCoord.yStart -12}px`,
-            left: `${(pos.x*imgCoord.width)+imgCoord.xStart -12}px`,
-          }
-        }
-
-      />
-      <ReactTooltip
-        id={`${pj.name}RegisterTip`}
-        place='right'
-        effect='solid'
-        backgroundColor='none'
-        delayShow={500}
-      >
-        <PjCard pjData={pj} />
-      </ReactTooltip>
-    </>
-
   );
 };
 

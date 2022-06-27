@@ -1,8 +1,28 @@
-import React from 'react';
+import jwtDecode from 'jwt-decode';
+import React, {useState} from 'react';
+import {login} from '../../api/auth';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
+import {User} from '../../types';
 
-const Login = () => {
+type Props = {
+  setUser: (user: User) => void
+}
+
+const Login = ({setUser} : Props) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleClick = async () => {
+    const res = await login(email, password);
+    if (res === 'ERR_BAD_REQUEST') {
+      console.log('LOGIN ERROR TODO');
+      return;
+    }
+    const tokenDecode = jwtDecode(res) as any; // Change to Type Token
+    console.log('login tokenDecode', tokenDecode);
+    setUser({userId: tokenDecode?.id});
+  };
   return (
     <div className="
       min-h-screen
@@ -26,9 +46,22 @@ const Login = () => {
         justify-around
         items-center
       ">
-        <Input placeholder="Identifiant" type="text" />
-        <Input placeholder="Mot de passe" type="password" />
-        <PrimaryButton text={'Connexion'}/>
+        <Input
+          value={email}
+          placeholder="Email"
+          type="email"
+          setValueString={setEmail}
+        />
+        <Input
+          value={password}
+          setValueString={setPassword}
+          placeholder="Mot de passe"
+          type="password"
+        />
+        <PrimaryButton
+          onClick={handleClick}
+          text={'Connexion'}
+        />
       </form>
     </div>
   );

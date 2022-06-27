@@ -47,10 +47,11 @@ export const pjsMoocked : PjType[]= [
     race: 'Hobbit',
     level: 4,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.5,
         y: 0.5,
       },
+      map: 'Terre de Fangh',
     },
     gold: 12,
     player: 0,
@@ -69,10 +70,11 @@ export const pjsMoocked : PjType[]= [
     race: 'Humain',
     level: 3,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.6,
         y: 0.6,
       },
+      map: 'Terre de Fangh',
     },
     quest: 1,
     player: 0,
@@ -92,10 +94,11 @@ export const pjsMoocked : PjType[]= [
     id: 2,
     level: 13,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.7,
         y: 0.7,
       },
+      map: 'Terre de Fangh',
     },
     quest: 0,
     player: 0,
@@ -115,10 +118,11 @@ export const pjsMoocked : PjType[]= [
     id: 3,
     level: 1,
     positions: {
-      positionFangh: {
+      coordonate: {
         x: 0.4,
         y: 0.5,
       },
+      map: 'Terre de Fangh',
     },
     quest: 1,
     alignement: {
@@ -143,26 +147,86 @@ export const playerMoocked : Player[]= [
 export const mapsMoocked : WorldMap[] = [
   {
     name: 'Terre de Fangh',
+    scale: 9.24,
     mapLink: fanghMap,
+    vertical: false,
   },
   {
     name: 'Caladie',
+    scale: 25.62,
     mapLink: CaladieMap,
+    vertical: true,
   },
   {
     name: 'Confins du givres',
+    scale: 6.05,
     mapLink: FrostMap,
+    vertical: false,
   },
   {
     name: 'Jungles D\'Ammouka & Sungul',
+    scale: 22.69,
     mapLink: JungleMap,
+    vertical: true,
   },
   {
     name: 'Ile Mong-Bolo',
+    scale: 19.72,
     mapLink: mongboloMap,
+    vertical: false,
   },
   {
     name: 'Fernol',
+    scale: 25.62,
     mapLink: fernolMap,
+    vertical: true,
+  },
+];
+export const landsMoocked = [
+  {
+    name: 'Marécage',
+    speedMod: 0.5,
+  },
+  {
+    name: 'Montagne',
+    speedMod: 0.5,
+  },
+  {
+    name: 'Forêt',
+    speedMod: 0.75,
+  },
+  {
+    name: 'Collines',
+    speedMod: 0.75,
+  },
+  {
+    name: 'Routes, Plaines, Mer',
+    speedMod: 1,
+  },
+];
+export const speedMoocked = [
+  {
+    name: 'Normal, chariot 30km',
+    speedMod: 30,
+  },
+  {
+    name: 'barbares 55km',
+    speedMod: 55,
+  },
+  {
+    name: 'Cheval 50km',
+    speedMod: 50,
+  },
+  {
+    name: 'Diligence 70km',
+    speedMod: 70,
+  },
+  {
+    name: 'Galere',
+    speedMod: 60,
+  },
+  {
+    name: 'Gallion',
+    speedMod: 100,
   },
 ];

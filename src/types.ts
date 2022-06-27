@@ -1,17 +1,16 @@
 export type PjType = {
     name: string,
     img: string,
-    job: Job,
+    job?: Job,
     culte?: string,
     race: Race,
     level: number,
-    positions:{
-        positionFangh?: Pos,
-        positionNorth?: Pos,
-        positionJungle?: Pos,
-        positionCaladie?: Pos,
-        positionFernol?: Pos,
-        positionMongbolo?: Pos,
+    positions?:{
+        coordonate : {
+            x: number,
+            y: number;
+        },
+        map: string;
     },
     quest?: number,
     player: number,
@@ -31,6 +30,8 @@ export type Player ={
 export type WorldMap = {
     name: string;
     mapLink: string;
+    scale: number;
+    vertical: boolean;
 }
 export type Pos = {x: number, y: number};
 export type Job =
@@ -70,4 +71,13 @@ export type PossibleDate = {
     date?: Date,
     day?: number,
     moment: 'soirée' | 'journée'
+}
+export type Auth = {
+    token: string;
+    user?: string;
+    id?: number;
+    role?: string;
+}
+export type User = {
+    userId: number;
 }
