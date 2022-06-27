@@ -2,11 +2,11 @@ import React from 'react';
 type Props = {
     name: string;
     picture: string;
-    onClick: () => void;
+    handleOnDrag: (e: React.DragEvent<HTMLImageElement>) => void;
     hidden: boolean;
 }
 
-const MapButton = ({hidden, name, picture, onClick}: Props) => {
+const MapButton = ({hidden, name, picture, handleOnDrag}: Props) => {
   return (
     <div
       className={
@@ -16,9 +16,9 @@ const MapButton = ({hidden, name, picture, onClick}: Props) => {
                 cursor-pointer
                 ${hidden && 'hidden'}`
       }
-      onClick={onClick}
     >
       <img
+        onDragEnd={(e) => handleOnDrag(e)}
         className="
             w-20
             h-20

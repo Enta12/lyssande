@@ -36,7 +36,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     useState<ContextMenuProps | null>(null);
   const [tokenData, setTokenData] =
     useState(pjs.map((pj) => formatPjToTokenData(pj)));
-  const [pjSelected, setPjSelected] = useState(-1);
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
@@ -114,16 +113,19 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  const placeSelectedPj = (event : MouseEvent<HTMLDivElement>) => {
-    if (pjSelected > -1 && mapRef.current) {
+  const placeSelectedPj = (
+      pjSelectedv2: number,
+      event : MouseEvent<HTMLDivElement>,
+  ) => {
+    if (pjSelectedv2 > -1 && mapRef.current) {
       const currentItem = [...tokenData];
-      currentItem[pjSelected] = {
+      currentItem[pjSelectedv2] = {
         x: (event.pageX-mapRef.current.offsetLeft)/
           (mapRef.current.clientWidth),
         y: (event.pageY-mapRef.current.offsetTop)/
           (mapRef.current.clientHeight),
         map: mapName,
-        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
+        showMouvement: currentItem[pjSelectedv2]?.showMouvement || 0,
       };
       setTokenData(currentItem);
     }
@@ -134,7 +136,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
-            handleClick={placeSelectedPj}
+            handleOnDrag={(e) => placeSelectedPj(index, e)}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
@@ -146,9 +148,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               !(pjSortedByPlayer.length===0 ||
               pjSortedByPlayer.some(
                   (selectedPj) => selectedPj === pj.player))}
-            handleTokenClick={() => {
-              setPjSelected(index);
-            }}
             img={pjs[index].img}
             pj={pjs[index]}
             key={pj.name}
@@ -161,7 +160,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   useEffect(() => {
     if (height>0) {
       createTokens();
-      setPjSelected(pjSelected-1);
+      setContextValue({...contextValue});
     } else {
       setTimeout(function() {
         setHeight(mapRef?.current?.clientHeight || height-1);
@@ -183,11 +182,14 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         ref={mapRef}
       >
         <img
+          onDrag={(e) => e.preventDefault()}
+          onDragEnter={(e) => e.preventDefault()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => e.preventDefault()}
           onContextMenu={(e) => openContextMenu(e)}
           className='self-start max-h-[800px]'
           src={img}
           alt={mapName}
-          onClick={placeSelectedPj}
         />
         {tokens}
       </div>
@@ -209,15 +211,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              onClick={() => {
-                const pjPos = formatPjToTokenData(pj);
-                if (pjPos) {
-                  const tokenDataTemp = [...tokenData];
-                  tokenDataTemp[index] = pjPos;
-                  setTokenData(tokenDataTemp);
-                }
-                setPjSelected(index);
-              }}
+              handleOnDrag={(e) => placeSelectedPj(index, e)}
               key={pj.name}
               name={pj.name}
               picture={pj.img}

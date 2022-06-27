@@ -10,8 +10,7 @@ type Props = {
     pj: PjType;
     pos: Pos;
     mouvement: number;
-    handleClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    handleTokenClick: () => void;
+    handleOnDrag: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     setContexMenu: (e: React.MouseEvent<HTMLImageElement, MouseEvent>,
                     pjTODO: boolean) => void;
 }
@@ -21,8 +20,7 @@ const Token = ({
   img,
   pj,
   pos,
-  handleTokenClick,
-  handleClick,
+  handleOnDrag,
   setContexMenu,
   mouvement,
   showMouvement = true,
@@ -38,7 +36,6 @@ const Token = ({
   return (
     <>
       <div
-        onClick={(e) => handleClick(e)}
         className='absolute'
         style={
           showMouvement?
@@ -69,12 +66,12 @@ const Token = ({
         `}
         >
           <img
-            onClick={handleTokenClick}
             onContextMenu={(e) => handleContextMenu(e)}
             data-tip
             data-for={`${pj.name}RegisterTip`}
             src={img}
             alt={pj.name}
+            onDragEnd={(e) => handleOnDrag(e)}
             className={`
               relative
               h-6
