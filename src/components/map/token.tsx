@@ -1,13 +1,15 @@
-/* import ReactTooltip from 'react-tooltip'; */
 import {PjType, Pos} from '../../types';
-/* import PjCard from '../pjCard'; */
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
+import PjCard from '../pjCard';
 
 type Style = {
   top: string;
   left: string;
   width?: string;
   height?: string;
+  marginTop?: string;
+  marginLeft?: string;
 };
 type Props = {
     hidden: boolean;
@@ -43,6 +45,8 @@ const Token = ({
     style.width = `${mouvement*100}%`;
   } else {
     style.width = '24px';
+    style.marginTop = '-12px';
+    style.marginLeft = '-12px';
   }
 
   return (
@@ -95,7 +99,7 @@ const Token = ({
           />
         </div>
       </div>
-      {/* <ReactTooltip
+      <ReactTooltip
         id={`${pj.name}RegisterTip`}
         place='right'
         effect='solid'
@@ -103,7 +107,7 @@ const Token = ({
         delayShow={500}
       >
         <PjCard pjData={pj} />
-      </ReactTooltip>*/}
+      </ReactTooltip>
     </>
   );
 };

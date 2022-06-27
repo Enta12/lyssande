@@ -32,7 +32,6 @@ const formatPjToTokenData = (pj :PjType) => {
 const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
-  const [test, setTest] =useState(0);
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
   const [tokenData, setTokenData] =
@@ -114,19 +113,26 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  const placeSelectedPj = (
+  const placeCharater = (
       pjSelected: number,
       event : MouseEvent<HTMLDivElement>,
   ) => {
     if (pjSelected > -1 && mapRef.current) {
       const currentItem = [...tokenData];
-      currentItem[pjSelected] = {
-        x: (event.pageX-mapRef.current.offsetLeft)/
+      if (
+        event.pageX > mapRef.current.offsetLeft &&
+        event.pageX < mapRef.current.offsetLeft + mapRef.current.scrollWidth &&
+        event.pageX > mapRef.current.offsetTop &&
+        event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
+      ) {
+        currentItem[pjSelected] = {
+          x: (event.pageX-mapRef.current.offsetLeft)/
           (mapRef.current.clientWidth),
-        y: (event.pageY-mapRef.current.offsetTop)/
+          y: (event.pageY-mapRef.current.offsetTop)/
           (mapRef.current.clientHeight),
-        map: mapName,
-        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
+          map: mapName,
+          showMouvement: currentItem[pjSelected]?.showMouvement || 0,
+        };
       };
       setTokenData(currentItem);
     }
@@ -137,7 +143,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
-            handleOnDrag={(e) => placeSelectedPj(index, e)}
+            handleOnDrag={(e) => placeCharater(index, e)}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
@@ -178,10 +184,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   createTokens();
   return (
     <>
-      <input type="number" value={test} onChange={
-        (e) => setTest(parseInt(e.target.value || '0'))
-      } />
-      <button onClick={() => setTest(test- 0.1)} >-0.1</button>
       <div
         className='relative overflow-hidden'
         ref={mapRef}
@@ -216,7 +218,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              handleOnDrag={(e) => placeSelectedPj(index, e)}
+              handleOnDrag={(e) => placeCharater(index, e)}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
