@@ -93,7 +93,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     setContextMenu(null);
   };
   const openContextMenu =(
-      e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+      e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
       pjIndex?: number,
   ) => {
     e.preventDefault();

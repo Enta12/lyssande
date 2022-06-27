@@ -17,8 +17,8 @@ type Props = {
     pos: Pos;
     mouvement: number;
     handleOnDrag: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    setContexMenu: (e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-                    pjTODO: boolean) => void;
+    setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+                    onPj: boolean) => void;
 }
 
 const Token = ({
@@ -32,7 +32,7 @@ const Token = ({
   showMouvement = true,
 } : Props) => {
   const handleContextMenu =
-  (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setContexMenu(e, true);
   };
   const style: Style = {
@@ -48,6 +48,7 @@ const Token = ({
   return (
     <>
       <div
+        onContextMenu={(e) => handleContextMenu(e)}
         onDrag={(e) => e.preventDefault()}
         onDragEnter={(e) => e.preventDefault()}
         onDragOver={(e) => e.preventDefault()}
@@ -76,7 +77,6 @@ const Token = ({
               e.preventDefault();
               console.log('regroup TODO');
             }}
-            onContextMenu={(e) => handleContextMenu(e)}
             data-tip
             data-for={`${pj.name}RegisterTip`}
             src={img}
