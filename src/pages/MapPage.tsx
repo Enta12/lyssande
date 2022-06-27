@@ -21,13 +21,10 @@ const MapPage = () => {
               />
             );
           })}
-
         </div>
-
         <div className="bg-darkBrown w-full h-2 rounded-b-lg"/>
       </div>
       <Map
-        vertical={mapsMoocked[mapSelected].vertical}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
         pjs={pjsMoocked}

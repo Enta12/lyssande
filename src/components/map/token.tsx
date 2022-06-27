@@ -1,16 +1,17 @@
-/* import ReactTooltip from 'react-tooltip'; */
 import {PjType, Pos} from '../../types';
-/* import PjCard from '../pjCard'; */
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
+import PjCard from '../pjCard';
 
 type Style = {
   top: string;
   left: string;
   width?: string;
   height?: string;
+  marginTop?: string;
+  marginLeft?: string;
 };
 type Props = {
-    vertical: boolean;
     hidden: boolean;
     showMouvement?: boolean;
     img: string;
@@ -18,12 +19,11 @@ type Props = {
     pos: Pos;
     mouvement: number;
     handleOnDrag: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    setContexMenu: (e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-                    pjTODO: boolean) => void;
+    setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+                    onPj: boolean) => void;
 }
 
 const Token = ({
-  vertical,
   hidden,
   img,
   pj,
@@ -34,7 +34,7 @@ const Token = ({
   showMouvement = true,
 } : Props) => {
   const handleContextMenu =
-  (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setContexMenu(e, true);
   };
   const style: Style = {
@@ -42,17 +42,17 @@ const Token = ({
     left: `${pos.x*100}%`,
   };
   if (showMouvement) {
-    vertical ?
-    style.height = `${mouvement*100}%`:
     style.width = `${mouvement*100}%`;
-    console.log(style);
   } else {
     style.width = '24px';
+    style.marginTop = '-12px';
+    style.marginLeft = '-12px';
   }
 
   return (
     <>
       <div
+        onContextMenu={(e) => handleContextMenu(e)}
         onDrag={(e) => e.preventDefault()}
         onDragEnter={(e) => e.preventDefault()}
         onDragOver={(e) => e.preventDefault()}
@@ -81,7 +81,6 @@ const Token = ({
               e.preventDefault();
               console.log('regroup TODO');
             }}
-            onContextMenu={(e) => handleContextMenu(e)}
             data-tip
             data-for={`${pj.name}RegisterTip`}
             src={img}
@@ -100,7 +99,7 @@ const Token = ({
           />
         </div>
       </div>
-      {/* <ReactTooltip
+      <ReactTooltip
         id={`${pj.name}RegisterTip`}
         place='right'
         effect='solid'
@@ -108,7 +107,7 @@ const Token = ({
         delayShow={500}
       >
         <PjCard pjData={pj} />
-      </ReactTooltip>*/}
+      </ReactTooltip>
     </>
   );
 };

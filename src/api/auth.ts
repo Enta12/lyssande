@@ -8,7 +8,6 @@ export const login = (email: string, password: string) => {
       })
       .then((response) => {
         const tokens = response.data.data;
-        console.log(tokens);
         if (tokens.refresh_token) {
           localStorage.setItem('refreshToken', tokens.refresh_token);
         }

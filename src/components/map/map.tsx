@@ -12,7 +12,6 @@ type Props = {
     img: string;
     mapName: string;
     scale: number;
-    vertical: boolean
 }
 
 type ContextMenuProps = {
@@ -30,7 +29,7 @@ const formatPjToTokenData = (pj :PjType) => {
   };
 };
 
-const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
+const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
   const [contexMenu, setContextMenu] =
@@ -93,7 +92,7 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
     setContextMenu(null);
   };
   const openContextMenu =(
-      e: MouseEvent<HTMLImageElement, globalThis.MouseEvent>,
+      e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
       pjIndex?: number,
   ) => {
     e.preventDefault();
@@ -114,19 +113,26 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  const placeSelectedPj = (
+  const placeCharater = (
       pjSelected: number,
       event : MouseEvent<HTMLDivElement>,
   ) => {
     if (pjSelected > -1 && mapRef.current) {
       const currentItem = [...tokenData];
-      currentItem[pjSelected] = {
-        x: (event.pageX-mapRef.current.offsetLeft-12)/
+      if (
+        event.pageX > mapRef.current.offsetLeft &&
+        event.pageX < mapRef.current.offsetLeft + mapRef.current.scrollWidth &&
+        event.pageX > mapRef.current.offsetTop &&
+        event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
+      ) {
+        currentItem[pjSelected] = {
+          x: (event.pageX-mapRef.current.offsetLeft)/
           (mapRef.current.clientWidth),
-        y: (event.pageY-mapRef.current.offsetTop-12)/
+          y: (event.pageY-mapRef.current.offsetTop)/
           (mapRef.current.clientHeight),
-        map: mapName,
-        showMouvement: currentItem[pjSelected]?.showMouvement || 0,
+          map: mapName,
+          showMouvement: currentItem[pjSelected]?.showMouvement || 0,
+        };
       };
       setTokenData(currentItem);
     }
@@ -137,13 +143,12 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
         if (tokenData[index]?.map === mapName) {
           tokens[index] =
           <Token
-            vertical={vertical}
-            handleOnDrag={(e) => placeSelectedPj(index, e)}
+            handleOnDrag={(e) => placeCharater(index, e)}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
                 (landsMoocked[contextValue.land].speedMod) *
-                (contextValue.duration +1)) / (scale * 30))
+                (contextValue.duration +1))*2 / (scale * 30))
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
@@ -213,7 +218,7 @@ const Map = ({img, pjs, mapName, scale, vertical}: Props) => {
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              handleOnDrag={(e) => placeSelectedPj(index, e)}
+              handleOnDrag={(e) => placeCharater(index, e)}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
