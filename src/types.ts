@@ -77,3 +77,6 @@ export type Auth = {
     id?: number;
     role?: string;
 }
+export type User = {
+    userId: number;
+}

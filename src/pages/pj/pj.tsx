@@ -2,10 +2,20 @@ import addIcon from '../../assets/add.svg';
 import PjCard from '../../components/pjCard';
 import {pjsMoocked} from '../../moockedData';
 import React from 'react';
+// import axios from '../../api/axios';
 
 const Pj = () => {
   const EmptyCards : JSX.Element[] = [];
-  const pjData = pjsMoocked;
+  const pjData = [];
+  /*
+  axios.get('/items/characters').then((res) =>
+    console.log('api', res.data.data[0]));
+
+  ou
+
+  const pjData : Pj[] = await axios.get('/items/characters').then((res) =>
+    return res.data.data[0]; ));
+  */
 
   for (let i = 0; i < (4 - ((pjData.length+1)%4)); i++) {
     EmptyCards.push(
