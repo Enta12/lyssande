@@ -1,7 +1,9 @@
-import {PjType, Pos} from '../../types';
+import {GroupData, PjType, Pos} from '../../../types';
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
-import PjCard from '../pjCard';
+import TokenImg from './tokenImg';
+import TokenGroups from './tokenGroup';
+/* import ReactTooltip from 'react-tooltip';
+import PjCard from '../pjCard'; */
 
 type Style = {
   top: string;
@@ -11,12 +13,16 @@ type Style = {
   marginTop?: string;
   marginLeft?: string;
 };
-type Props = {
+type Props = { /* TODO sort */
+    pj?: PjType;
+    groupData?: GroupData;
+    groupTokens: (entityId: number, group?: boolean)
+        => void
     hidden: boolean;
     showMouvement?: boolean;
-    img: string;
-    pj: PjType;
     pos: Pos;
+    setEntityDrag: (value: {entityId: number, group: boolean}) => void;
+    index: number;
     mouvement: number;
     handleOnDrag: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -24,14 +30,17 @@ type Props = {
 }
 
 const Token = ({
+  groupData,
+  groupTokens,
   hidden,
-  img,
   pj,
+  index,
   pos,
   handleOnDrag,
   setContexMenu,
   mouvement,
   showMouvement = true,
+  setEntityDrag,
 } : Props) => {
   const handleContextMenu =
   (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -76,30 +85,33 @@ const Token = ({
           aspect-square
         `}
         >
-          <img
-            onDrop={(e) => {
-              e.preventDefault();
-              console.log('regroup TODO');
-            }}
-            data-tip
-            data-for={`${pj.name}RegisterTip`}
-            src={img}
-            alt={pj.name}
-            onDragEnd={(e) => handleOnDrag(e)}
-            className={`
-              absolute
-              h-6
-              w-6
-              object-cover
-              rounded-xl
-              border
-              border-black
-              z-30
-            `}
-          />
+          {
+            pj &&
+              <TokenImg
+                index={index}
+                groupTokens={groupTokens}
+                setPjDrag={() => setEntityDrag({entityId: index, group: false})}
+                pj={pj}
+                handleOnDrag={handleOnDrag}
+              />
+          }
+          {
+            groupData &&
+              <TokenGroups
+                groupData={groupData}
+                setGroupDrag={() => setEntityDrag(
+                    {entityId: index, group: true})
+                }
+                index={index}
+                handleOnDrag={handleOnDrag}
+              />
+          }
         </div>
       </div>
-      <ReactTooltip
+
+      {
+        /*
+        <ReactTooltip
         id={`${pj.name}RegisterTip`}
         place='right'
         effect='solid'
@@ -107,7 +119,8 @@ const Token = ({
         delayShow={500}
       >
         <PjCard pjData={pj} />
-      </ReactTooltip>
+      </ReactTooltip>*/
+      }
     </>
   );
 };
