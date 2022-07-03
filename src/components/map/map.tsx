@@ -161,6 +161,34 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       };
     }
   };
+  const ungroupToken = (characterId: number) => {
+    const tokenDataTemp = tokenData;
+    const groupsDataTemp = groupsData;
+    const character = tokenData[characterId];
+    if (character) {
+      const group = groupsDataTemp[character.group];
+      if (group) {
+        const characterIndex = group.members.indexOf(characterId);
+        if (characterIndex !== -1) {
+          group.members.splice(characterIndex, 1);
+        }
+      }
+      if (
+        groupsDataTemp[character.group]?.members.length === 1
+      ) {
+        const lastCharacterIndex = groupsDataTemp[character.group]?.members[0];
+        if (lastCharacterIndex !== undefined) {
+          const lastCharacter =
+            tokenDataTemp[lastCharacterIndex];
+          if (lastCharacter) lastCharacter.group = -1;
+        }
+        groupsData[character.group] = undefined;
+      }
+      character.group = -1;
+    }
+    setTokenData(tokenData);
+    setGroupsData(groupsDataTemp);
+  };
   const groupTokens = (
       entityId: number,
       group?: boolean,
@@ -176,9 +204,24 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           groupB.members.push(
               ...groupA.members);
           groupsData[entityDrag.entityId] = undefined;
+          groupA.members.forEach((memberId) => {
+            const member = tokenData[memberId];
+            if (member) {
+              member.group = entityId;
+              member.x = groupB.position.x;
+              member.y = groupB.position.y;
+            }
+          });
         } else if (characterB) {
           groupA.members.push(entityId);
           characterB.group = entityDrag.entityId;
+          groupA.members.forEach((memberId) => {
+            const member = tokenData[memberId];
+            if (member) {
+              member.x = characterB.x;
+              member.y = characterB.y;
+            }
+          });
         }
       }
     } else {
@@ -196,11 +239,15 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (group && groupB) {
           groupB.members.push(entityDrag.entityId);
           characterA.group = entityId;
+          characterA.x = groupB.position.x;
+          characterA.y = groupB.position.y;
         } else if (characterB) {
           for (let i =0; true; i++) {
             if (!groupsData[i]) {
               characterB.group = i;
               characterA.group = i;
+              characterA.x = characterB.x;
+              characterA.y = characterB.y;
               groupsData[i]={
                 members: [entityDrag.entityId, entityId],
                 position: {
@@ -231,7 +278,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               groupTokens={groupTokens}
               index={index}
               setEntityDrag={setEntityDrag}
-              handleOnDrag={(e) => placeEntity(index, e, false)}
+              placeEntity={placeEntity}
               showMouvement={tokenData[index]?.showMouvement === 1}
               mouvement={
                 (((speedMoocked[contextValue.speed].speedMod) *
@@ -254,11 +301,13 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (groupsData[index] && groupsData[index]?.position.map === mapName) {
           groups[index] =
           <Token
+            ungroupToken={ungroupToken}
+            charactersData={pjs}
             groupData={groupsData[index]}
             groupTokens={groupTokens}
             index={index}
             setEntityDrag={setEntityDrag}
-            handleOnDrag={(e) => placeEntity(index, e, true)}
+            placeEntity={placeEntity}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *

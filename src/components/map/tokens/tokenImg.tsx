@@ -6,8 +6,9 @@ type Props = {
     groupTokens: () => void;
     setPjDrag: () => void;
     pj: PjType;
-    handleOnDrag: (e: React.DragEvent<HTMLImageElement>) => void
-
+    handleOnDrag?: (e:(React.DragEvent<HTMLDivElement> |
+      React.DragEvent<HTMLImageElement>)) => void;
+    handleDragEnd?: () => void;
 }
 
 const TokenImg = (
@@ -16,6 +17,7 @@ const TokenImg = (
       pj,
       setPjDrag,
       handleOnDrag,
+      handleDragEnd,
     } : Props,
 ) => {
   return (
@@ -29,10 +31,11 @@ const TokenImg = (
       alt={pj.name}
       onDragStart={setPjDrag}
       onDragEnd={(e) => {
-        handleOnDrag(e);
+        if (handleDragEnd) handleDragEnd();
+        if (handleOnDrag) handleOnDrag(e);
       }}
       className={`
-        absolute
+        relative
         h-6
         w-6
         object-cover

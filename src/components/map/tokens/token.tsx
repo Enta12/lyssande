@@ -14,6 +14,8 @@ type Style = {
   marginLeft?: string;
 };
 type Props = { /* TODO sort */
+    ungroupToken?: (value: number) => void;
+    charactersData?: PjType[]
     pj?: PjType;
     groupData?: GroupData;
     groupTokens: (entityId: number, group?: boolean)
@@ -24,19 +26,25 @@ type Props = { /* TODO sort */
     setEntityDrag: (value: {entityId: number, group: boolean}) => void;
     index: number;
     mouvement: number;
-    handleOnDrag: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    placeEntity: (
+      entitySelected: number,
+      event: (React.DragEvent<HTMLDivElement> |
+        React.DragEvent<HTMLImageElement>),
+      group: boolean) => void
     setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
                     onPj: boolean) => void;
 }
 
 const Token = ({
+  ungroupToken,
+  charactersData,
   groupData,
   groupTokens,
   hidden,
   pj,
   index,
   pos,
-  handleOnDrag,
+  placeEntity,
   setContexMenu,
   mouvement,
   showMouvement = true,
@@ -72,6 +80,7 @@ const Token = ({
         <div
           className={`
           cursor-grab
+          aspect-square
           z-10
           rounded-full
           flex
@@ -83,7 +92,6 @@ const Token = ({
           ${hidden && 'hidden'}
           ${showMouvement && 'border-2 ml-[-50%] mt-[-50%] bg-blue-500/[.2]'}
           w-full
-          aspect-square
         `}
         >
           {
@@ -92,18 +100,24 @@ const Token = ({
                 groupTokens={() => groupTokens(index)}
                 setPjDrag={() => setEntityDrag({entityId: index, group: false})}
                 pj={pj}
-                handleOnDrag={handleOnDrag}
+                handleOnDrag={(e) => placeEntity(index, e, false)}
               />
           }
           {
             groupData &&
               <TokenGroups
-                groupTokens={() => groupTokens(index, true)}
+                ungroupToken={(value: number) => {
+                  if (ungroupToken) ungroupToken(value);
+                }}
+                charactersData={charactersData}
+                groupTokens={(id: number, group: boolean) =>
+                  groupTokens(id, group)}
                 groupData={groupData}
-                setGroupDrag={() => setEntityDrag(
-                    {entityId: index, group: true})
+                setEntityDrag={(value : {entityId: number, group: boolean}) =>
+                  setEntityDrag(value)
                 }
-                handleOnDrag={handleOnDrag}
+                placeEntity={placeEntity}
+                index={index}
               />
           }
         </div>
