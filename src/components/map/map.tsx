@@ -30,12 +30,6 @@ const formatPjToTokenData = (pj :PjType) => {
   };
 };
 
-// add a token to a group
-// add const variable
-// don't show token on group
-// show token group
-// add on click on token group
-
 const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
@@ -43,7 +37,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
-  const [groupsData, setGroupsData] = useState<GroupData[]>([]);
+  const [groupsData, setGroupsData] = useState<(GroupData | undefined)[]>([]);
   const [tokenData, setTokenData] =
     useState(pjs.map((pj) => formatPjToTokenData(pj)));
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
@@ -138,7 +132,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         event.pageX > mapRef.current.offsetTop &&
         event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
       ) {
-        if (group) {
+        if (group && groupsData[entitySelected]) {
           const groups = [...groupsData];
           groups[entitySelected] = {
             position: {
@@ -147,7 +141,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               y: (event.pageY-mapRef.current.offsetTop)/
               (mapRef.current.clientHeight),
             },
-            members: groups[entitySelected].members || [],
+            members: groups[entitySelected]?.members || [],
           };
           setGroupsData(groups);
         } else {
@@ -166,38 +160,54 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       };
     }
   };
-  const groupTokens = ( // setGroupTokenData
+  const groupTokens = (
       entityId: number,
       group?: boolean,
   ) => {
     const tokenDataTemp = tokenData;
     const groupsDataTemp = groupsData;
-    const characterA = tokenDataTemp[entityDrag.entityId];
     const characterB = tokenDataTemp[entityId];
-    if (characterA) {
-      if (group) {
-        groupsDataTemp[entityId].members.push(entityDrag.entityId);
-        characterA.group = entityId;
-      } else if (characterB) {
-        for (let i =0; true; i++) {
-          if (!groupsData[i]) {
-            characterB.group = i;
-            characterA.group = i;
-            groupsData[i]={
-              members: [entityDrag.entityId, entityId],
-              position: {
-                x: characterB.x,
-                y: characterB.y,
-              },
-            };
-            break;
+    const groupB = groupsDataTemp[entityId];
+    if (entityDrag.group) {
+      const groupA = groupsData[entityDrag.entityId];
+      if (groupA) {
+        if (group && groupB) {
+          groupB.members.push(
+              ...groupA.members);
+          groupsData[entityDrag.entityId] = undefined;
+        } else if (characterB) {
+          groupA.members.push(entityId);
+          characterB.group = entityDrag.entityId;
+        }
+      }
+    } else {
+      const characterA = tokenDataTemp[entityDrag.entityId];
+      if (characterA) {
+        if (group && groupB) {
+          groupB.members.push(entityDrag.entityId);
+          characterA.group = entityId;
+        } else if (characterB) {
+          for (let i =0; true; i++) {
+            if (!groupsData[i]) {
+              characterB.group = i;
+              characterA.group = i;
+              groupsData[i]={
+                members: [entityDrag.entityId, entityId],
+                position: {
+                  x: characterB.x,
+                  y: characterB.y,
+                },
+              };
+              break;
+            }
           }
         }
-        setGroupsData(groupsDataTemp);
-        setTokenData(tokenDataTemp);
-        createTokens();
-        setRerender(!rerender); // Have to set a state for tokens
       }
+      setGroupsData(groupsDataTemp);
+      setTokenData(tokenDataTemp);
+      createTokens();
+      setRerender(!rerender);
+      // Have to set a state for tokens or dependecies of usesState
     }
   };
   const createTokens = () => {
@@ -230,7 +240,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         }
       });
       groupsData.forEach((group, index) => {
-        if (groupsData[index]) {
+        if (groupsData[index] !== undefined) {
           groups[index] =
           <Token
             groupData={groupsData[index]}
@@ -249,12 +259,12 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               !(pjSortedByPlayer.length===0 ||
                 pjSortedByPlayer.some(
                     (currentCharacter) =>
-                      groupsData[index].members.some(
+                      groupsData[index]?.members.some(
                           (currentMember) =>
                             currentMember === currentCharacter))
               )}
             key={index}
-            pos={groupsData[index].position || {x: 0, y: 0}}
+            pos={groupsData[index]?.position || {x: 0, y: 0}}
           />;
         }
       });

@@ -88,8 +88,7 @@ const Token = ({
           {
             pj &&
               <TokenImg
-                index={index}
-                groupTokens={groupTokens}
+                groupTokens={() => groupTokens(index)}
                 setPjDrag={() => setEntityDrag({entityId: index, group: false})}
                 pj={pj}
                 handleOnDrag={handleOnDrag}
@@ -98,11 +97,11 @@ const Token = ({
           {
             groupData &&
               <TokenGroups
+                groupTokens={() => groupTokens(index, true)}
                 groupData={groupData}
                 setGroupDrag={() => setEntityDrag(
                     {entityId: index, group: true})
                 }
-                index={index}
                 handleOnDrag={handleOnDrag}
               />
           }

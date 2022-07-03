@@ -22,7 +22,6 @@ export type PjType = {
     },
     gold: number,
     id: number,
-
 };
 export type Player ={
     name: string,

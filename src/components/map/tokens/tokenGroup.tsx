@@ -5,14 +5,14 @@ import {GroupData} from '../../../types';
 type Props = {
   groupData: GroupData;
   setGroupDrag: () => void;
-  index: number;
+  groupTokens: () => void;
   handleOnDrag: (e: React.DragEvent<HTMLDivElement>) => void;
 };
 
 const TokenGroups = ({
   groupData,
   setGroupDrag,
-  index,
+  groupTokens,
   handleOnDrag,
 }: Props) => {
   return (
@@ -22,6 +22,9 @@ const TokenGroups = ({
         onDragStart={setGroupDrag}
         onDragEnd={(e) => {
           handleOnDrag(e);
+        }}
+        onDrop={() => {
+          groupTokens();
         }}
         className={`
           relative
