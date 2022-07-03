@@ -32,15 +32,15 @@ const TokenImg = (
         handleOnDrag(e);
       }}
       className={`
-                  absolute
-                  h-6
-                  w-6
-                  object-cover
-                  rounded-xl
-                  border
-                  border-black
-                  z-30
-                `}
+        absolute
+        h-6
+        w-6
+        object-cover
+        rounded-xl
+        border
+        border-black
+        z-30
+      `}
     />
   );
 };

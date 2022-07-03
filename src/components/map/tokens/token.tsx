@@ -71,6 +71,7 @@ const Token = ({
       >
         <div
           className={`
+          cursor-grab
           z-10
           rounded-full
           flex

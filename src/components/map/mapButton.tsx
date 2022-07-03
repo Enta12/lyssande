@@ -4,20 +4,28 @@ type Props = {
     picture: string;
     handleOnDrag: (e: React.DragEvent<HTMLImageElement>) => void;
     hidden: boolean;
+    setPjDrag: () => void;
 }
 
-const MapButton = ({hidden, name, picture, handleOnDrag}: Props) => {
+const MapButton = ({
+  hidden,
+  name,
+  picture,
+  handleOnDrag,
+  setPjDrag,
+}: Props) => {
   return (
     <div
       className={
         `relative
-                border-darkBrown
-                rounded-full
-                cursor-pointer
-                ${hidden && 'hidden'}`
+        border-darkBrown
+        rounded-full
+        cursor-grab
+        ${hidden && 'hidden'}`
       }
     >
       <img
+        onDragStart={setPjDrag}
         onDragEnd={(e) => handleOnDrag(e)}
         className="
             w-20

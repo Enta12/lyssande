@@ -140,11 +140,12 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               (mapRef.current.clientWidth),
               y: (event.pageY-mapRef.current.offsetTop)/
               (mapRef.current.clientHeight),
+              map: mapName,
             },
             members: groups[entitySelected]?.members || [],
           };
           setGroupsData(groups);
-        } else {
+        } else if (tokenData[entitySelected]?.group === -1) {
           const tokens = [...tokenData];
           tokens[entitySelected] = {
             x: (event.pageX-mapRef.current.offsetLeft)/
@@ -181,6 +182,15 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         }
       }
     } else {
+      if (!tokenDataTemp[entityDrag.entityId]) {
+        tokenDataTemp[entityDrag.entityId] = {
+          x: group ? groupB?.position.x || -1 : characterB?.x || -1,
+          y: group ? groupB?.position.y || -1 : characterB?.y || -1,
+          map: mapName,
+          showMouvement: 0,
+          group: group ? entityId : -1,
+        };
+      }
       const characterA = tokenDataTemp[entityDrag.entityId];
       if (characterA) {
         if (group && groupB) {
@@ -196,6 +206,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                 position: {
                   x: characterB.x,
                   y: characterB.y,
+                  map: mapName,
                 },
               };
               break;
@@ -240,7 +251,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         }
       });
       groupsData.forEach((group, index) => {
-        if (groupsData[index] !== undefined) {
+        if (groupsData[index] && groupsData[index]?.position.map === mapName) {
           groups[index] =
           <Token
             groupData={groupsData[index]}
@@ -295,6 +306,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         ref={mapRef}
       >
         <img
+          draggable={false}
           onDrag={(e) => e.preventDefault()}
           onDragEnter={(e) => e.preventDefault()}
           onDragOver={(e) => e.preventDefault()}
@@ -319,6 +331,9 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         {pjs.map((pj, index) => {
           return (
             <MapButton
+              setPjDrag={() => setEntityDrag(
+                  {entityId: index, group: false},
+              )}
               hidden={
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(

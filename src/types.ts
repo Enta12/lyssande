@@ -84,6 +84,7 @@ export type GroupData = {
     position: {
         x: number,
         y: number,
+        map: string,
     }
     members: number[];
 }
