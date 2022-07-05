@@ -129,7 +129,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       if (
         event.pageX > mapRef.current.offsetLeft &&
         event.pageX < mapRef.current.offsetLeft + mapRef.current.scrollWidth &&
-        event.pageX > mapRef.current.offsetTop &&
+        event.pageY > mapRef.current.offsetTop &&
         event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
       ) {
         if (group && groupsData[entitySelected]) {
@@ -145,7 +145,14 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
             members: groups[entitySelected]?.members || [],
           };
           setGroupsData(groups);
-        } else if (tokenData[entitySelected]?.group === -1) {
+        } else if (
+          tokenData[entitySelected]?.group === -1 ||
+          !groupsData.some((group) => {
+            if (group) {
+              return group.members.some((member) => member === entitySelected);
+            }
+          })
+        ) {
           const tokens = [...tokenData];
           tokens[entitySelected] = {
             x: (event.pageX-mapRef.current.offsetLeft)/
