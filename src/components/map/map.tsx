@@ -204,75 +204,82 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     const groupsDataTemp = groupsData;
     const characterB = tokenDataTemp[entityId];
     const groupB = groupsDataTemp[entityId];
-    if (entityDrag.group) {
-      const groupA = groupsData[entityDrag.entityId];
-      if (groupA) {
-        if (group && groupB) {
-          groupB.members.push(
-              ...groupA.members);
-          groupsData[entityDrag.entityId] = undefined;
-          groupA.members.forEach((memberId) => {
-            const member = tokenData[memberId];
-            if (member) {
-              member.group = entityId;
-              member.x = groupB.position.x;
-              member.y = groupB.position.y;
-            }
-          });
-        } else if (characterB) {
-          groupA.members.push(entityId);
-          characterB.group = entityDrag.entityId;
-          groupA.members.forEach((memberId) => {
-            const member = tokenData[memberId];
-            if (member) {
-              member.x = characterB.x;
-              member.y = characterB.y;
-            }
-          });
+    if (entityId !== entityDrag.entityId &&
+      ((entityDrag.group &&
+        !groupsData[entityDrag.entityId]?.members.some(
+            (member) => entityId === member)) ||
+        !entityDrag.group
+      )) {
+      if (entityDrag.group) {
+        const groupA = groupsData[entityDrag.entityId];
+        if (groupA) {
+          if (group && groupB) {
+            groupB.members.push(
+                ...groupA.members);
+            groupsData[entityDrag.entityId] = undefined;
+            groupA.members.forEach((memberId) => {
+              const member = tokenData[memberId];
+              if (member) {
+                member.group = entityId;
+                member.x = groupB.position.x;
+                member.y = groupB.position.y;
+              }
+            });
+          } else if (characterB) {
+            groupA.members.push(entityId);
+            characterB.group = entityDrag.entityId;
+            groupA.members.forEach((memberId) => {
+              const member = tokenData[memberId];
+              if (member) {
+                member.x = characterB.x;
+                member.y = characterB.y;
+              }
+            });
+          }
         }
-      }
-    } else {
-      if (!tokenDataTemp[entityDrag.entityId]) {
-        tokenDataTemp[entityDrag.entityId] = {
-          x: group ? groupB?.position.x || -1 : characterB?.x || -1,
-          y: group ? groupB?.position.y || -1 : characterB?.y || -1,
-          map: mapName,
-          showMouvement: 0,
-          group: group ? entityId : -1,
-        };
-      }
-      const characterA = tokenDataTemp[entityDrag.entityId];
-      if (characterA) {
-        if (group && groupB) {
-          groupB.members.push(entityDrag.entityId);
-          characterA.group = entityId;
-          characterA.x = groupB.position.x;
-          characterA.y = groupB.position.y;
-        } else if (characterB) {
-          for (let i =0; true; i++) {
-            if (!groupsData[i]) {
-              characterB.group = i;
-              characterA.group = i;
-              characterA.x = characterB.x;
-              characterA.y = characterB.y;
-              groupsData[i]={
-                members: [entityDrag.entityId, entityId],
-                position: {
-                  x: characterB.x,
-                  y: characterB.y,
-                  map: mapName,
-                },
-              };
-              break;
+      } else {
+        if (!tokenDataTemp[entityDrag.entityId]) {
+          tokenDataTemp[entityDrag.entityId] = {
+            x: group ? groupB?.position.x || -1 : characterB?.x || -1,
+            y: group ? groupB?.position.y || -1 : characterB?.y || -1,
+            map: mapName,
+            showMouvement: 0,
+            group: group ? entityId : -1,
+          };
+        }
+        const characterA = tokenDataTemp[entityDrag.entityId];
+        if (characterA) {
+          if (group && groupB) {
+            groupB.members.push(entityDrag.entityId);
+            characterA.group = entityId;
+            characterA.x = groupB.position.x;
+            characterA.y = groupB.position.y;
+          } else if (characterB) {
+            for (let i =0; true; i++) {
+              if (!groupsData[i]) {
+                characterB.group = i;
+                characterA.group = i;
+                characterA.x = characterB.x;
+                characterA.y = characterB.y;
+                groupsData[i]={
+                  members: [entityDrag.entityId, entityId],
+                  position: {
+                    x: characterB.x,
+                    y: characterB.y,
+                    map: mapName,
+                  },
+                };
+                break;
+              }
             }
           }
         }
-      }
-      setGroupsData(groupsDataTemp);
-      setTokenData(tokenDataTemp);
-      createTokens();
-      setRerender(!rerender);
+        setGroupsData(groupsDataTemp);
+        setTokenData(tokenDataTemp);
+        createTokens();
+        setRerender(!rerender);
       // Have to set a state for tokens or dependecies of usesState
+      }
     }
   };
   const createTokens = () => {
