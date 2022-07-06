@@ -9,10 +9,13 @@ type Props = {
     handleOnDrag?: (e:(React.DragEvent<HTMLDivElement> |
       React.DragEvent<HTMLImageElement>)) => void;
     handleDragEnd?: () => void;
+    handleContextMenu?: (e: React.MouseEvent<HTMLImageElement, MouseEvent>) =>
+        void;
 }
 
 const TokenImg = (
     {
+      handleContextMenu,
       groupTokens,
       pj,
       setPjDrag,
@@ -22,6 +25,9 @@ const TokenImg = (
 ) => {
   return (
     <img
+      onContextMenu={(e) => {
+        if (handleContextMenu) handleContextMenu(e);
+      }}
       onDrop={() => {
         groupTokens();
       }}

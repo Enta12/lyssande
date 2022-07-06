@@ -332,11 +332,12 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
             hidden={
               !(pjSortedByPlayer.length===0 ||
                 pjSortedByPlayer.some(
-                    (currentCharacter) =>
+                    (currentPlayer) =>
                       groupsData[index]?.members.some(
                           (currentMember) =>
-                            currentMember === currentCharacter))
-              )}
+                            pjs[currentMember].player === currentPlayer,
+                      ),
+                ))}
             key={index}
             pos={groupsData[index]?.position || {x: 0, y: 0}}
           />;

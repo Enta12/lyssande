@@ -69,7 +69,6 @@ const Token = ({
   return (
     <>
       <div
-        onContextMenu={(e) => handleContextMenu(e)}
         onDrag={(e) => e.preventDefault()}
         onDragEnter={(e) => e.preventDefault()}
         onDragOver={(e) => e.preventDefault()}
@@ -97,6 +96,7 @@ const Token = ({
           {
             pj &&
               <TokenImg
+                handleContextMenu={handleContextMenu}
                 groupTokens={() => groupTokens(index)}
                 setPjDrag={() => setEntityDrag({entityId: index, group: false})}
                 pj={pj}
