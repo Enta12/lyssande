@@ -79,7 +79,7 @@ const TokenGroups = ({
               charactersData &&
                   groupData.members.map((characterID, index) => {
                     return (
-                        (!onlyShow || onlyShow === characterID) ?
+                        (onlyShow === undefined || onlyShow === characterID) ?
                         <TokenImg
                           key={index}
                           groupTokens={
