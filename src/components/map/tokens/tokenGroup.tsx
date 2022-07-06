@@ -28,11 +28,11 @@ const TokenGroups = ({
 }: Props) => {
   const tokenRef = useRef<HTMLDivElement>(null);
   const [showCharacters, setShowCharaters] = useState(false);
-  const [onlyShow, setOnlyShow] = useState<number | undefined>();
+  const [pjDrag, setPjDrag] = useState(false);
   useEffect(() => {
     const onClickOutside = () => {
       setShowCharaters(false);
-      setOnlyShow(undefined);
+      setPjDrag(false);
     };
     const handleClickOutside = (event: any) => {
       if (tokenRef.current && !tokenRef.current.contains(event.target)) {
@@ -73,32 +73,33 @@ const TokenGroups = ({
               border-black
               bg-brown
               mt-[-90%]
+              transition-opacity
+              ${pjDrag && 'opacity-50'}
           `}
           >
             {
               charactersData &&
                   groupData.members.map((characterID, index) => {
                     return (
-                        (onlyShow === undefined || onlyShow === characterID) ?
-                        <TokenImg
-                          key={index}
-                          groupTokens={
-                            () => {
-                              groupTokens(characterID, false);
-                            }
+                      <TokenImg
+                        key={index}
+                        groupTokens={
+                          () => {
+                            groupTokens(characterID, false);
                           }
-                          handleDragEnd={() => setOnlyShow(undefined)}
-                          setPjDrag={() => {
-                            setEntityDrag(
-                                {entityId: characterID, group: false});
-                            setOnlyShow(characterID);
-                          }}
-                          handleOnDrag={(e) => {
-                            ungroupToken(characterID);
-                            placeEntity(characterID, e, false);
-                          }}
-                          pj={charactersData[characterID]}
-                        /> : <React.Fragment key={index}> </React.Fragment>
+                        }
+                        handleDragEnd={() => setPjDrag(false)}
+                        setPjDrag={() => {
+                          setEntityDrag(
+                              {entityId: characterID, group: false});
+                          setPjDrag(true);
+                        }}
+                        handleOnDrag={(e) => {
+                          ungroupToken(characterID);
+                          placeEntity(characterID, e, false);
+                        }}
+                        pj={charactersData[characterID]}
+                      />
                     );
                   },
                   )
