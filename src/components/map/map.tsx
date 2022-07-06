@@ -404,7 +404,10 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              handleOnDrag={(e) => placeEntity(index, e, false)}
+              handleOnDrag={(e) =>{
+                if (tokenData[index]?.group !== -1) ungroupToken(index);
+                placeEntity(index, e, false);
+              }}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
