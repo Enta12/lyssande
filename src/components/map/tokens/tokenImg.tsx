@@ -3,6 +3,7 @@ import React from 'react';
 import {PjType} from '../../../types';
 
 type Props = {
+    setIsGrouping: () => void;
     groupTokens: () => void;
     setPjDrag: () => void;
     pj: PjType;
@@ -21,6 +22,7 @@ const TokenImg = (
       setPjDrag,
       handleOnDrag,
       handleDragEnd,
+      setIsGrouping,
     } : Props,
 ) => {
   return (
@@ -29,7 +31,11 @@ const TokenImg = (
         if (handleContextMenu) handleContextMenu(e);
       }}
       onDrop={() => {
+        console.log('A');
         groupTokens();
+        console.log('AA');
+        setIsGrouping();
+        console.log('AAA');
       }}
       data-tip
       data-for={`${pj.name}RegisterTip`}

@@ -13,8 +13,8 @@ type Style = {
   marginTop?: string;
   marginLeft?: string;
 };
-type Props = { /* TODO sort */
-    ungroupToken?: (value: number) => void;
+type Props = {
+    setIsGrouping: () => void;
     charactersData?: PjType[]
     pj?: PjType;
     groupData?: GroupData;
@@ -27,16 +27,13 @@ type Props = { /* TODO sort */
     index: number;
     mouvement: number;
     placeEntity: (
-      entitySelected: number,
       event: (React.DragEvent<HTMLDivElement> |
-        React.DragEvent<HTMLImageElement>),
-      group: boolean) => void
+        React.DragEvent<HTMLImageElement>)) => void
     setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
                     onPj: boolean) => void;
 }
 
 const Token = ({
-  ungroupToken,
   charactersData,
   groupData,
   groupTokens,
@@ -44,8 +41,9 @@ const Token = ({
   pj,
   index,
   pos,
-  placeEntity,
   setContexMenu,
+  setIsGrouping,
+  placeEntity,
   mouvement,
   showMouvement = true,
   setEntityDrag,
@@ -72,43 +70,46 @@ const Token = ({
         onDrag={(e) => e.preventDefault()}
         onDragEnter={(e) => e.preventDefault()}
         onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          console.log('B');
+          placeEntity(e);
+          console.log('BB');
+        }}
         className='absolute z-10'
         style={style}
       >
         <div
           className={`
-          cursor-grab
-          aspect-square
-          z-10
-          rounded-full
-          flex
-          justify-center
-          items-center
-          absolute
-          border-dashed
-          border-blue-500
-          ${hidden && 'hidden'}
-          ${showMouvement && 'border-2 ml-[-50%] mt-[-50%] bg-blue-500/[.2]'}
-          w-full
-        `}
+            cursor-grab
+            aspect-square
+            z-10
+            rounded-full
+            flex
+            justify-center
+            items-center
+            absolute
+            border-dashed
+            border-blue-500
+            ${hidden && 'hidden'}
+            ${showMouvement && 'border-2 ml-[-50%] mt-[-50%] bg-blue-500/[.2]'}
+            w-full
+          `}
         >
           {
             pj &&
               <TokenImg
+                setIsGrouping={setIsGrouping}
                 handleContextMenu={handleContextMenu}
                 groupTokens={() => groupTokens(index)}
                 setPjDrag={() => setEntityDrag({entityId: index, group: false})}
                 pj={pj}
-                handleOnDrag={(e) => placeEntity(index, e, false)}
               />
           }
           {
             groupData &&
               <TokenGroups
-                ungroupToken={(value: number) => {
-                  if (ungroupToken) ungroupToken(value);
-                }}
+                setIsGrouping={setIsGrouping}
                 charactersData={charactersData}
                 groupTokens={(id: number, group: boolean) =>
                   groupTokens(id, group)}
@@ -116,7 +117,6 @@ const Token = ({
                 setEntityDrag={(value : {entityId: number, group: boolean}) =>
                   setEntityDrag(value)
                 }
-                placeEntity={placeEntity}
                 index={index}
               />
           }

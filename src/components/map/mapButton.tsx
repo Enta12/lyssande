@@ -2,7 +2,6 @@ import React from 'react';
 type Props = {
     name: string;
     picture: string;
-    handleOnDrag: (e: React.DragEvent<HTMLImageElement>) => void;
     hidden: boolean;
     setPjDrag: () => void;
 }
@@ -11,7 +10,6 @@ const MapButton = ({
   hidden,
   name,
   picture,
-  handleOnDrag,
   setPjDrag,
 }: Props) => {
   return (
@@ -26,7 +24,6 @@ const MapButton = ({
     >
       <img
         onDragStart={setPjDrag}
-        onDragEnd={(e) => handleOnDrag(e)}
         className="
             w-20
             h-20

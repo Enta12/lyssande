@@ -4,27 +4,21 @@ import {GroupData, PjType} from '../../../types';
 import TokenImg from './tokenImg';
 
 type Props = {
-  ungroupToken: (value: number) => void;
   groupData: GroupData;
   setEntityDrag: (value : {entityId: number, group: boolean}) => void;
   groupTokens: (id: number, group: boolean) => void;
-  placeEntity: (
-    entitySelected: number,
-    event: (React.DragEvent<HTMLDivElement> |
-      React.DragEvent<HTMLImageElement>),
-    group: boolean) => void
   charactersData?: PjType[];
   index: number;
+  setIsGrouping: () => void;
 };
 
 const TokenGroups = ({
   index,
-  ungroupToken,
+  setIsGrouping,
   charactersData,
   groupData,
   setEntityDrag,
   groupTokens,
-  placeEntity,
 }: Props) => {
   const tokenRef = useRef<HTMLDivElement>(null);
   const [showCharacters, setShowCharaters] = useState(false);
@@ -82,6 +76,7 @@ const TokenGroups = ({
                   groupData.members.map((characterID, index) => {
                     return (
                       <TokenImg
+                        setIsGrouping={setIsGrouping}
                         key={index}
                         groupTokens={
                           () => {
@@ -93,10 +88,6 @@ const TokenGroups = ({
                           setEntityDrag(
                               {entityId: characterID, group: false});
                           setPjDrag(true);
-                        }}
-                        handleOnDrag={(e) => {
-                          ungroupToken(characterID);
-                          placeEntity(characterID, e, false);
                         }}
                         pj={charactersData[characterID]}
                       />
@@ -110,9 +101,9 @@ const TokenGroups = ({
             onDragStart={() => setEntityDrag(
                 {entityId: index, group: true},
             )}
-            onDragEnd={(e) => placeEntity(index, e, true)}
             onDrop={() => {
               groupTokens(index, true);
+              setIsGrouping();
             }}
             className={`
               relative

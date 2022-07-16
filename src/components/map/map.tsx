@@ -33,7 +33,6 @@ const formatPjToTokenData = (pj :PjType) => {
 const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
-  const [rerender, setRerender] = useState(false);
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
@@ -44,8 +43,9 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
-  const tokens: JSX.Element[] = []; /* TODO check refresch */
+  const tokens: JSX.Element[] = [];
   const groups: JSX.Element[] = [];
+  let isGrouping = false;
   const contextMenu = {
     speed: {
       options: speedMoocked.map((speed) => speed.name),
@@ -57,8 +57,12 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     },
     duration: {
       options: new Array(10).fill('').map(
-          (duration, index) => `${index+1} jour`),
-      /* TODO calculer en demie journée */
+          (duration, index) => (index+1)%2 === 0 ?
+          `${(index+1)/2} jour${(index+1)/2>1 ? 's' : ''}` :
+          `${(index+1)/2 > 0.5 ? `${Math.round((index+1)/2)}
+          jour${(index+1)/2>1 ? 's' : ''} et ` : ''}
+          1 demie journée`,
+      ),
       value: contextValue.duration,
     },
   };
@@ -121,57 +125,62 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     }
   };
   const placeEntity = (
-      entitySelected: number,
       event : MouseEvent<HTMLDivElement>,
-      group: boolean,
   ) => {
-    if (entitySelected > -1 && mapRef.current) {
+    console.log('setIsGrouping', isGrouping);
+    if (entityDrag.entityId > -1 && mapRef.current) {
       if (
         event.pageX > mapRef.current.offsetLeft &&
         event.pageX < mapRef.current.offsetLeft + mapRef.current.scrollWidth &&
         event.pageY > mapRef.current.offsetTop &&
         event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
       ) {
-        if (group && groupsData[entitySelected]) {
+        const tokens = [...tokenData];
+        const x = (event.pageX-mapRef.current.offsetLeft)/
+            (mapRef.current.clientWidth);
+        const y = (event.pageY-mapRef.current.offsetTop)/
+            (mapRef.current.clientHeight);
+        if (entityDrag.group && groupsData[entityDrag.entityId]) {
           const groups = [...groupsData];
-          groups[entitySelected] = {
+          groups[entityDrag.entityId]?.members.forEach((member) => {
+            tokens[member] = {
+              x,
+              y,
+              map: mapName,
+              showMouvement: tokens[entityDrag.entityId]?.showMouvement || 0,
+              group: entityDrag.entityId,
+            };
+          });
+          groups[entityDrag.entityId] = {
             position: {
-              x: (event.pageX-mapRef.current.offsetLeft)/
-              (mapRef.current.clientWidth),
-              y: (event.pageY-mapRef.current.offsetTop)/
-              (mapRef.current.clientHeight),
+              x,
+              y,
               map: mapName,
             },
-            members: groups[entitySelected]?.members || [],
+            members: groups[entityDrag.entityId]?.members || [],
           };
           setGroupsData(groups);
-        } else if (
-          tokenData[entitySelected]?.group === -1 ||
-          !groupsData.some((group) => {
-            if (group) {
-              return group.members.some((member) => member === entitySelected);
-            }
-          })
-        ) {
-          const tokens = [...tokenData];
-          tokens[entitySelected] = {
-            x: (event.pageX-mapRef.current.offsetLeft)/
-            (mapRef.current.clientWidth),
-            y: (event.pageY-mapRef.current.offsetTop)/
-            (mapRef.current.clientHeight),
+        } else if (!isGrouping) {
+          console.log('hello I"m here');
+          if (tokens[entityDrag.entityId]?.group !== -1) {
+            ungroupToken(entityDrag.entityId);
+          }
+          tokens[entityDrag.entityId] = {
+            x,
+            y,
             map: mapName,
-            showMouvement: tokens[entitySelected]?.showMouvement || 0,
-            group: tokens[entitySelected]?.group || -1,
+            showMouvement: tokens[entityDrag.entityId]?.showMouvement || 0,
+            group: -1,
           };
-          setTokenData(tokens);
         }
+        setTokenData(tokens);
       };
     }
   };
   const ungroupToken = (characterId: number) => {
     const tokenDataTemp = tokenData;
     const groupsDataTemp = groupsData;
-    const character = tokenData[characterId];
+    const character = tokenDataTemp[characterId];
     if (character) {
       const group = groupsDataTemp[character.group];
       if (group) {
@@ -193,8 +202,8 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       }
       character.group = -1;
     }
-    setTokenData(tokenData);
-    setGroupsData(groupsDataTemp);
+    setTokenData([...tokenDataTemp]);
+    setGroupsData([...groupsDataTemp]);
   };
   const groupTokens = (
       entityId: number,
@@ -204,12 +213,15 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     const groupsDataTemp = groupsData;
     const characterB = tokenDataTemp[entityId];
     const groupB = groupsDataTemp[entityId];
-    if (entityId !== entityDrag.entityId &&
-      ((entityDrag.group &&
-        !groupsData[entityDrag.entityId]?.members.some(
-            (member) => entityId === member)) ||
-        !entityDrag.group
-      )) {
+    if (
+      (group && entityDrag.group !== group) ||
+      (
+        entityId !== entityDrag.entityId &&
+        ((entityDrag.group &&
+          !groupsData[entityDrag.entityId]?.members.some(
+              (member) => entityId === member)) ||
+          !entityDrag.group
+        ))) {
       if (entityDrag.group) {
         const groupA = groupsData[entityDrag.entityId];
         if (groupA) {
@@ -227,6 +239,8 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
             });
           } else if (characterB) {
             groupA.members.push(entityId);
+            groupA.position.x = characterB.x;
+            groupA.position.y = characterB.y;
             characterB.group = entityDrag.entityId;
             groupA.members.forEach((memberId) => {
               const member = tokenData[memberId];
@@ -261,7 +275,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                 characterA.group = i;
                 characterA.x = characterB.x;
                 characterA.y = characterB.y;
-                groupsData[i]={
+                groupsDataTemp[i]={
                   members: [entityDrag.entityId, entityId],
                   position: {
                     x: characterB.x,
@@ -274,12 +288,10 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
             }
           }
         }
-        setGroupsData(groupsDataTemp);
-        setTokenData(tokenDataTemp);
-        createTokens();
-        setRerender(!rerender);
-      // Have to set a state for tokens or dependecies of usesState
       }
+      setGroupsData([...groupsDataTemp]);
+      setTokenData([...tokenDataTemp]);
+      createTokens();
     }
   };
   const createTokens = () => {
@@ -289,15 +301,16 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           if (tokenData[index]?.map === mapName) {
             tokens[index] =
             <Token
+              setIsGrouping={() => isGrouping = true}
+              placeEntity={placeEntity}
               groupTokens={groupTokens}
               index={index}
               setEntityDrag={setEntityDrag}
-              placeEntity={placeEntity}
               showMouvement={tokenData[index]?.showMouvement === 1}
               mouvement={
                 (((speedMoocked[contextValue.speed].speedMod) *
                   (landsMoocked[contextValue.land].speedMod) *
-                  (contextValue.duration +1))*2 / (scale * 30))
+                  (contextValue.duration +1)) / (scale * 30))
               }
               setContexMenu={(e) => openContextMenu(e, index)}
               hidden={
@@ -315,18 +328,18 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (groupsData[index] && groupsData[index]?.position.map === mapName) {
           groups[index] =
           <Token
-            ungroupToken={ungroupToken}
+            setIsGrouping={() => isGrouping = true}
+            placeEntity={placeEntity}
             charactersData={pjs}
             groupData={groupsData[index]}
             groupTokens={groupTokens}
             index={index}
             setEntityDrag={setEntityDrag}
-            placeEntity={placeEntity}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
                   (landsMoocked[contextValue.land].speedMod) *
-                  (contextValue.duration +1))*2 / (scale * 30))
+                  (contextValue.duration +1)) / (scale * 30))
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
@@ -374,7 +387,10 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           onDrag={(e) => e.preventDefault()}
           onDragEnter={(e) => e.preventDefault()}
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            placeEntity(e);
+          }}
           onContextMenu={(e) => openContextMenu(e)}
           className='self-start max-h-[800px]'
           src={img}
@@ -390,7 +406,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           value={pjSortedByPlayer}
           handleChange={handleChange} />
       </div>
-      <div className='flex gap-16 mt-4 w-full pb-5 pl-5'>
+      <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
 
         {pjs.map((pj, index) => {
           return (
@@ -404,10 +420,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              handleOnDrag={(e) =>{
-                if (tokenData[index]?.group !== -1) ungroupToken(index);
-                placeEntity(index, e, false);
-              }}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
