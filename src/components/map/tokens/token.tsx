@@ -2,8 +2,8 @@ import {GroupData, PjType, Pos} from '../../../types';
 import React from 'react';
 import TokenImg from './tokenImg';
 import TokenGroups from './tokenGroup';
-/* import ReactTooltip from 'react-tooltip';
-import PjCard from '../pjCard'; */
+import ReactTooltip from 'react-tooltip';
+import PjCard from '../../pjCard';
 
 type Style = {
   top: string;
@@ -72,9 +72,7 @@ const Token = ({
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => {
           e.preventDefault();
-          console.log('B');
           placeEntity(e);
-          console.log('BB');
         }}
         className='absolute z-10'
         style={style}
@@ -124,16 +122,16 @@ const Token = ({
       </div>
 
       {
-        /*
+        pj &&
         <ReactTooltip
-        id={`${pj.name}RegisterTip`}
-        place='right'
-        effect='solid'
-        backgroundColor='none'
-        delayShow={500}
-      >
-        <PjCard pjData={pj} />
-      </ReactTooltip>*/
+          id={`${pj.name}RegisterTip`}
+          place='right'
+          effect='solid'
+          backgroundColor='none'
+          delayShow={500}
+        >
+          <PjCard pjData={pj} />
+        </ReactTooltip>
       }
     </>
   );

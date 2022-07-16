@@ -31,11 +31,8 @@ const TokenImg = (
         if (handleContextMenu) handleContextMenu(e);
       }}
       onDrop={() => {
-        console.log('A');
         groupTokens();
-        console.log('AA');
         setIsGrouping();
-        console.log('AAA');
       }}
       data-tip
       data-for={`${pj.name}RegisterTip`}

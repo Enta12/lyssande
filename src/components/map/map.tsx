@@ -43,9 +43,9 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
+
   const tokens: JSX.Element[] = [];
   const groups: JSX.Element[] = [];
-  let isGrouping = false;
   const contextMenu = {
     speed: {
       options: speedMoocked.map((speed) => speed.name),
@@ -66,6 +66,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       value: contextValue.duration,
     },
   };
+  let isGrouping = false;
 
   const handleContextMenuChange = (
       action: string,
@@ -80,7 +81,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       setContextMenu(null);
       return;
     }
-    const tokenDataTemp = [...tokenData];
+    const tokenDataTemp = tokenData;
     switch (action) {
       case 'supressToken':
         tokenDataTemp[index] = undefined;
@@ -127,7 +128,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
   const placeEntity = (
       event : MouseEvent<HTMLDivElement>,
   ) => {
-    console.log('setIsGrouping', isGrouping);
     if (entityDrag.entityId > -1 && mapRef.current) {
       if (
         event.pageX > mapRef.current.offsetLeft &&
@@ -135,7 +135,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         event.pageY > mapRef.current.offsetTop &&
         event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
       ) {
-        const tokens = [...tokenData];
+        const tokenDataTemp = tokenData;
         const x = (event.pageX-mapRef.current.offsetLeft)/
             (mapRef.current.clientWidth);
         const y = (event.pageY-mapRef.current.offsetTop)/
@@ -143,11 +143,12 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         if (entityDrag.group && groupsData[entityDrag.entityId]) {
           const groups = [...groupsData];
           groups[entityDrag.entityId]?.members.forEach((member) => {
-            tokens[member] = {
+            tokenDataTemp[member] = {
               x,
               y,
               map: mapName,
-              showMouvement: tokens[entityDrag.entityId]?.showMouvement || 0,
+              showMouvement:
+                  tokenDataTemp[entityDrag.entityId]?.showMouvement || 0,
               group: entityDrag.entityId,
             };
           });
@@ -161,19 +162,19 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           };
           setGroupsData(groups);
         } else if (!isGrouping) {
-          console.log('hello I"m here');
-          if (tokens[entityDrag.entityId]?.group !== -1) {
+          if (tokenDataTemp[entityDrag.entityId]?.group !== -1) {
             ungroupToken(entityDrag.entityId);
           }
-          tokens[entityDrag.entityId] = {
+          tokenDataTemp[entityDrag.entityId] = {
             x,
             y,
             map: mapName,
-            showMouvement: tokens[entityDrag.entityId]?.showMouvement || 0,
+            showMouvement:
+                tokenDataTemp[entityDrag.entityId]?.showMouvement || 0,
             group: -1,
           };
         }
-        setTokenData(tokens);
+        setTokenData([...tokenDataTemp]);
       };
     }
   };
@@ -202,8 +203,8 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       }
       character.group = -1;
     }
-    setTokenData([...tokenDataTemp]);
-    setGroupsData([...groupsDataTemp]);
+    setTokenData(tokenDataTemp);
+    setGroupsData(groupsDataTemp);
   };
   const groupTokens = (
       entityId: number,
