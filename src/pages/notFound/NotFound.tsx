@@ -14,6 +14,7 @@ const NotFound = ({}: Props) => {
         font-bubblegum
         text-bold
         text-4xl
+        hover:animate-spin
         text-swamp'
     >
       <span className='animate-spin'>404</span>
