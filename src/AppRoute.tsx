@@ -13,6 +13,7 @@ import Players from './pages/player/players';
 import CreateSession from './pages/createSession';
 import jwtDecode from 'jwt-decode';
 import {User} from './types';
+import NotFound from './pages/notFound/NotFound';
 
 export const AuthContext =
   React.createContext<{user?: User, setUser?:(user: User) => void}>({});
@@ -42,7 +43,8 @@ const AppRoute = () => {
             <Route path='/newPj' element={<Layout><AddPj /></Layout>} />
             <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
             <Route path='/map' element={<Layout><MapPage /></Layout>} />
-            <Route path='' element={<Layout><Players /></Layout>} />
+            <Route path='/' element={<Layout><Players /></Layout>} />
+            <Route path='*' element={<Layout><NotFound /></Layout>} />
           </Routes>
         </Router>
       </AuthContext.Provider>
