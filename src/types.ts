@@ -11,6 +11,7 @@ export type PjType = {
             y: number;
         },
         map: string;
+        group: number;
     },
     quest?: number,
     player: number,
@@ -21,7 +22,6 @@ export type PjType = {
     },
     gold: number,
     id: number,
-
 };
 export type Player ={
     name: string,
@@ -79,4 +79,12 @@ export type Auth = {
 }
 export type User = {
     userId: number;
+}
+export type GroupData = {
+    position: {
+        x: number,
+        y: number,
+        map: string,
+    }
+    members: number[];
 }

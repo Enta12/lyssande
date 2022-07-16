@@ -1,10 +1,10 @@
 import {MouseEvent, useState, useRef, useEffect} from 'react';
 import {landsMoocked, playerMoocked, speedMoocked} from '../../moockedData';
-import {PjType} from '../../types';
+import {GroupData, PjType} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
-import Token from './token';
+import Token from './tokens/token';
 import ContextMenu from './contextMenu';
 
 type Props = {
@@ -26,21 +26,26 @@ const formatPjToTokenData = (pj :PjType) => {
     ...pj.positions.coordonate,
     map: pj.positions.map,
     showMouvement: 0,
+    group: pj.positions.group,
   };
 };
 
 const Map = ({img, pjs, mapName, scale}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
+  const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
+  const [groupsData, setGroupsData] = useState<(GroupData | undefined)[]>([]);
   const [tokenData, setTokenData] =
     useState(pjs.map((pj) => formatPjToTokenData(pj)));
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
+
   const tokens: JSX.Element[] = [];
+  const groups: JSX.Element[] = [];
   const contextMenu = {
     speed: {
       options: speedMoocked.map((speed) => speed.name),
@@ -52,10 +57,16 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     },
     duration: {
       options: new Array(10).fill('').map(
-          (duration, index) => `${index+1} jour`),
+          (duration, index) => (index+1)%2 === 0 ?
+          `${(index+1)/2} jour${(index+1)/2>1 ? 's' : ''}` :
+          `${(index+1)/2 > 0.5 ? `${Math.round((index+1)/2)}
+          jour${(index+1)/2>1 ? 's' : ''} et ` : ''}
+          1 demie journée`,
+      ),
       value: contextValue.duration,
     },
   };
+  let isGrouping = false;
 
   const handleContextMenuChange = (
       action: string,
@@ -70,7 +81,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       setContextMenu(null);
       return;
     }
-    const tokenDataTemp = [...tokenData];
+    const tokenDataTemp = tokenData;
     switch (action) {
       case 'supressToken':
         tokenDataTemp[index] = undefined;
@@ -82,6 +93,7 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           x: tokenDataTemp[index]?.x || 0,
           y: tokenDataTemp[index]?.y || 0,
           showMouvement: tokenDataTemp[index]?.showMouvement === 1 ? 0:1,
+          group: tokenDataTemp[index]?.group || -1,
         };
         setTokenData(tokenDataTemp);
         break;
@@ -113,56 +125,239 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       setPjSortedByPlayer([...pjSortedByPlayer, option]);
     }
   };
-  const placeCharater = (
-      pjSelected: number,
+  const placeEntity = (
       event : MouseEvent<HTMLDivElement>,
   ) => {
-    if (pjSelected > -1 && mapRef.current) {
-      const currentItem = [...tokenData];
+    if (entityDrag.entityId > -1 && mapRef.current) {
       if (
         event.pageX > mapRef.current.offsetLeft &&
         event.pageX < mapRef.current.offsetLeft + mapRef.current.scrollWidth &&
-        event.pageX > mapRef.current.offsetTop &&
+        event.pageY > mapRef.current.offsetTop &&
         event.pageY < mapRef.current.offsetTop + mapRef.current.scrollHeight
       ) {
-        currentItem[pjSelected] = {
-          x: (event.pageX-mapRef.current.offsetLeft)/
-          (mapRef.current.clientWidth),
-          y: (event.pageY-mapRef.current.offsetTop)/
-          (mapRef.current.clientHeight),
-          map: mapName,
-          showMouvement: currentItem[pjSelected]?.showMouvement || 0,
-        };
+        const tokenDataTemp = tokenData;
+        const x = (event.pageX-mapRef.current.offsetLeft)/
+            (mapRef.current.clientWidth);
+        const y = (event.pageY-mapRef.current.offsetTop)/
+            (mapRef.current.clientHeight);
+        if (entityDrag.group && groupsData[entityDrag.entityId]) {
+          const groups = [...groupsData];
+          groups[entityDrag.entityId]?.members.forEach((member) => {
+            tokenDataTemp[member] = {
+              x,
+              y,
+              map: mapName,
+              showMouvement:
+                  tokenDataTemp[entityDrag.entityId]?.showMouvement || 0,
+              group: entityDrag.entityId,
+            };
+          });
+          groups[entityDrag.entityId] = {
+            position: {
+              x,
+              y,
+              map: mapName,
+            },
+            members: groups[entityDrag.entityId]?.members || [],
+          };
+          setGroupsData(groups);
+        } else if (!isGrouping) {
+          if (tokenDataTemp[entityDrag.entityId]?.group !== -1) {
+            ungroupToken(entityDrag.entityId);
+          }
+          tokenDataTemp[entityDrag.entityId] = {
+            x,
+            y,
+            map: mapName,
+            showMouvement:
+                tokenDataTemp[entityDrag.entityId]?.showMouvement || 0,
+            group: -1,
+          };
+        }
+        setTokenData([...tokenDataTemp]);
       };
-      setTokenData(currentItem);
+    }
+  };
+  const ungroupToken = (characterId: number) => {
+    const tokenDataTemp = tokenData;
+    const groupsDataTemp = groupsData;
+    const character = tokenDataTemp[characterId];
+    if (character) {
+      const group = groupsDataTemp[character.group];
+      if (group) {
+        const characterIndex = group.members.indexOf(characterId);
+        if (characterIndex !== -1) {
+          group.members.splice(characterIndex, 1);
+        }
+      }
+      if (
+        groupsDataTemp[character.group]?.members.length === 1
+      ) {
+        const lastCharacterIndex = groupsDataTemp[character.group]?.members[0];
+        if (lastCharacterIndex !== undefined) {
+          const lastCharacter =
+            tokenDataTemp[lastCharacterIndex];
+          if (lastCharacter) lastCharacter.group = -1;
+        }
+        groupsData[character.group] = undefined;
+      }
+      character.group = -1;
+    }
+    setTokenData(tokenDataTemp);
+    setGroupsData(groupsDataTemp);
+  };
+  const groupTokens = (
+      entityId: number,
+      group?: boolean,
+  ) => {
+    const tokenDataTemp = tokenData;
+    const groupsDataTemp = groupsData;
+    const characterB = tokenDataTemp[entityId];
+    const groupB = groupsDataTemp[entityId];
+    if (
+      (group && entityDrag.group !== group) ||
+      (
+        entityId !== entityDrag.entityId &&
+        ((entityDrag.group &&
+          !groupsData[entityDrag.entityId]?.members.some(
+              (member) => entityId === member)) ||
+          !entityDrag.group
+        ))) {
+      if (entityDrag.group) {
+        const groupA = groupsData[entityDrag.entityId];
+        if (groupA) {
+          if (group && groupB) {
+            groupB.members.push(
+                ...groupA.members);
+            groupsData[entityDrag.entityId] = undefined;
+            groupA.members.forEach((memberId) => {
+              const member = tokenData[memberId];
+              if (member) {
+                member.group = entityId;
+                member.x = groupB.position.x;
+                member.y = groupB.position.y;
+              }
+            });
+          } else if (characterB) {
+            groupA.members.push(entityId);
+            groupA.position.x = characterB.x;
+            groupA.position.y = characterB.y;
+            characterB.group = entityDrag.entityId;
+            groupA.members.forEach((memberId) => {
+              const member = tokenData[memberId];
+              if (member) {
+                member.x = characterB.x;
+                member.y = characterB.y;
+              }
+            });
+          }
+        }
+      } else {
+        if (!tokenDataTemp[entityDrag.entityId]) {
+          tokenDataTemp[entityDrag.entityId] = {
+            x: group ? groupB?.position.x || -1 : characterB?.x || -1,
+            y: group ? groupB?.position.y || -1 : characterB?.y || -1,
+            map: mapName,
+            showMouvement: 0,
+            group: group ? entityId : -1,
+          };
+        }
+        const characterA = tokenDataTemp[entityDrag.entityId];
+        if (characterA) {
+          if (group && groupB) {
+            groupB.members.push(entityDrag.entityId);
+            characterA.group = entityId;
+            characterA.x = groupB.position.x;
+            characterA.y = groupB.position.y;
+          } else if (characterB) {
+            for (let i =0; true; i++) {
+              if (!groupsData[i]) {
+                characterB.group = i;
+                characterA.group = i;
+                characterA.x = characterB.x;
+                characterA.y = characterB.y;
+                groupsDataTemp[i]={
+                  members: [entityDrag.entityId, entityId],
+                  position: {
+                    x: characterB.x,
+                    y: characterB.y,
+                    map: mapName,
+                  },
+                };
+                break;
+              }
+            }
+          }
+        }
+      }
+      setGroupsData([...groupsDataTemp]);
+      setTokenData([...tokenDataTemp]);
+      createTokens();
     }
   };
   const createTokens = () => {
-    pjs.forEach((pj, index) => {
-      if (mapRef?.current && tokenData[index]) {
-        if (tokenData[index]?.map === mapName) {
-          tokens[index] =
+    if (mapRef?.current) {
+      pjs.forEach((pj, index) => {
+        if (tokenData[index] && tokenData[index]?.group === -1) {
+          if (tokenData[index]?.map === mapName) {
+            tokens[index] =
+            <Token
+              setIsGrouping={() => isGrouping = true}
+              placeEntity={placeEntity}
+              groupTokens={groupTokens}
+              index={index}
+              setEntityDrag={setEntityDrag}
+              showMouvement={tokenData[index]?.showMouvement === 1}
+              mouvement={
+                (((speedMoocked[contextValue.speed].speedMod) *
+                  (landsMoocked[contextValue.land].speedMod) *
+                  (contextValue.duration +1)) / (scale * 30))
+              }
+              setContexMenu={(e) => openContextMenu(e, index)}
+              hidden={
+                !(pjSortedByPlayer.length===0 ||
+                pjSortedByPlayer.some(
+                    (selectedPj) => selectedPj === pj.player))}
+              pj={pjs[index]}
+              key={pj.name}
+              pos={tokenData[index] || {x: 0, y: 0}}
+            />;
+          };
+        }
+      });
+      groupsData.forEach((group, index) => {
+        if (groupsData[index] && groupsData[index]?.position.map === mapName) {
+          groups[index] =
           <Token
-            handleOnDrag={(e) => placeCharater(index, e)}
+            setIsGrouping={() => isGrouping = true}
+            placeEntity={placeEntity}
+            charactersData={pjs}
+            groupData={groupsData[index]}
+            groupTokens={groupTokens}
+            index={index}
+            setEntityDrag={setEntityDrag}
             showMouvement={tokenData[index]?.showMouvement === 1}
             mouvement={
               (((speedMoocked[contextValue.speed].speedMod) *
-                (landsMoocked[contextValue.land].speedMod) *
-                (contextValue.duration +1))*2 / (scale * 30))
+                  (landsMoocked[contextValue.land].speedMod) *
+                  (contextValue.duration +1)) / (scale * 30))
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
               !(pjSortedByPlayer.length===0 ||
-              pjSortedByPlayer.some(
-                  (selectedPj) => selectedPj === pj.player))}
-            img={pjs[index].img}
-            pj={pjs[index]}
-            key={pj.name}
-            pos={tokenData[index] || {x: 0, y: 0}}
+                pjSortedByPlayer.some(
+                    (currentPlayer) =>
+                      groupsData[index]?.members.some(
+                          (currentMember) =>
+                            pjs[currentMember].player === currentPlayer,
+                      ),
+                ))}
+            key={index}
+            pos={groupsData[index]?.position || {x: 0, y: 0}}
           />;
-        };
-      }
-    });
+        }
+      });
+    }
   };
   useEffect(() => {
     if (height>0) {
@@ -189,16 +384,21 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
         ref={mapRef}
       >
         <img
+          draggable={false}
           onDrag={(e) => e.preventDefault()}
           onDragEnter={(e) => e.preventDefault()}
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            placeEntity(e);
+          }}
           onContextMenu={(e) => openContextMenu(e)}
           className='self-start max-h-[800px]'
           src={img}
           alt={mapName}
         />
         {tokens}
+        {groups}
       </div>
       <div className='flex gap-16 mt-4 w-full'>
         <ShortSelect
@@ -207,18 +407,20 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           value={pjSortedByPlayer}
           handleChange={handleChange} />
       </div>
-      <div className='flex gap-16 mt-4 w-full pb-5 pl-5'>
+      <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
 
         {pjs.map((pj, index) => {
           return (
             <MapButton
+              setPjDrag={() => setEntityDrag(
+                  {entityId: index, group: false},
+              )}
               hidden={
                 !(pjSortedByPlayer.length===0 ||
                   pjSortedByPlayer.some(
                       (selectedPj) => selectedPj === pj.player)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              handleOnDrag={(e) => placeCharater(index, e)}
               key={pj.name}
               name={pj.name}
               picture={pj.img}
