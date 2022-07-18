@@ -28,15 +28,15 @@ const PrimaryButton = ({
         font-bubblegum
         align-center
         bg-brown
-        rounded-2xl
+        rounded-3xl
         ${short ? 'text-lg rounded-md border-4' :
-        'text-2xl rounded-2xl border-8'}
+        'text-2xl border-8'}
         ${height || 'h-24'}
         ${width || 'w-80'}
         ${alterButton ?
           'bg-red-600' :
           'text-lightGrey'}
-        ${className}
+        ${className && className}
       `}>
       <span className={ alterButton ?
         'text-transparent bg-clip-text bg-gradient-to-b from-black to-red-900' :

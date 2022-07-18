@@ -53,7 +53,6 @@ export type Local =
     'swordArm' |
     'leg' |
     'genitals' |
-    'locals' |
     'random';
 export type Protagonist = {
     name: string;

@@ -1,9 +1,12 @@
 /* eslint-disable max-len */
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useState} from 'react';
+import {InputSelect} from '../../components';
 import {FightPhaseData, Local, Protagonist} from '../../types';
+import {ReactComponent as TargetIcon} from '../../assets/target.svg';
+import {ReactComponent as Blowup} from '../../assets/blowup.svg';
+import {ReactComponent as SwordIcon} from '../../assets/sword.svg';
 
-type Props ={
-    isSelected: boolean,
+type Props = {
     index: number,
     protagonistList : Protagonist[],
     data: FightPhaseData,
@@ -43,6 +46,15 @@ const locals : Local[] = [
   'swordArm',
   'random',
 ];
+const localsTrad = {
+  head: 'tête',
+  arm: 'bras',
+  leg: 'jambes',
+  genitals: 'parties génitales',
+  torso: 'Torse',
+  swordArm: 'Bras armé',
+  random: 'Au hasard !',
+};
 const localModif={
   head: {
     def: 0,
@@ -70,15 +82,18 @@ const localModif={
   },
 };
 
-const FightLine = ({isSelected, protagonistList, data, handleChange, handleSupress, index}: Props) => {
+const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
+  const [localIndex, setLocalIndex] = useState(0);
+  const [protagonistB, setProtagonistB] = useState(0);
+
   let roll10 = Math.floor(Math.random() * 10);
   if (roll10 > 7) {
     roll10 = 5;
   } else if (roll10 > 3) {
     roll10 = 4;
   }
-  const local = data.local === 'random'? locals[roll10]: data.local;
 
+  const local = locals[localIndex] === 'random'? locals[roll10]: locals[localIndex];
   let at = 10;
   let prd = 10;
   if (local === 'head' || local === 'torso' || local === 'swordArm' || local === 'arm' || local === 'genitals' || local === 'leg' ) {
@@ -92,38 +107,41 @@ const FightLine = ({isSelected, protagonistList, data, handleChange, handleSupre
   if (prd < 0) prd = 0;
 
   return (
-    <div className={'flex'}>
-      {isSelected && '-------------->'}
-      <select value={data.protagonistA} name="protagonistA" onChange={ (e) => handleChange(e, index)}>
-        {protagonistList.map((protagonist, index) =>{
-          return (
-            <option key={`${index}OptionA`} value={index}>
-              {protagonist.name}
-            </option>
-          );
-        })}
-      </select>
-      <select value={data.local} name="local" onChange={ (e) => handleChange(e, index)}>
-        {locals.map((local, index) =>{
-          return (
-            <option key={`${index}Local`} value={local}>
-              {local}
-            </option>
-          );
-        })}
-      </select>
-      <select value={data.protagonistB} name="protagonistB" onChange={ (e) => handleChange(e, index)}>
-        {protagonistList.map((protagonist, index) =>{
-          return (
-            <option key={`${index}OptionB`} value={index}>
-              {protagonist.name}
-            </option>
-          );
-        })}
-      </select>
-      {local}
-      { matrice[prd][at]}
-      <button onClick={(e) => handleSupress(index)} >Suprimer la ligne</button>
+    <div className='text-xl flex text-brown gap-4'>
+      <div className='flex h-20 bg-brown w-[600px] rounded-2xl p-3 items-center justify-around'>
+        <div className='w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center'> {protagonistList[data.protagonistB].name} </div>
+        <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">VS</span> ~</span>
+        <InputSelect
+          className='text-xl'
+          width='[157px]'
+          height='[50px]'
+          options={protagonistList.filter((temp, index) => {
+            return index !== data.protagonistA;
+          })
+              .map((elt) => elt.name) || []}
+          handleChange={setProtagonistB}
+          value={protagonistB}
+        />
+        <div className='relative w-48'>
+          <TargetIcon className='absolute' />
+          <InputSelect
+            className='text-xl absolute top-0 left-10'
+            width='[157px]'
+            height='[50px]'
+            options={locals.map((elt) => localsTrad[elt])}
+            handleChange={setLocalIndex}
+            value={localIndex}
+          />
+        </div>
+      </div>
+      <div className='relative'>
+        <SwordIcon className='absolute top-2 left-0 w-16 opacity-50'/>
+        <div className='absolute text-xl left-9 flex h-20 border-8 border-brown bg-white rounded-2xl p-3 items-center justify-around w-32'>
+          {localsTrad[local]}
+        </div>
+        <span className=' left-[174px] font-extrabold absolute z-10 top-6'>{matrice[prd][at]} </span>
+        <Blowup className=' left-[154px] absolute top-1' />
+      </div>
     </div>
   );
 };
