@@ -96,7 +96,14 @@ const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
   const local = locals[localIndex] === 'random'? locals[roll10]: locals[localIndex];
   let at = 10;
   let prd = 10;
-  if (local === 'head' || local === 'torso' || local === 'swordArm' || local === 'arm' || local === 'genitals' || local === 'leg' ) {
+  if (
+    local === 'head' ||
+    local === 'torso' ||
+    local === 'swordArm' ||
+    local === 'arm' ||
+    local === 'genitals' ||
+    local === 'leg'
+  ) {
     at = protagonistList[data.protagonistA].at-1 + localModif[local].at;
     prd = protagonistList[data.protagonistB].prd-1 + localModif[local].def;
   }
@@ -108,9 +115,11 @@ const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
 
   return (
     <div className='text-xl flex text-brown gap-4'>
-      <div className='flex h-20 bg-brown w-[600px] rounded-2xl p-3 items-center justify-around'>
-        <div className='w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center'> {protagonistList[data.protagonistB].name} </div>
-        <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">VS</span> ~</span>
+      <div className='flex h-20 bg-brown w-[600px] rounded-2xl p-3 items-center justify-around '>
+        <div className='w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center'>
+          {protagonistList[data.protagonistB].name} </div>
+        <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">
+          VS</span> ~</span>
         <InputSelect
           className='text-xl'
           width='[157px]'
@@ -134,9 +143,24 @@ const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
           />
         </div>
       </div>
-      <div className='relative'>
+      <div className='relative w-60'>
         <SwordIcon className='absolute top-2 left-0 w-16 opacity-50'/>
-        <div className='absolute text-xl left-9 flex h-20 border-8 border-brown bg-white rounded-2xl p-3 items-center justify-around w-32'>
+        <div
+          className='
+            absolute
+            text-xl
+            left-9
+            flex
+            h-20
+            border-8
+            border-brown
+            bg-white
+            rounded-2xl
+            p-3
+            items-center
+            justify-around
+            w-32'
+        >
           {localsTrad[local]}
         </div>
         <span className=' left-[174px] font-extrabold absolute z-10 top-6'>{matrice[prd][at]} </span>

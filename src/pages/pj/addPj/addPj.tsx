@@ -1,14 +1,14 @@
 import Input from '../../../components/input';
-import InputSelect from '../../../components/inputSelect';
+// import InputSelect from '../../../components/inputSelect';
 import Title from '../../../components/title';
 import React from 'react';
 import AlignmentInput from './AlignmentInput';
 import TextInput from '../../../components/textInput';
-import {
+/* import {
   culteMoocked,
   jobsMoocked,
   racesMoocked,
-} from '../../../moockedData';
+} from '../../../moockedData'; */
 import FileInput from '../../../components/fileInput';
 
 
@@ -35,8 +35,8 @@ const AddPj = () => {
           flex-1
         '>
           <Input placeholder="Nom du personnage" type="text"/>
-          <InputSelect title={'Classe'} options={jobsMoocked}/>
-          <InputSelect title={'Race'} options={racesMoocked}/>
+          {/* <InputSelect title={'Classe'} options={jobsMoocked}/> */ }
+          { /* <InputSelect title={'Race'} options={racesMoocked}/> */}
           <Input placeholder="Niveau du personnage" type="number"/>
           <Input placeholder="Nombre de PO" type="number"/>
           <FileInput text="PHOTO" />
@@ -50,7 +50,7 @@ const AddPj = () => {
           h-full
         '>
           <AlignmentInput />
-          <InputSelect title={'Culte'} options={culteMoocked}/>
+          {/* <InputSelect title={'Culte'} options={culteMoocked}/> */}
           <TextInput />
         </div>
       </form>

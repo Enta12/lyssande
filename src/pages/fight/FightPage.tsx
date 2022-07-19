@@ -9,6 +9,8 @@ const protaTest = {
   at: 12,
   prd: 12,
   cou: 13,
+  ambidexterity: false,
+  npc: false,
 };
 
 const FightPage = () => {
@@ -95,7 +97,7 @@ const FightPage = () => {
         top-[112px]
         left-0'
     >
-      <div className='flex-1 flex-col px-7 gap-2 flex'>
+      <div className='flex-col mx-7 gap-2 flex min-w-[856px]'>
         <Title title={'Combat'} />
         {
           fightTurnSorted[0]
@@ -111,12 +113,10 @@ const FightPage = () => {
         <button onClick={addFightElement}>Ajouter un tour</button>
         {/* <button onClick = {filterByCourage}>Filtrer par courage</button> */}
       </div>
-      <div className='bg-darkBrown w-537 rounded-l-xl'>
-        <ProtagonistListForm
-          protagonistList={protagonistList}
-          setProtagonistList={setProtagonistList}
-        />
-      </div>
+      <ProtagonistListForm
+        protagonists={protagonistList}
+        setProtagonistList={setProtagonistList}
+      />
     </div>
   );
 };

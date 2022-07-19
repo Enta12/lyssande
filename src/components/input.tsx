@@ -5,6 +5,7 @@ interface Props {
     type: string;
     width?: string;
     height?: string;
+    className?: string
     value?: number | string;
     setValueString?: (newValue: string) => void;
     setValueNumber?: (newValue: string) => void;

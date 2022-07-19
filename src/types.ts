@@ -59,6 +59,8 @@ export type Protagonist = {
     at: number;
     prd: number;
     cou: number;
+    ambidexterity: boolean;
+    npc: boolean;
 }
 export type FightPhaseData = {
     protagonistA : number;

@@ -1,49 +1,109 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {Protagonist} from '../../types';
+import {ReactComponent as TwoHandsIcon} from '../../assets/twoHands.svg';
+import {PrimaryButton} from '../../components';
 
 type Props = {
     protagonist: Protagonist,
-    handleChange: (index: number, e: ChangeEvent<HTMLInputElement>) => void,
-    index: number
+    handleChange: (protagonist: Protagonist) => void,
 }
 
-const ProtagonistForm = ({protagonist, handleChange, index}: Props) => {
+const ProtagonistForm = ({protagonist, handleChange}: Props) => {
+  const onNameChange = (newValue: string) => {
+    const protagonistTemp = protagonist;
+    protagonistTemp.name = newValue;
+    handleChange(protagonistTemp);
+  };
+  const onStatChange = (action: 'prd' | 'at' | 'cou', newValue: number) => {
+    const protagonistTemp = protagonist;
+    protagonistTemp[action] = newValue;
+    handleChange(protagonistTemp);
+  };
+  const onAmbidextryChange = () => {
+    const protagonistTemp = protagonist;
+    protagonistTemp.ambidexterity = !protagonistTemp.ambidexterity;
+    handleChange(protagonistTemp);
+  };
   return (
-    <div className="m-1">
-      <div>
-        <label htmlFor="name">Nom :</label>
-        <label htmlFor="cou">Cour :</label>
-      </div>
-      <div>
+    <div
+      className='bg-orange p-2 h-56 w-[147px] rounded-2xl'
+    >
+      <div
+        className='
+            rounded-2xl
+            bg-beige
+            text-brown'
+      >
         <input
+          type='text'
+          onChange={(e) => onNameChange(e.target.value)}
           value={protagonist.name}
-          onChange={ (e) => handleChange(index, e)}
-          name="name"
-          type="text"
+          className='
+            text-swamp
+            my-1
+            pb-1
+            pl-2
+            bg-orange
+            font-lg
+            font-bold
+            w-[134px]
+            focus:outline-none'
         />
-        <input
-          value={protagonist.cou}
-          onChange={ (e) => handleChange(index, e)}
-          name="cou"
-          type="number"
-        />
+        <div className="flex justify-between mx-1.5 text-bubblegum">
+            COU
+          <ProtagonistInput
+            type='text'
+            handleChange={(e)=>onStatChange('cou', parseInt(e.target.value)||0)}
+            value={protagonist.cou}
+          />
+        </div>
+        <div className="flex justify-between items-center mx-1.5 ">
+            AT
+          <div className="flex justify-between items-center">
+            <ProtagonistInput
+              type='text'
+              handleChange={
+                (e)=>onStatChange('at', parseInt(e.target.value)||0)}
+              value={protagonist.at}
+            />
+            {
+              /*
+                  double
+                */
+            }
+          </div>
+        </div>
+        <div className="flex justify-between items-center mx-1.5 ">
+            PRD
+          <ProtagonistInput
+            type='number'
+            handleChange={
+              (e) => onStatChange('prd', parseInt(e.target.value)||0)}
+            value={protagonist.prd}
+          />
+        </div>
       </div>
-      <div>
-        <label htmlFor="at">AT :</label>
-        <label htmlFor="prd">PRD :</label>
-      </div>
-      <div>
-        <input
-          value={protagonist.at}
-          onChange={ (e) => handleChange(index, e)}
-          type="number"
-          name="at"
-        />
-        <input
-          value={protagonist.prd}
-          onChange={ (e) => handleChange(index, e)}
-          type="number"
-          name="prd"
+      <div className='flex flex-col bg-orange py-1.5 gap-2'>
+        <div className='flex justify-end gap-1 '>
+          <TwoHandsIcon />
+          <div
+            onClick={onAmbidextryChange}
+            className={`
+                cursor-pointer
+                w-6
+                h-6
+                border-4
+                ${protagonist.ambidexterity ? 'bg-green-500' : 'bg-brown'}
+                border-white
+                rounded-lg`}
+          />
+        </div>
+        <PrimaryButton
+          text='Suprimer'
+          alterButton
+          short
+          width='32'
+          height='7'
         />
       </div>
     </div>
@@ -51,3 +111,30 @@ const ProtagonistForm = ({protagonist, handleChange, index}: Props) => {
 };
 
 export default ProtagonistForm;
+
+const ProtagonistInput = (
+    {
+      handleChange, type, value,
+    }:
+  {
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    type: string,
+    value: string | number,
+  },
+) => {
+  return (
+    <input
+      type={type}
+      value={value}
+      onChange={handleChange}
+      className='
+      text-swamp
+        w-5
+        bg-transparent
+        font-lg
+        font-bold
+        m-1
+        focus:outline-none'
+    />
+  );
+};
