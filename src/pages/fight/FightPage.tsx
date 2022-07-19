@@ -86,6 +86,23 @@ const FightPage = () => {
     });
     setFightTurnSorted([...fightTurnSortedTemp]);
   }, [fightElementData, turnSelected, protagonistList]);
+  const updateProtagonists = (
+      action: 'add' | 'update' | 'delete',
+      protagonist?: Protagonist,
+      index?: number,
+  ) => {
+    let protagonistsTemp = [...protagonistList];
+    if (action === 'add' && protagonist) {
+      protagonistsTemp.push(protagonist);
+    } else if (action === 'update' && protagonist && index !== undefined) {
+      protagonistsTemp[index] = protagonist;
+    } else if (action === 'delete' && index !== undefined) {
+      protagonistsTemp = protagonistsTemp.filter(
+          (protagonist, currentIndex) => index !== currentIndex);
+    }
+    setProtagonistList(protagonistsTemp);
+  };
+
 
   return (
     <div
@@ -115,7 +132,13 @@ const FightPage = () => {
       </div>
       <ProtagonistListForm
         protagonists={protagonistList}
-        setProtagonistList={setProtagonistList}
+        handleaAddProtagonist={
+          (protagonist: Protagonist) => updateProtagonists('add', protagonist)}
+        handleDeleteProtagonist={
+          (index) => updateProtagonists('delete', undefined, index)}
+        handleUpdateProtagonist={
+          (protagonist, index) =>
+            updateProtagonists('update', protagonist, index)}
       />
     </div>
   );

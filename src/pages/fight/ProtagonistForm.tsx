@@ -6,9 +6,10 @@ import {PrimaryButton} from '../../components';
 type Props = {
     protagonist: Protagonist,
     handleChange: (protagonist: Protagonist) => void,
+    handleDelete: () => void,
 }
 
-const ProtagonistForm = ({protagonist, handleChange}: Props) => {
+const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
   const onNameChange = (newValue: string) => {
     const protagonistTemp = protagonist;
     protagonistTemp.name = newValue;
@@ -99,6 +100,7 @@ const ProtagonistForm = ({protagonist, handleChange}: Props) => {
           />
         </div>
         <PrimaryButton
+          onClick={handleDelete}
           text='Suprimer'
           alterButton
           short

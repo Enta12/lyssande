@@ -6,13 +6,19 @@ import {Title} from '../../components';
 
 type Props = {
     protagonists: Protagonist[],
-    setProtagonistList: React.Dispatch<React.SetStateAction<Protagonist[]>>
+    handleaAddProtagonist: (protagonist: Protagonist) => void;
+    handleDeleteProtagonist: (index: number) => void;
+    handleUpdateProtagonist: (protagonist: Protagonist, index: number) => void;
 }
 
-const ProtagonistListForm = ({protagonists, setProtagonistList}: Props) => {
+const ProtagonistListForm = ({
+  protagonists,
+  handleaAddProtagonist,
+  handleDeleteProtagonist,
+  handleUpdateProtagonist,
+}: Props) => {
   const addProtagonist = (npc : boolean) => {
-    const protagonistListTemp = [...protagonists];
-    protagonistListTemp.push({
+    handleaAddProtagonist({
       name: 'name',
       at: 10,
       prd: 10,
@@ -20,14 +26,7 @@ const ProtagonistListForm = ({protagonists, setProtagonistList}: Props) => {
       ambidexterity: false,
       npc,
     });
-    setProtagonistList(protagonistListTemp);
   };
-  const updateProtagonist =
-    (index: number, newProtagoniste: Protagonist) => {
-      const protagonistListTemp = [...protagonists];
-      protagonistListTemp[index] = newProtagoniste;
-      setProtagonistList([...protagonistListTemp]);
-    };
   return (
     <div
       className="
@@ -39,10 +38,11 @@ const ProtagonistListForm = ({protagonists, setProtagonistList}: Props) => {
         bg-darkBrown
         rounded-l-xl"
     >
-      <Title title={'PJ'}/>
+      <Title reverse title={'PJ'}/>
       <div
         className="
           gap-4
+          justify-center
           grid
           auto-rows-min
           auto-cols-[40px]
@@ -54,14 +54,16 @@ const ProtagonistListForm = ({protagonists, setProtagonistList}: Props) => {
               key={index}
               protagonist={protagonist}
               handleChange={
-                (protagonist) => updateProtagonist(index, protagonist)
+                (protagonist) => handleUpdateProtagonist(protagonist, index)
               }
+              handleDelete={() => handleDeleteProtagonist(index)}
             />
           );
         })}
         <div
           onClick={() => addProtagonist(false)}
           className='
+            cursor-pointer
             border-dashed
             h-[224px]
             w-[147px]
