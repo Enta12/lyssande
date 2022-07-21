@@ -65,7 +65,7 @@ export type Protagonist = {
 export type FightPhaseData = {
     protagonistA : number;
     protagonistB : number;
-    local: Local;
+    local: number;
 }
 export type PossibleDate = {
     date?: Date,

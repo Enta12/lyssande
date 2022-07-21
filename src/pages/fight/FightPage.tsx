@@ -1,5 +1,6 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {useState} from 'react';
 import {PrimaryButton, Title} from '../../components';
+import {locals} from '../../moockedData';
 import {FightPhaseData, Protagonist} from '../../types';
 import FightLine from './fightLine';
 import ProtagonistListForm from './ProtagonistListForm';
@@ -31,7 +32,7 @@ const FightPage = () => {
     fightElementDataTemp.push({
       protagonistA: 0,
       protagonistB: 0,
-      local: 'torso',
+      local: 0,
     });
     setFightElementData(fightElementDataTemp);
   };
@@ -41,28 +42,26 @@ const FightPage = () => {
     });
     setFightElementData(fightElementDataTemp);
   };
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>, index: number) => {
+  const updateProtagonistB = (
+      index: number,
+      newProtagonistB: number,
+  ) => {
     const fightElementDataTemp = [...fightElementData];
-    if (e.target.name === 'protagonistA' || e.target.name === 'protagonistB') {
-      fightElementDataTemp[index][e.target.name] = parseInt(e.target.value);
-    }
-    if (e.target.name === 'local' && (
-      e.target.value === 'torso' ||
-             e.target.value === 'head' ||
-             e.target.value === 'arm' ||
-             e.target.value === 'swordArm' ||
-             e.target.value === 'leg' ||
-             e.target.value === 'random' ||
-             e.target.value === 'genitals')) {
-      fightElementDataTemp[index][e.target.name] = e.target.value;
-    }
+    fightElementDataTemp[index].protagonistB = newProtagonistB;
+    setFightElementData(fightElementDataTemp);
+  };
+  const updateLocal = (
+      index: number,
+      newLocal: number,
+  ) => {
+    const fightElementDataTemp = [...fightElementData];
+    fightElementDataTemp[index].local = newLocal;
     setFightElementData(fightElementDataTemp);
   };
   const getOrderIndex = (index: number, lenght: number) => {
     const test = turnSelected + index < lenght ?
         turnSelected + index :
         turnSelected + index - lenght;
-    console.log('test', lenght);
     return test;
   };
   const updateProtagonists = (
@@ -76,8 +75,8 @@ const FightPage = () => {
       protagonistsTemp.push(protagonist);
       fightElementDataTemp.push({
         protagonistA: protagonistsTemp.length-1,
-        protagonistB: protagonistsTemp.length-1,
-        local: 'random',
+        protagonistB: 0,
+        local: locals.length-1,
       });
     } else if (action === 'update' && protagonist && index !== undefined) {
       protagonistsTemp[index] = protagonist;
@@ -115,7 +114,7 @@ const FightPage = () => {
         {
           fightElementData.map( (data, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
                 <FightLine
                   firstLine={!index}
                   protagonistList={protagonistList}
@@ -124,10 +123,20 @@ const FightPage = () => {
                         getOrderIndex(index, fightElementData.length)
                     ]
                   }
-                  handleChange={handleChange}
+                  updateProtagonistB={
+                    (newProtagonistB) =>
+                      updateProtagonistB(
+                          getOrderIndex(index, fightElementData.length),
+                          newProtagonistB,
+                      )
+                  }
+                  updateLocal={
+                    (newLocal) => updateLocal(
+                        getOrderIndex(index, fightElementData.length),
+                        newLocal,
+                    )}
                   handleSupress={handleSupress}
                   index={getOrderIndex(index, fightElementData.length)}
-                  key={getOrderIndex(index, fightElementData.length)}
                 />
                 {
                   !index &&
@@ -137,13 +146,10 @@ const FightPage = () => {
                     text='Tour suivant'
                   />
                 }
-              </>
+              </React.Fragment>
 
             );
           })
-        }
-        {
-          /* fightTurnSorted.filter((data, index) => index > 0) */
         }
         <button onClick={addFightElement}>Ajouter un tour</button>
         {/* <button onClick = {filterByCourage}>Filtrer par courage</button> */}

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {PjType, Player, WorldMap} from './types';
+import {Local, PjType, Player, WorldMap} from './types';
 import fanghMap from './assets/maps/fangh.jpg';
 import CaladieMap from './assets/maps/caladie.jpg';
 import FrostMap from './assets/maps/frost.jpg';
@@ -227,4 +227,13 @@ export const speedMoocked = [
     name: 'Gallion',
     speedMod: 100,
   },
+];
+export const locals : Local[] = [
+  'head',
+  'arm',
+  'leg',
+  'genitals',
+  'torso',
+  'swordArm',
+  'random',
 ];

@@ -1,17 +1,19 @@
 /* eslint-disable max-len */
-import React, {ChangeEvent, useState} from 'react';
+import React from 'react';
 import {InputSelect} from '../../components';
-import {FightPhaseData, Local, Protagonist} from '../../types';
+import {FightPhaseData, Protagonist} from '../../types';
 import {ReactComponent as TargetIcon} from '../../assets/target.svg';
 import {ReactComponent as Blowup} from '../../assets/blowup.svg';
 import {ReactComponent as SwordIcon} from '../../assets/sword.svg';
+import {locals} from '../../moockedData';
 
 type Props = {
     firstLine: boolean;
     index: number,
     protagonistList : Protagonist[],
     data: FightPhaseData,
-    handleChange: (e: ChangeEvent<HTMLSelectElement>, index:number) => void,
+    updateProtagonistB: (newProtagonistB: number) => void,
+    updateLocal: (newLocal: number) => void,
     handleSupress: (indexToSupress: number) => void
 }
 const matrice= [
@@ -38,15 +40,7 @@ const matrice= [
   ['EA', 'EA', 'EA', 'EA', 'EA', 'EA', '1', '2', '3', '4', '5', '11', '6', '6', '7', '9', '10', '11', '12', '14', '15', '16', '16'],
   ['EA', 'EA', 'EA', 'EA', 'EA', 'EA', 'EA', '2', '2', '3', '4', '11', '5', '6', '7', '8', '9', '10', '11', '13', '15', '16', '16'],
 ];
-const locals : Local[] = [
-  'head',
-  'arm',
-  'leg',
-  'genitals',
-  'torso',
-  'swordArm',
-  'random',
-];
+
 const localsTrad = {
   head: 'tête',
   arm: 'bras',
@@ -83,18 +77,21 @@ const localModif={
   },
 };
 
-const FightLine = ({protagonistList, data, firstLine, handleChange, index}: Props) => {
-  const [localIndex, setLocalIndex] = useState(0);
-  const [protagonistB, setProtagonistB] = useState(0);
-
+const FightLine = ({protagonistList, data, firstLine, updateLocal, updateProtagonistB}: Props) => {
+  const getOpponentList = () => {
+    const list = protagonistList.filter((temp, index) => {
+      return index !== data.protagonistA;
+    }).map((elt) => elt.name);
+    if (list.length > 0) return list;
+    else return ['Aucune cible'];
+  };
   let roll10 = Math.floor(Math.random() * 10);
   if (roll10 > 7) {
     roll10 = 5;
   } else if (roll10 > 3) {
     roll10 = 4;
   }
-
-  const local = locals[localIndex] === 'random'? locals[roll10]: locals[localIndex];
+  const local = locals[data.local] === 'random'? locals[roll10]: locals[data.local];
   let at = 10;
   let prd = 10;
   if (
@@ -118,19 +115,16 @@ const FightLine = ({protagonistList, data, firstLine, handleChange, index}: Prop
     <div className='text-xl flex text-brown gap-4'>
       <div className='flex h-20 bg-brown w-[600px] rounded-2xl p-3 items-center justify-around '>
         <div className='w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center'>
-          {protagonistList[data.protagonistB].name} </div>
+          {protagonistList[data.protagonistB].name || 'Nom indéfinie'} </div>
         <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">
           VS</span> ~</span>
         <InputSelect
           className='text-xl'
           width='[157px]'
           height='[50px]'
-          options={protagonistList.filter((temp, index) => {
-            return index !== data.protagonistA;
-          })
-              .map((elt) => elt.name) || []}
-          handleChange={setProtagonistB}
-          value={protagonistB}
+          options={getOpponentList()}
+          handleChange={updateProtagonistB}
+          value={data.protagonistB}
         />
         <div className='relative w-48'>
           <TargetIcon className='absolute' />
@@ -139,8 +133,8 @@ const FightLine = ({protagonistList, data, firstLine, handleChange, index}: Prop
             width='[157px]'
             height='[50px]'
             options={locals.map((elt) => localsTrad[elt])}
-            handleChange={setLocalIndex}
-            value={localIndex}
+            handleChange={updateLocal}
+            value={data.local}
           />
         </div>
       </div>

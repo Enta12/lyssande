@@ -19,7 +19,7 @@ const ProtagonistListForm = ({
 }: Props) => {
   const addProtagonist = (npc : boolean) => {
     handleaAddProtagonist({
-      name: 'name',
+      name: '',
       at: 10,
       prd: 10,
       cou: 10,

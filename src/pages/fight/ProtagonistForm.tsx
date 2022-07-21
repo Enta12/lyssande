@@ -36,6 +36,7 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
             text-brown'
       >
         <input
+          placeholder='Name'
           type='text'
           onChange={(e) => onNameChange(e.target.value)}
           value={protagonist.name}
