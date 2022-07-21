@@ -4,10 +4,18 @@ import {locals} from '../../moockedData';
 import {FightPhaseData, Protagonist} from '../../types';
 import FightLine from './fightLine';
 import ProtagonistListForm from './ProtagonistListForm';
+import {
+  ReactComponent as BlowUpButtonRight,
+} from '../../assets/blowUpBoutonRight.svg';
+import {
+  ReactComponent as BlowUpButtonLeft,
+} from '../../assets/blowUpBoutonLeft.svg';
 
 const FightPage = () => {
   const [protagonistList, setProtagonistList] =
     useState<Protagonist[]>([]);
+  const [haveStart, setHaveStart] =
+    useState(false);
   const [fightElementData, setFightElementData] =
     useState<FightPhaseData[]>([]);
   const [turnSelected, setTurnSelected] = useState(0);
@@ -27,15 +35,6 @@ const FightPage = () => {
     });
     setFightElementData(fightElementDataTemp);
   }; */
-  const addFightElement = () => {
-    const fightElementDataTemp = [...fightElementData];
-    fightElementDataTemp.push({
-      protagonistA: 0,
-      protagonistB: 0,
-      local: 0,
-    });
-    setFightElementData(fightElementDataTemp);
-  };
   const handleSupress = (indexToSupress : number) => {
     const fightElementDataTemp = fightElementData.filter((el, index) => {
       return index !== indexToSupress;
@@ -70,7 +69,7 @@ const FightPage = () => {
       index?: number,
   ) => {
     let protagonistsTemp = [...protagonistList];
-    const fightElementDataTemp = [...fightElementData];
+    let fightElementDataTemp = [...fightElementData];
     if (action === 'add' && protagonist) {
       protagonistsTemp.push(protagonist);
       fightElementDataTemp.push({
@@ -83,6 +82,8 @@ const FightPage = () => {
     } else if (action === 'delete' && index !== undefined) {
       protagonistsTemp = protagonistsTemp.filter(
           (protagonist, currentIndex) => index !== currentIndex);
+      fightElementDataTemp = fightElementDataTemp.filter(
+          (fightElementData, currentIndex) => index !== currentIndex);
       fightElementDataTemp.forEach((data) => {
         if (data.protagonistA === index) data.protagonistA = data.protagonistB;
         else if (data.protagonistB === index) {
@@ -109,8 +110,33 @@ const FightPage = () => {
         top-[112px]
         left-0'
     >
-      <div className='flex-col mx-7 gap-2 flex min-w-[856px]'>
+      <div className='flex-col mx-7 flex min-w-[856px] gap-4'>
         <Title title={'Combat'} />
+        {
+          !haveStart &&
+          <div className='mx-auto relative mb-6'>
+            <BlowUpButtonLeft
+              className='
+                absolute
+                top-[-26px]
+                left-[-70px]
+                h-[141px]
+                w-[175px]'
+            />
+            <PrimaryButton
+              className='relative z-10'
+              text='Commencer le combat'
+              onClick={() => setHaveStart(true)}
+            />
+            <BlowUpButtonRight
+              className='absolute
+                        top-[-26px]
+                        right-[-70px]
+                        h-[141px]
+                        w-[175px]'
+            />
+          </div>
+        }
         {
           fightElementData.map( (data, index) => {
             return (
@@ -139,7 +165,7 @@ const FightPage = () => {
                   index={getOrderIndex(index, fightElementData.length)}
                 />
                 {
-                  !index &&
+                  !index && haveStart &&
                   <PrimaryButton
                     className="ml-60"
                     onClick={nextSelected}
@@ -151,7 +177,6 @@ const FightPage = () => {
             );
           })
         }
-        <button onClick={addFightElement}>Ajouter un tour</button>
         {/* <button onClick = {filterByCourage}>Filtrer par courage</button> */}
       </div>
       <ProtagonistListForm
