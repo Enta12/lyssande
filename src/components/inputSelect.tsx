@@ -9,6 +9,7 @@ interface Props {
     handleChange: (value: number) => void;
     value: number;
     className?: string;
+    emptyValue?: string;
 }
 
 const InputSelect = ({
@@ -19,6 +20,7 @@ const InputSelect = ({
   height,
   handleChange,
   value,
+  emptyValue = '',
 } : Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,8 @@ const InputSelect = ({
           bg-white
         `}
       >
-        {`${title ? `${title} : ` : ''}${options[value]}`}
+        {`${title ? `${title} : ` : ''}
+        ${options[value] || emptyValue}`}
         <img
           className={isOpen?
             'rotate-180 transition-transform' :
@@ -90,7 +93,7 @@ const InputSelect = ({
           height={height || '12'}
           last={index===options.length-1}
           key={`${title}${index}`}
-          name={option}
+          name={option || emptyValue}
           display={isOpen}
           selectAnOption={(e) => {
             selectAnOption(e, index);

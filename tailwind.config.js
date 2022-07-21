@@ -21,7 +21,7 @@ module.exports = {
         inter: "'Inter', sans-serif",
       },
       gridTemplateColumns: {
-        "auto-fit-140": "repeat(auto-fit, minmax(140px, 1fr))",
+        "auto-fit-140": "repeat(auto-fit, 140px)",
       },
     },
   },

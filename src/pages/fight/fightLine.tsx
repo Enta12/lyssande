@@ -128,6 +128,7 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateProtago
         <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">
           VS</span> ~</span>
         <InputSelect
+          emptyValue="cible sans nom"
           className='text-xl'
           width='[157px]'
           height='[50px]'

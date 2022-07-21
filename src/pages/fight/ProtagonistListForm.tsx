@@ -41,7 +41,8 @@ const ProtagonistListForm = ({
       <Title reverse title={'PJ'}/>
       <div
         className="
-          gap-4
+          gap-x-8
+          gap-y-4
           justify-center
           grid
           auto-rows-min
@@ -66,7 +67,8 @@ const ProtagonistListForm = ({
       <Title className='mx-auto' reverse subtitle title={'VS'}/>
       <div
         className="
-          gap-4
+          gap-x-8
+          gap-y-4
           justify-center
           grid
           auto-rows-min
