@@ -7,6 +7,7 @@ import {ReactComponent as Blowup} from '../../assets/blowup.svg';
 import {ReactComponent as SwordIcon} from '../../assets/sword.svg';
 
 type Props = {
+    firstLine: boolean;
     index: number,
     protagonistList : Protagonist[],
     data: FightPhaseData,
@@ -82,7 +83,7 @@ const localModif={
   },
 };
 
-const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
+const FightLine = ({protagonistList, data, firstLine, handleChange, index}: Props) => {
   const [localIndex, setLocalIndex] = useState(0);
   const [protagonistB, setProtagonistB] = useState(0);
 
@@ -143,29 +144,32 @@ const FightLine = ({protagonistList, data, handleChange, index}: Props) => {
           />
         </div>
       </div>
-      <div className='relative w-60'>
-        <SwordIcon className='absolute top-2 left-0 w-16 opacity-50'/>
-        <div
-          className='
-            absolute
-            text-xl
-            left-9
-            flex
-            h-20
-            border-8
-            border-brown
-            bg-white
-            rounded-2xl
-            p-3
-            items-center
-            justify-around
-            w-32'
-        >
-          {localsTrad[local]}
+      {
+        firstLine &&
+        <div className='relative w-60'>
+          <SwordIcon className='absolute top-2 left-0 w-16 opacity-50'/>
+          <div
+            className='
+              absolute
+              text-xl
+              left-9
+              flex
+              h-20
+              border-8
+              border-brown
+              bg-white
+              rounded-2xl
+              p-3
+              items-center
+              justify-around
+              w-32'
+          >
+            {localsTrad[local]}
+          </div>
+          <span className=' left-[174px] font-extrabold absolute z-10 top-6'>{matrice[prd][at]} </span>
+          <Blowup className=' left-[154px] absolute top-1' />
         </div>
-        <span className=' left-[174px] font-extrabold absolute z-10 top-6'>{matrice[prd][at]} </span>
-        <Blowup className=' left-[154px] absolute top-1' />
-      </div>
+      }
     </div>
   );
 };

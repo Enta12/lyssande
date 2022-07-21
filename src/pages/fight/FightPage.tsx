@@ -1,29 +1,22 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {PrimaryButton, Title} from '../../components';
 import {FightPhaseData, Protagonist} from '../../types';
 import FightLine from './fightLine';
 import ProtagonistListForm from './ProtagonistListForm';
 
-const protaTest = {
-  name: 'fluffy',
-  at: 12,
-  prd: 12,
-  cou: 13,
-  ambidexterity: false,
-  npc: false,
-};
-
 const FightPage = () => {
-  const [fightTurnSorted, setFightTurnSorted] = useState<JSX.Element[]>([]);
   const [protagonistList, setProtagonistList] =
-    useState<Protagonist[]>([protaTest]);
+    useState<Protagonist[]>([]);
   const [fightElementData, setFightElementData] =
     useState<FightPhaseData[]>([]);
   const [turnSelected, setTurnSelected] = useState(0);
+
   const nextSelected = () => {
-    if (turnSelected + 1 === fightElementData.length) {
-      setTurnSelected(0);
-    } else setTurnSelected(turnSelected + 1);
+    if (fightElementData.length) {
+      if (turnSelected + 1 === fightElementData.length) {
+        setTurnSelected(0);
+      } else setTurnSelected(turnSelected + 1);
+    }
   };
   /* const filterByCourage = () => {
     const fightElementDataTemp = [...fightElementData];
@@ -65,41 +58,44 @@ const FightPage = () => {
     }
     setFightElementData(fightElementDataTemp);
   };
-  useEffect(()=> {
-    const fightTurnSortedTemp: JSX.Element[] = [];
-    let backToStart = 0;
-    fightElementData.forEach((element, index) => {
-      if (!(turnSelected + index < fightElementData.length)) {
-        backToStart = index + turnSelected;
-      }
-      const turnIndex = index + turnSelected - backToStart;
-      fightTurnSortedTemp.push(
-          <FightLine
-            protagonistList={protagonistList}
-            data={fightElementData[turnIndex]}
-            handleChange={handleChange}
-            handleSupress={handleSupress}
-            index={turnIndex}
-            key={turnIndex}
-          />,
-      );
-    });
-    setFightTurnSorted([...fightTurnSortedTemp]);
-  }, [fightElementData, turnSelected, protagonistList]);
+  const getOrderIndex = (index: number, lenght: number) => {
+    const test = turnSelected + index < lenght ?
+        turnSelected + index :
+        turnSelected + index - lenght;
+    console.log('test', lenght);
+    return test;
+  };
   const updateProtagonists = (
       action: 'add' | 'update' | 'delete',
       protagonist?: Protagonist,
       index?: number,
   ) => {
     let protagonistsTemp = [...protagonistList];
+    const fightElementDataTemp = [...fightElementData];
     if (action === 'add' && protagonist) {
       protagonistsTemp.push(protagonist);
+      fightElementDataTemp.push({
+        protagonistA: protagonistsTemp.length-1,
+        protagonistB: protagonistsTemp.length-1,
+        local: 'random',
+      });
     } else if (action === 'update' && protagonist && index !== undefined) {
       protagonistsTemp[index] = protagonist;
     } else if (action === 'delete' && index !== undefined) {
       protagonistsTemp = protagonistsTemp.filter(
           (protagonist, currentIndex) => index !== currentIndex);
+      fightElementDataTemp.forEach((data) => {
+        if (data.protagonistA === index) data.protagonistA = data.protagonistB;
+        else if (data.protagonistB === index) {
+          data.protagonistB = data.protagonistA;
+        }
+        if (data.protagonistA > index) data.protagonistA--;
+        if (data.protagonistB > index) data.protagonistB--;
+      });
+      // update all fight elemnt where prota > index
     }
+    // on delete and add check if turn have start and edit turn if it needed
+    setFightElementData(fightElementDataTemp);
     setProtagonistList(protagonistsTemp);
   };
 
@@ -117,15 +113,37 @@ const FightPage = () => {
       <div className='flex-col mx-7 gap-2 flex min-w-[856px]'>
         <Title title={'Combat'} />
         {
-          fightTurnSorted[0]
+          fightElementData.map( (data, index) => {
+            return (
+              <>
+                <FightLine
+                  firstLine={!index}
+                  protagonistList={protagonistList}
+                  data={
+                    fightElementData[
+                        getOrderIndex(index, fightElementData.length)
+                    ]
+                  }
+                  handleChange={handleChange}
+                  handleSupress={handleSupress}
+                  index={getOrderIndex(index, fightElementData.length)}
+                  key={getOrderIndex(index, fightElementData.length)}
+                />
+                {
+                  !index &&
+                  <PrimaryButton
+                    className="ml-60"
+                    onClick={nextSelected}
+                    text='Tour suivant'
+                  />
+                }
+              </>
+
+            );
+          })
         }
-        <PrimaryButton
-          className="ml-60"
-          onClick={nextSelected}
-          text='Tour suivant'
-        />
         {
-          fightTurnSorted.filter((data, index) => index > 0)
+          /* fightTurnSorted.filter((data, index) => index > 0) */
         }
         <button onClick={addFightElement}>Ajouter un tour</button>
         {/* <button onClick = {filterByCourage}>Filtrer par courage</button> */}
