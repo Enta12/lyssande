@@ -92,6 +92,12 @@ const FightPage = () => {
         if (data.protagonistA > index) data.protagonistA--;
         if (data.protagonistB > index) data.protagonistB--;
       });
+      if (
+        !protagonistsTemp.some((elt) => !elt.npc) ||
+        !protagonistsTemp.some((elt) => elt.npc)) {
+        setTurnSelected(0);
+        setHaveStart(false);
+      }
       // update all fight elemnt where prota > index
     }
     // on delete and add check if turn have start and edit turn if it needed
@@ -102,18 +108,19 @@ const FightPage = () => {
 
   return (
     <div
-      className='
+      className={
+        `${haveStart ? 'absolute top-[112px]' : 'relative'}
         py-7
         flex
-        absolute
         w-screen
-        top-[112px]
-        left-0'
+        left-0`}
     >
       <div className='flex-col mx-7 flex min-w-[856px] gap-4'>
         <Title title={'Combat'} />
         {
           !haveStart &&
+          protagonistList.some((elt) => !elt.npc) &&
+          protagonistList.some((elt) => elt.npc) &&
           <div className='mx-auto relative mb-6'>
             <BlowUpButtonLeft
               className='
@@ -142,7 +149,7 @@ const FightPage = () => {
             return (
               <React.Fragment key={index}>
                 <FightLine
-                  firstLine={!index}
+                  firstLine={!index && haveStart}
                   protagonistList={protagonistList}
                   data={
                     fightElementData[

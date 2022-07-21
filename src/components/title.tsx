@@ -1,21 +1,28 @@
-import React from 'react';
-const Title = ({
-  title,
-  reverse = false,
-} : {
+import React, {ComponentPropsWithoutRef} from 'react';
+
+type Props = ComponentPropsWithoutRef<'h1'> & {
   title : string,
   reverse?: boolean,
-}) => {
+  subtitle?: boolean,
+}
+
+const Title = ({
+  title,
+  subtitle = false,
+  reverse = false,
+  className,
+} : Props) => {
   return (
-    <>
-      <h1
-        className={`
+    <h1
+      className={`
           font-bubblegum
           ${reverse ? 'text-orange' : 'text-swamp'}
-          text-3xl`
-        }
-      >~ {title} ~</h1>
-    </>
+          ${subtitle ? 'text-2xl' : 'text-3xl'}
+          ${className || ''}`
+      }
+    >
+      ~ {title} ~
+    </h1>
   );
 };
 

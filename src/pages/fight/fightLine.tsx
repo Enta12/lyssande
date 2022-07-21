@@ -113,7 +113,16 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateProtago
 
   return (
     <div className='text-xl flex text-brown gap-4'>
-      <div className='flex h-20 bg-brown w-[600px] rounded-2xl p-3 items-center justify-around '>
+      <div className={`
+        flex
+        h-20
+        ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
+        w-[600px]
+        rounded-2xl
+        p-3
+        items-center
+        justify-around`}
+      >
         <div className='w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center'>
           {protagonistList[data.protagonistA].name || 'Nom indéfinie'} </div>
         <span className="font-bubblegum text-swamp text-2xl">~ <span className="font-bubblegum text-orange">
