@@ -5,7 +5,7 @@ import {PrimaryButton} from '../../components';
 
 type Props = {
     protagonist: Protagonist,
-    handleChange: (protagonist: Protagonist) => void,
+    handleChange: (protagonist: Protagonist, cou: boolean) => void,
     handleDelete: () => void,
 }
 
@@ -13,17 +13,17 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
   const onNameChange = (newValue: string) => {
     const protagonistTemp = protagonist;
     protagonistTemp.name = newValue;
-    handleChange(protagonistTemp);
+    handleChange(protagonistTemp, false);
   };
   const onStatChange = (action: 'prd' | 'at' | 'cou', newValue: number) => {
     const protagonistTemp = protagonist;
     protagonistTemp[action] = newValue;
-    handleChange(protagonistTemp);
+    handleChange(protagonistTemp, action==='cou');
   };
   const onAmbidextryChange = () => {
     const protagonistTemp = protagonist;
     protagonistTemp.ambidexterity = !protagonistTemp.ambidexterity;
-    handleChange(protagonistTemp);
+    handleChange(protagonistTemp, false);
   };
   return (
     <div

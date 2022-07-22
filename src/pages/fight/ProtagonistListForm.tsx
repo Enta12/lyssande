@@ -8,11 +8,14 @@ type Props = {
     protagonists: Protagonist[],
     handleaAddProtagonist: (protagonist: Protagonist) => void;
     handleDeleteProtagonist: (index: number) => void;
-    handleUpdateProtagonist: (protagonist: Protagonist, index: number) => void;
+    handleUpdateProtagonist: (
+      protagonist: Protagonist, index: number, cou: boolean) => void;
+    protagonistsLenght: number;
 }
 
 const ProtagonistListForm = ({
   protagonists,
+  protagonistsLenght,
   handleaAddProtagonist,
   handleDeleteProtagonist,
   handleUpdateProtagonist,
@@ -25,6 +28,7 @@ const ProtagonistListForm = ({
       cou: 10,
       ambidexterity: false,
       npc,
+      id: protagonistsLenght,
     });
   };
   return (
@@ -49,19 +53,20 @@ const ProtagonistListForm = ({
           auto-cols-[40px]
           grid-cols-auto-fit-140"
       >
-        {protagonists.filter((protagonist) => !protagonist.npc)
-            .map((protagonist, index) => {
-              return (
+        {protagonists.sort((a, b) => a.id - b.id)
+            .map((protagonist, index) => !protagonist.npc ?
                 <ProtagonistForm
                   key={index}
                   protagonist={protagonist}
                   handleChange={
-                    (protagonist) => handleUpdateProtagonist(protagonist, index)
+                    (
+                        protagonist,
+                        cou) => handleUpdateProtagonist(protagonist, index, cou)
                   }
                   handleDelete={() => handleDeleteProtagonist(index)}
-                />
-              );
-            })}
+                /> :
+                <React.Fragment key={index}></React.Fragment>,
+            )}
         <AddProtagonist addProtagonist={addProtagonist} />
       </div>
       <Title className='mx-auto' reverse subtitle title={'VS'}/>
@@ -75,19 +80,20 @@ const ProtagonistListForm = ({
           auto-cols-[40px]
           grid-cols-auto-fit-140"
       >
-        {protagonists.filter((protagonist) => protagonist.npc)
-            .map((protagonist, index) => {
-              return (
+        {protagonists.sort((a, b) => a.id - b.id)
+            .map((protagonist, index) => protagonist.npc ?
                 <ProtagonistForm
                   key={index}
                   protagonist={protagonist}
                   handleChange={
-                    (protagonist) => handleUpdateProtagonist(protagonist, index)
+                    (
+                        protagonist,
+                        cou) => handleUpdateProtagonist(protagonist, index, cou)
                   }
                   handleDelete={() => handleDeleteProtagonist(index)}
-                />
-              );
-            })}
+                /> :
+                <React.Fragment key={index}></React.Fragment>,
+            )}
         <AddProtagonist addProtagonist={addProtagonist} npc />
       </div>
     </div>

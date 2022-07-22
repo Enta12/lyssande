@@ -19,6 +19,7 @@ const FightPage = () => {
   const [fightElementData, setFightElementData] =
     useState<FightPhaseData[]>([]);
   const [turnSelected, setTurnSelected] = useState(0);
+  const [protagonistsLenght, setProtagonistsLenght] = useState(0);
 
   const nextSelected = () => {
     if (fightElementData.length) {
@@ -27,14 +28,6 @@ const FightPage = () => {
       } else setTurnSelected(turnSelected + 1);
     }
   };
-  /* const filterByCourage = () => {
-    const fightElementDataTemp = [...fightElementData];
-    fightElementDataTemp.sort((a, b) => {
-      return protagonistList[b.protagonistA].cou -
-        protagonistList[a.protagonistA].cou;
-    });
-    setFightElementData(fightElementDataTemp);
-  }; */
   const handleSupress = (indexToSupress : number) => {
     const fightElementDataTemp = fightElementData.filter((el, index) => {
       return index !== indexToSupress;
@@ -63,44 +56,100 @@ const FightPage = () => {
         turnSelected + index - lenght;
     return test;
   };
-  const updateProtagonists = (
-      action: 'add' | 'update' | 'delete',
-      protagonist?: Protagonist,
-      index?: number,
+  const supressToken = (
+      protagonistsTemp: Protagonist[],
+      fightElementDataTemp: FightPhaseData[],
+      index: number,
   ) => {
-    let protagonistsTemp = [...protagonistList];
-    let fightElementDataTemp = [...fightElementData];
-    if (action === 'add' && protagonist) {
+    protagonistsTemp.splice(index, 1);
+    fightElementDataTemp.splice(index, 1);
+    fightElementDataTemp.forEach((data) => {
+      if (data.protagonistB === index) {
+        data.protagonistB = data.protagonistA;
+      }
+      if (data.protagonistA > index) data.protagonistA--;
+      if (data.protagonistB > index) data.protagonistB--;
+    });
+    if (
+      !protagonistsTemp.some((elt) => !elt.npc) ||
+      !protagonistsTemp.some((elt) => elt.npc)) {
+      setTurnSelected(0);
+      setHaveStart(false);
+    }
+  };
+  const addTurnIntoCorrectPlace = (
+      protagonist: Protagonist,
+      protagonistsTemp : Protagonist[],
+      fightElementDataTemp: FightPhaseData[],
+  ) => {
+    let isAdd = false;
+    let newIndex: number;
+    for (let i = 0; i<fightElementDataTemp.length; i++) {
+      const currentIndex = getOrderIndex(i, fightElementData.length);
+      if (
+        protagonist.cou > protagonistList[currentIndex].cou) {
+        newIndex = (!i && haveStart) ? currentIndex+1 : currentIndex;
+        protagonistsTemp.splice(newIndex, 0, protagonist);
+        fightElementDataTemp.splice(newIndex, 0, {
+          protagonistA: newIndex,
+          protagonistB: 0,
+          local: locals.length-1,
+        });
+        isAdd = true;
+        break;
+      }
+    }
+    if (!isAdd) {
       protagonistsTemp.push(protagonist);
       fightElementDataTemp.push({
         protagonistA: protagonistsTemp.length-1,
         protagonistB: 0,
         local: locals.length-1,
       });
-    } else if (action === 'update' && protagonist && index !== undefined) {
-      protagonistsTemp[index] = protagonist;
-    } else if (action === 'delete' && index !== undefined) {
-      protagonistsTemp = protagonistsTemp.filter(
-          (protagonist, currentIndex) => index !== currentIndex);
-      fightElementDataTemp = fightElementDataTemp.filter(
-          (fightElementData, currentIndex) => index !== currentIndex);
-      fightElementDataTemp.forEach((data) => {
-        if (data.protagonistA === index) data.protagonistA = data.protagonistB;
-        else if (data.protagonistB === index) {
-          data.protagonistB = data.protagonistA;
-        }
-        if (data.protagonistA > index) data.protagonistA--;
-        if (data.protagonistB > index) data.protagonistB--;
-      });
-      if (
-        !protagonistsTemp.some((elt) => !elt.npc) ||
-        !protagonistsTemp.some((elt) => elt.npc)) {
-        setTurnSelected(0);
-        setHaveStart(false);
-      }
-      // update all fight elemnt where prota > index
     }
-    // on delete and add check if turn have start and edit turn if it needed
+    fightElementDataTemp.forEach((elt, index) => {
+      if (elt.protagonistA > newIndex && index !== newIndex) {
+        elt.protagonistA++;
+      }
+      if (elt.protagonistB === -1) {
+        elt.protagonistB = newIndex || protagonistList.length-1;
+      }
+    });
+  };
+  const updateProtagonists = (
+      action: 'add' | 'update' | 'delete',
+      protagonist?: Protagonist,
+      index?: number,
+      cou?: boolean,
+  ) => {
+    const protagonistsTemp = [...protagonistList];
+    const fightElementDataTemp = [...fightElementData];
+    if (action === 'add' && protagonist) {
+      addTurnIntoCorrectPlace(
+          protagonist,
+          protagonistsTemp,
+          fightElementDataTemp,
+      );
+    } else if (
+      action === 'update' &&
+      protagonist &&
+      index !== undefined ) {
+      if (cou) {
+        fightElementDataTemp.forEach((elt) => {
+          if (elt.protagonistB === index) elt.protagonistB = -1;
+        });
+        supressToken(protagonistsTemp, fightElementDataTemp, index);
+        addTurnIntoCorrectPlace(
+            protagonist,
+            protagonistsTemp,
+            fightElementDataTemp,
+        );
+      } else {
+        protagonistsTemp[index] = protagonist;
+      }
+    } else if (action === 'delete' && index !== undefined) {
+      supressToken(protagonistsTemp, fightElementDataTemp, index);
+    }
     setFightElementData(fightElementDataTemp);
     setProtagonistList(protagonistsTemp);
   };
@@ -184,17 +233,20 @@ const FightPage = () => {
             );
           })
         }
-        {/* <button onClick = {filterByCourage}>Filtrer par courage</button> */}
       </div>
       <ProtagonistListForm
+        protagonistsLenght={protagonistsLenght}
         protagonists={protagonistList}
         handleaAddProtagonist={
-          (protagonist: Protagonist) => updateProtagonists('add', protagonist)}
+          (protagonist: Protagonist) => {
+            updateProtagonists('add', protagonist);
+            setProtagonistsLenght(protagonistsLenght+1);
+          }}
         handleDeleteProtagonist={
           (index) => updateProtagonists('delete', undefined, index)}
         handleUpdateProtagonist={
-          (protagonist, index) =>
-            updateProtagonists('update', protagonist, index)}
+          (protagonist, index, cou) =>
+            updateProtagonists('update', protagonist, index, cou)}
       />
     </div>
   );
