@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {PrimaryButton, Title} from '../../components';
 import {locals} from '../../moockedData';
 import {FightPhaseData, Protagonist} from '../../types';
@@ -20,6 +20,22 @@ const FightPage = () => {
     useState<FightPhaseData[]>([]);
   const [turnSelected, setTurnSelected] = useState(0);
   const [protagonistsLenght, setProtagonistsLenght] = useState(0);
+  const [screenHeight, setScreenHeight] = useState(window.screen.height);
+
+  useEffect(() => {
+    const getHeight = () => window.innerHeight ||
+                            document.documentElement.clientHeight ||
+                            document.body.clientHeight;
+    setScreenHeight(getHeight());
+    window.addEventListener(
+        'resize',
+        () => setScreenHeight(getHeight()));
+    return () => {
+      window.removeEventListener('resize', () => setScreenHeight(getHeight()));
+    };
+  }, [setScreenHeight, haveStart]);
+
+  let heightLeftLines = screenHeight - 220;
 
   const nextSelected = () => {
     if (fightElementData.length) {
@@ -28,6 +44,24 @@ const FightPage = () => {
       } else setTurnSelected(turnSelected + 1);
     }
   };
+  useEffect(() => {
+    const onPress = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        if (haveStart) {
+          nextSelected();
+        } else if (
+          protagonistList.some((elt) => !elt.npc) &&
+          protagonistList.some((elt) => elt.npc)
+        ) {
+          setHaveStart(true);
+        }
+      }
+    };
+    window.addEventListener('keydown', (e) => onPress(e));
+    return (
+      window.removeEventListener('keydown', (e) => onPress(e))
+    );
+  });
   const handleSupress = (indexToSupress : number) => {
     const fightElementDataTemp = fightElementData.filter((el, index) => {
       return index !== indexToSupress;
@@ -201,33 +235,44 @@ const FightPage = () => {
           </div>
         }
         {
-          fightElementData.map( (data, index) => {
+          fightElementData.map((data, index) => {
+            const indexInOrder = getOrderIndex(index, fightElementData.length);
+            const canAddLine = () => {
+              if (!haveStart) return true;
+              if (index === 0) {
+                heightLeftLines -=
+                (protagonistList[indexInOrder].secondAt ? 339 : 248);
+              } else {
+                heightLeftLines -= (protagonistList[indexInOrder].secondAt ?
+                  190 : 110);
+              }
+              return heightLeftLines > 0;
+            };
             return (
+              canAddLine() &&
               <React.Fragment key={index}>
                 <FightLine
                   firstLine={!index && haveStart}
                   protagonistList={protagonistList}
                   data={
-                    fightElementData[
-                        getOrderIndex(index, fightElementData.length)
-                    ]
+                    fightElementData[indexInOrder]
                   }
                   updateOposing={
                     (newOposing, protagonistB) =>
                       updateOposing(
-                          getOrderIndex(index, fightElementData.length),
+                          indexInOrder,
                           newOposing,
                           protagonistB,
                       )
                   }
                   updateLocal={
                     (newLocal, firstLine) => updateLocal(
-                        getOrderIndex(index, fightElementData.length),
+                        indexInOrder,
                         newLocal,
                         firstLine,
                     )}
                   handleSupress={handleSupress}
-                  index={getOrderIndex(index, fightElementData.length)}
+                  index={indexInOrder}
                 />
                 {
                   !index && haveStart &&
@@ -238,12 +283,26 @@ const FightPage = () => {
                   />
                 }
               </React.Fragment>
-
             );
           })
         }
+        {
+          haveStart &&
+          <span
+            className='
+              m-auto
+              text-[80px]
+            text-orange
+            relative
+            bottom-[84px]
+            h-3'
+          >
+            . . .
+          </span>
+        }
       </div>
       <ProtagonistListForm
+        height={haveStart ? screenHeight-220 : undefined}
         protagonistsLenght={protagonistsLenght}
         protagonists={protagonistList}
         handleaAddProtagonist={

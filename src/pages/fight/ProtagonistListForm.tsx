@@ -5,6 +5,7 @@ import {ReactComponent as AddIcon} from '../../assets/whiteAdd.svg';
 import {Title} from '../../components';
 
 type Props = {
+    height?: number,
     protagonists: Protagonist[],
     handleaAddProtagonist: (protagonist: Protagonist) => void;
     handleDeleteProtagonist: (index: number) => void;
@@ -16,6 +17,7 @@ type Props = {
 const ProtagonistListForm = ({
   protagonists,
   protagonistsLenght,
+  height,
   handleaAddProtagonist,
   handleDeleteProtagonist,
   handleUpdateProtagonist,
@@ -32,7 +34,12 @@ const ProtagonistListForm = ({
   };
   return (
     <div
+      style={{
+        height: height? height+'px' : '100%',
+      }}
       className="
+        overflow-y-auto
+        scrollbar-thin
         gap-4
         flex
         flex-col
