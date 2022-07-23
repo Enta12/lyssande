@@ -26,7 +26,6 @@ const ProtagonistListForm = ({
       at: 10,
       prd: 10,
       cou: 10,
-      ambidexterity: false,
       npc,
       id: protagonistsLenght,
     });

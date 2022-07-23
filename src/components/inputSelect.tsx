@@ -123,6 +123,7 @@ const Option = ({
   const classNames = display?
   `h-${height}
   border-t
+  cursor-pointer
   flex
   justify-center
   items-center

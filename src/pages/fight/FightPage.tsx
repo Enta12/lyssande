@@ -34,20 +34,23 @@ const FightPage = () => {
     });
     setFightElementData(fightElementDataTemp);
   };
-  const updateProtagonistB = (
+  const updateOposing = (
       index: number,
-      newProtagonistB: number,
+      newOposing: number,
+      protagonistB: boolean,
   ) => {
     const fightElementDataTemp = [...fightElementData];
-    fightElementDataTemp[index].protagonistB = newProtagonistB;
+    fightElementDataTemp[
+        index][protagonistB ? 'protagonistB' : 'protagonistC'] = newOposing;
     setFightElementData(fightElementDataTemp);
   };
   const updateLocal = (
       index: number,
       newLocal: number,
+      firstLine: boolean,
   ) => {
     const fightElementDataTemp = [...fightElementData];
-    fightElementDataTemp[index].local = newLocal;
+    fightElementDataTemp[index][firstLine? 'local': 'secondLocal'] = newLocal;
     setFightElementData(fightElementDataTemp);
   };
   const getOrderIndex = (index: number, lenght: number) => {
@@ -93,7 +96,9 @@ const FightPage = () => {
         fightElementDataTemp.splice(newIndex, 0, {
           protagonistA: newIndex,
           protagonistB: 0,
+          protagonistC: 0,
           local: locals.length-1,
+          secondLocal: locals.length-1,
         });
         isAdd = true;
         break;
@@ -104,7 +109,9 @@ const FightPage = () => {
       fightElementDataTemp.push({
         protagonistA: protagonistsTemp.length-1,
         protagonistB: 0,
+        protagonistC: 0,
         local: locals.length-1,
+        secondLocal: locals.length-1,
       });
     }
     fightElementDataTemp.forEach((elt, index) => {
@@ -205,17 +212,19 @@ const FightPage = () => {
                         getOrderIndex(index, fightElementData.length)
                     ]
                   }
-                  updateProtagonistB={
-                    (newProtagonistB) =>
-                      updateProtagonistB(
+                  updateOposing={
+                    (newOposing, protagonistB) =>
+                      updateOposing(
                           getOrderIndex(index, fightElementData.length),
-                          newProtagonistB,
+                          newOposing,
+                          protagonistB,
                       )
                   }
                   updateLocal={
-                    (newLocal) => updateLocal(
+                    (newLocal, firstLine) => updateLocal(
                         getOrderIndex(index, fightElementData.length),
                         newLocal,
+                        firstLine,
                     )}
                   handleSupress={handleSupress}
                   index={getOrderIndex(index, fightElementData.length)}

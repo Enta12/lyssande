@@ -57,16 +57,18 @@ export type Local =
 export type Protagonist = {
     name: string;
     at: number;
+    secondAt?: number;
     prd: number;
     cou: number;
-    ambidexterity: boolean;
     npc: boolean;
     id: number;
 }
 export type FightPhaseData = {
     protagonistA : number;
     protagonistB : number;
+    protagonistC : number;
     local: number;
+    secondLocal: number;
 }
 export type PossibleDate = {
     date?: Date,

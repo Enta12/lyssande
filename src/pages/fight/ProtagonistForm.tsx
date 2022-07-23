@@ -5,7 +5,11 @@ import {PrimaryButton} from '../../components';
 
 type Props = {
     protagonist: Protagonist,
-    handleChange: (protagonist: Protagonist, cou: boolean) => void,
+    handleChange: (
+      protagonist: Protagonist,
+      cou: boolean,
+      ambidexterity: boolean
+    ) => void,
     handleDelete: () => void,
 }
 
@@ -13,17 +17,20 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
   const onNameChange = (newValue: string) => {
     const protagonistTemp = protagonist;
     protagonistTemp.name = newValue;
-    handleChange(protagonistTemp, false);
+    handleChange(protagonistTemp, false, false);
   };
-  const onStatChange = (action: 'prd' | 'at' | 'cou', newValue: number) => {
+  const onStatChange = (
+      action: 'prd' | 'at' | 'cou' | 'secondAt',
+      newValue: number,
+  ) => {
     const protagonistTemp = protagonist;
     protagonistTemp[action] = newValue;
-    handleChange(protagonistTemp, action==='cou');
+    handleChange(protagonistTemp, action==='cou', false);
   };
   const onAmbidextryChange = () => {
     const protagonistTemp = protagonist;
-    protagonistTemp.ambidexterity = !protagonistTemp.ambidexterity;
-    handleChange(protagonistTemp, false);
+    protagonistTemp.secondAt = protagonistTemp.secondAt ? undefined : 10;
+    handleChange(protagonistTemp, false, true);
   };
   return (
     <div
@@ -62,6 +69,15 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
         <div className="flex justify-between items-center mx-1.5 ">
             AT
           <div className="flex justify-between items-center">
+            {
+              protagonist.secondAt !== undefined &&
+              <ProtagonistInput
+                type='text'
+                handleChange={
+                  (e)=>onStatChange('secondAt', parseInt(e.target.value)||0)}
+                value={protagonist.secondAt}
+              />
+            }
             <ProtagonistInput
               type='text'
               handleChange={
@@ -95,7 +111,8 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
                 w-6
                 h-6
                 border-4
-                ${protagonist.ambidexterity ? 'bg-green-500' : 'bg-brown'}
+                ${protagonist.secondAt ?
+                  'bg-green-500' : 'bg-brown'}
                 border-white
                 rounded-lg`}
           />
