@@ -53,18 +53,22 @@ export type Local =
     'swordArm' |
     'leg' |
     'genitals' |
-    'locals' |
     'random';
 export type Protagonist = {
     name: string;
     at: number;
+    secondAt?: number;
     prd: number;
     cou: number;
+    npc: boolean;
+    id: number;
 }
 export type FightPhaseData = {
     protagonistA : number;
     protagonistB : number;
-    local: Local;
+    protagonistC : number;
+    local: number;
+    secondLocal: number;
 }
 export type PossibleDate = {
     date?: Date,

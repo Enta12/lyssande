@@ -1,56 +1,139 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {Protagonist} from '../../types';
 import ProtagonistForm from './ProtagonistForm';
+import {ReactComponent as AddIcon} from '../../assets/whiteAdd.svg';
+import {Title} from '../../components';
 
 type Props = {
-    protagonistList: Protagonist[],
-    setProtagonistList: React.Dispatch<React.SetStateAction<Protagonist[]>>
+    height?: number,
+    protagonists: Protagonist[],
+    handleaAddProtagonist: (protagonist: Protagonist) => void;
+    handleDeleteProtagonist: (index: number) => void;
+    handleUpdateProtagonist: (
+      protagonist: Protagonist, index: number, cou: boolean) => void;
+    protagonistsLenght: number;
 }
 
-const ProtagonistListForm = ({protagonistList, setProtagonistList}: Props) => {
-  const addProtagonist = () => {
-    const protagonistListTemp = [...protagonistList];
-    protagonistListTemp.push({
-      name: 'name',
+const ProtagonistListForm = ({
+  protagonists,
+  protagonistsLenght,
+  height,
+  handleaAddProtagonist,
+  handleDeleteProtagonist,
+  handleUpdateProtagonist,
+}: Props) => {
+  const addProtagonist = (npc : boolean) => {
+    handleaAddProtagonist({
+      name: '',
       at: 10,
       prd: 10,
       cou: 10,
+      npc,
+      id: protagonistsLenght,
     });
-    setProtagonistList(protagonistListTemp);
   };
-  const updateProtagonist =
-    (index: number, e : ChangeEvent<HTMLInputElement>) => {
-      const protagonistListTemp = [...protagonistList];
-      if (e.target.name === 'name' ) {
-        protagonistListTemp[index][e.target.name] = e.target.value;
-      } else if ( e.target.name === 'at' ||
-                  e.target.name === 'prd' ||
-                  e.target.name === 'cou' ) {
-        protagonistListTemp[index][e.target.name] = parseInt(e.target.value);
-      }
-      setProtagonistList([...protagonistListTemp]);
-    };
   return (
-    <>
-      <div className="flex flex-wrap justify-around w-full gap-1">
-        {protagonistList.map((protagonist, index) => {
-          return (
-            <ProtagonistForm
-              key={index}
-              protagonist={protagonist}
-              handleChange={updateProtagonist}
-              index={index}
-            />
-          );
-        })}
-        <button
-          className="m-1"
-          onClick={addProtagonist}>
-            Ajouter un combattant
-        </button>
+    <div
+      style={{
+        height: height? height+'px' : '100%',
+      }}
+      className="
+        overflow-y-auto
+        scrollbar-thin
+        gap-4
+        flex
+        flex-col
+        flex-1
+        p-4
+        bg-darkBrown
+        rounded-l-xl"
+    >
+      <Title reverse title={'PJ'}/>
+      <div
+        className="
+          gap-x-8
+          gap-y-4
+          justify-center
+          grid
+          auto-rows-min
+          auto-cols-[40px]
+          grid-cols-auto-fit-140"
+      >
+        {protagonists.sort((a, b) => a.id - b.id)
+            .map((protagonist, index) => !protagonist.npc ?
+                <ProtagonistForm
+                  key={index}
+                  protagonist={protagonist}
+                  handleChange={
+                    (
+                        protagonist,
+                        cou) => handleUpdateProtagonist(protagonist, index, cou)
+                  }
+                  handleDelete={() => handleDeleteProtagonist(index)}
+                /> :
+                <React.Fragment key={index}></React.Fragment>,
+            )}
+        <AddProtagonist addProtagonist={addProtagonist} />
       </div>
-    </>
+      <Title className='mx-auto' reverse subtitle title={'VS'}/>
+      <div
+        className="
+          gap-x-8
+          gap-y-4
+          justify-center
+          grid
+          auto-rows-min
+          auto-cols-[40px]
+          grid-cols-auto-fit-140"
+      >
+        {protagonists.sort((a, b) => a.id - b.id)
+            .map((protagonist, index) => protagonist.npc ?
+                <ProtagonistForm
+                  key={index}
+                  protagonist={protagonist}
+                  handleChange={
+                    (
+                        protagonist,
+                        cou) => handleUpdateProtagonist(protagonist, index, cou)
+                  }
+                  handleDelete={() => handleDeleteProtagonist(index)}
+                /> :
+                <React.Fragment key={index}></React.Fragment>,
+            )}
+        <AddProtagonist addProtagonist={addProtagonist} npc />
+      </div>
+    </div>
   );
 };
 
 export default ProtagonistListForm;
+
+const AddProtagonist = (
+    {addProtagonist, npc = false}:
+    {addProtagonist :(npc: boolean) => void, npc?: boolean},
+) => {
+  return (
+    <div
+      onClick={() => addProtagonist(npc)}
+      className='
+        cursor-pointer
+        border-dashed
+        h-[224px]
+        w-[147px]
+        border-orange
+        border-4
+        rounded-2xl
+        flex
+        pt-12
+        text-xl
+        text-orange
+        items-center
+        flex-col
+        text-center'
+    >
+      <AddIcon/>
+      Ajouter un {npc? 'adversaire' : 'PJ'}
+    </div>
+  );
+};
+

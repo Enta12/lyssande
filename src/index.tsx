@@ -15,7 +15,9 @@ root.render(
         h-12
         h-52
         hidden
-        drop-shadow"
+        drop-shadow
+        h-[50px]
+        w-[157px]"
       />
     </React.StrictMode>,
 );

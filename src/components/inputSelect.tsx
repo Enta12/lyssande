@@ -5,17 +5,32 @@ interface Props {
     width?: string;
     height?: string;
     options: string[];
-    title: string;
+    title?: string;
+    handleChange: (value: number) => void;
+    value?: number;
+    className?: string;
+    emptyValue?: string;
 }
 
-const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
+const InputSelect = ({
+  className,
+  title,
+  options,
+  width,
+  height,
+  handleChange,
+  value,
+  emptyValue = '',
+} : Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [optionSelected, setOptionSelected] = useState('');
   const selectRef = useRef<HTMLDivElement>(null);
-  const selectAnOption = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const selectAnOption = (
+      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+      index: number,
+  ) => {
     e.stopPropagation();
     setIsOpen(false);
-    setOptionSelected(e.currentTarget.innerHTML);
+    handleChange(index);
   };
   useEffect(() => {
     const onClickOutside = () => {
@@ -35,12 +50,14 @@ const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
   return (
     <div
       className={`
-        w-${width}
+        h-${height || '12'}
+        w-${width || '3/4'}
         relative
         text-brown
         text-center
         text-2xl
         font-inter
+        ${className || ''}
       `}
       ref={selectRef}
     >
@@ -59,7 +76,8 @@ const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
           bg-white
         `}
       >
-        {`${title}: ${optionSelected}`}
+        {`${title ? `${title} : ` : ''}
+        ${(value && options[value]) || emptyValue}`}
         <img
           className={isOpen?
             'rotate-180 transition-transform' :
@@ -72,17 +90,17 @@ const InputSelect = ({title, options, width= '3/4', height = '12'} : Props) => {
         className="absolute w-full z-20"
       >
         {options.map((option, index) => <Option
-          height={height}
+          height={height || '12'}
           last={index===options.length-1}
           key={`${title}${index}`}
-          name={option}
+          name={option || emptyValue}
           display={isOpen}
           selectAnOption={(e) => {
-            selectAnOption(e);
+            selectAnOption(e, index);
           }}
         />)}
       </div>
-      <input readOnly type="hidden" value={optionSelected}/>
+      <input readOnly type="hidden" value={value ? options[value] : ''}/>
     </div>
   );
 };
@@ -105,6 +123,7 @@ const Option = ({
   const classNames = display?
   `h-${height}
   border-t
+  cursor-pointer
   flex
   justify-center
   items-center
