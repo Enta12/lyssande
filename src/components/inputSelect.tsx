@@ -7,7 +7,7 @@ interface Props {
     options: string[];
     title?: string;
     handleChange: (value: number) => void;
-    value: number;
+    value?: number;
     className?: string;
     emptyValue?: string;
 }
@@ -77,7 +77,7 @@ const InputSelect = ({
         `}
       >
         {`${title ? `${title} : ` : ''}
-        ${options[value] || emptyValue}`}
+        ${(value && options[value]) || emptyValue}`}
         <img
           className={isOpen?
             'rotate-180 transition-transform' :
@@ -100,7 +100,7 @@ const InputSelect = ({
           }}
         />)}
       </div>
-      <input readOnly type="hidden" value={options[value]}/>
+      <input readOnly type="hidden" value={value ? options[value] : ''}/>
     </div>
   );
 };

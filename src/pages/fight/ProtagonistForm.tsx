@@ -84,11 +84,6 @@ const ProtagonistForm = ({protagonist, handleChange, handleDelete}: Props) => {
                 (e)=>onStatChange('at', parseInt(e.target.value)||0)}
               value={protagonist.at}
             />
-            {
-              /*
-                  double
-                */
-            }
           </div>
         </div>
         <div className="flex justify-between items-center mx-1.5 ">
