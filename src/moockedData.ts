@@ -20,7 +20,8 @@ export const racesMoocked : string[]= [
   'gobelin',
 ];
 export const jobsMoocked : string[]= [
-  'Guerrier/Gladiateur',
+  'Guerrier',
+  'Gladiateur',
   'Pretre',
   'Magicien',
   'Voleur',

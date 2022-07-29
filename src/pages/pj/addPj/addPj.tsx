@@ -10,12 +10,65 @@ import {
   racesMoocked,
 } from '../../../moockedData';
 import FileInput from '../../../components/fileInput';
+import {PrimaryButton} from '../../../components';
+import axios from '../../../api/axios';
+import {useNavigate} from 'react-router-dom';
 
 
 const AddPj = () => {
   const [culte, setCulte] = useState<number | undefined>();
-  const [job, setJob] = useState(0);
+  const [job, setJob] = useState<number | undefined>();
   const [race, setRace] = useState(0);
+  const [name, setName] = useState('');
+  const [level, setLevel] = useState(1);
+  const [gold, setGold] = useState(0);
+  const [moral, setMoral] = useState(0);
+  const [law, setLaw] = useState(0);
+  const [story, setStory] = useState('');
+
+  const navigate = useNavigate();
+
+  const saveCharacter = () => {
+    console.log('1',
+        name &&
+        racesMoocked[race] &&
+        level > 0 &&
+        level < 30 &&
+        gold >= 0 &&
+        moral >= 0 &&
+        moral < 3 &&
+        law >= 0 &&
+        law < 3);
+    if (
+      name &&
+      racesMoocked[race] &&
+      level > 0 &&
+      level < 30 &&
+      gold >= 0 &&
+      moral >= 0 &&
+      moral < 3 &&
+      law >= 0 &&
+      law < 3
+    ) {
+      console.log('2');
+      axios.post(
+          '/characters',
+          {
+            name,
+            culte: culte ? culteMoocked[culte] : undefined,
+            job: job ? jobsMoocked[job] : undefined,
+            race: racesMoocked[race],
+            level,
+            gold,
+            law,
+            moral,
+            story,
+          },
+      );
+      navigate('/');
+    }
+  };
+
   return (
     <div className="
       p-8
@@ -28,30 +81,47 @@ const AddPj = () => {
       items-center
     ">
       <Title title="CREATIION D'UN PERSONNAGE"/>
-      <form className='pt-8 w-full flex justify-between'>
+      <div className='pt-8 w-full flex justify-between mb-6'>
         <div className='
           flex
           flex-col
-          gap-4
+          gap-3
           justify-between
           items-center
           flex-1
         '>
-          <Input placeholder="Nom du personnage" type="text"/>
+          <Input
+            placeholder="Nom du personnage"
+            type="text"
+            value={name}
+            setValueString={setName}
+          />
           <InputSelect
             title={'Metier'}
+            height='16'
             options={jobsMoocked}
             handleChange={(newValue) => setJob(newValue)}
             value={job}
           />
           <InputSelect
             title={'Race'}
+            height='16'
             options={racesMoocked}
             handleChange={(newValue) => setRace(newValue)}
             value={race}
           />
-          <Input placeholder="Niveau du personnage" type="number"/>
-          <Input placeholder="Nombre de PO" type="number"/>
+          <Input
+            placeholder="Niveau du personnage"
+            type="number"
+            value={level}
+            setValueNumber={(newValue) => setLevel(parseInt(newValue))}
+          />
+          <Input
+            placeholder="Nombre de PO"
+            type="number"
+            value={gold}
+            setValueNumber={(newValue) => setGold(parseInt(newValue))}
+          />
           <FileInput text="PHOTO" />
         </div>
         <div className='
@@ -62,16 +132,30 @@ const AddPj = () => {
           flex-1
           h-full
         '>
-          <AlignmentInput />
+          <AlignmentInput
+            moral={moral}
+            law={law}
+            setMoral={setMoral}
+            setLaw={setLaw}
+          />
           <InputSelect
             title={'Culte'}
+            height='16'
             options={culteMoocked}
             handleChange={(newValue) => setCulte(newValue)}
             value={culte}
           />
-          <TextInput />
+          <TextInput
+            value={story}
+            setValue={setStory}
+            placeholder="Histoire du personnage"
+          />
         </div>
-      </form>
+      </div>
+      <PrimaryButton
+        text="Envoyer"
+        onClick={saveCharacter}
+      />
     </div>
   );
 };
