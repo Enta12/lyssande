@@ -55,9 +55,9 @@ const AddPj = () => {
           '/characters',
           {
             name,
-            culte: culte ? culteMoocked[culte] : undefined,
-            job: job ? jobsMoocked[job] : undefined,
-            race: racesMoocked[race],
+            culte,
+            job,
+            race,
             level,
             gold,
             law,
