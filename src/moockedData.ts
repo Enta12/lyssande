@@ -48,7 +48,7 @@ export const pjsMoocked : PjType[]= [
     race: 'Hobbit',
     level: 4,
     positions: {
-      coordonate: {
+      coordinate: {
         x: 0.5,
         y: 0.5,
       },
@@ -59,7 +59,7 @@ export const pjsMoocked : PjType[]= [
     player: 0,
     story:
         'TS2322: Type name: string; img: string; job: Hobbit;level: number; positionFangh: { x: number; y: number; }; player: number; story: string; } is not assignable to type PjType.Object literal may only specify known properties, and story does not exist in type PjType.',
-    alignement: {
+    alignment: {
       moral: 'good',
       law: 'choatic',
     },
@@ -72,7 +72,7 @@ export const pjsMoocked : PjType[]= [
     race: 'Humain',
     level: 3,
     positions: {
-      coordonate: {
+      coordinate: {
         x: 0.6,
         y: 0.6,
       },
@@ -81,7 +81,7 @@ export const pjsMoocked : PjType[]= [
     },
     quest: 1,
     player: 0,
-    alignement: {
+    alignment: {
       moral: 'good',
       law: 'choatic',
     },
@@ -97,7 +97,7 @@ export const pjsMoocked : PjType[]= [
     id: 2,
     level: 13,
     positions: {
-      coordonate: {
+      coordinate: {
         x: 0.7,
         y: 0.7,
       },
@@ -106,7 +106,7 @@ export const pjsMoocked : PjType[]= [
     },
     quest: 0,
     player: 0,
-    alignement: {
+    alignment: {
       moral: 'good',
       law: 'choatic',
     },
@@ -122,7 +122,7 @@ export const pjsMoocked : PjType[]= [
     id: 3,
     level: 1,
     positions: {
-      coordonate: {
+      coordinate: {
         x: 0.4,
         y: 0.5,
       },
@@ -130,7 +130,7 @@ export const pjsMoocked : PjType[]= [
       group: -1,
     },
     quest: 1,
-    alignement: {
+    alignment: {
       moral: 'good',
       law: 'choatic',
     },

@@ -23,7 +23,7 @@ type ContextMenuProps = {
 const formatPjToTokenData = (pj :PjType) => {
   if (!pj.positions) return undefined;
   return {
-    ...pj.positions.coordonate,
+    ...pj.positions.coordinate,
     map: pj.positions.map,
     showMouvement: 0,
     group: pj.positions.group,

@@ -54,14 +54,17 @@ const AddPj = () => {
       axios.post(
           '/characters',
           {
+            player: 1,
             name,
-            culte,
-            job,
-            race,
+            culte: culte ? culteMoocked[culte] : undefined,
+            job: job ? jobsMoocked[job] : undefined,
+            race: racesMoocked[race],
             level,
             gold,
-            law,
-            moral,
+            alignment: {
+              law,
+              moral,
+            },
             story,
           },
       );

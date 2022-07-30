@@ -6,7 +6,7 @@ export type PjType = {
     race: Race,
     level: number,
     positions?:{
-        coordonate : {
+        coordinate : {
             x: number,
             y: number;
         },
@@ -16,7 +16,7 @@ export type PjType = {
     quest?: number,
     player: number,
     story: string
-    alignement: {
+    alignment: {
         moral: string,
         law: string
     },

@@ -45,7 +45,7 @@ const DetailPjCard = (props : {pjData: PjType}) => {
         </span>
         <Field name="CLASSE" value={pjData.race}/>
         <Field name="ALIGNEMENT"
-          value={`${pjData.alignement.law} ${pjData.alignement.moral}`}/>
+          value={`${pjData.alignment.law} ${pjData.alignment.moral}`}/>
         <Field name="OR" value={pjData.gold.toString()}/>
         <div className="w-full h-1 rounded-b-full bg-orange my-4" />
         <Field name="LIEU" value="Soon"/>
