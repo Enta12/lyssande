@@ -63,7 +63,7 @@ export const pjsMoocked : PjType[]= [
       moral: 'good',
       law: 'choatic',
     },
-    id: 0,
+    id: '0',
   },
   {
     name: 'Jeanne D\'orc',
@@ -86,7 +86,7 @@ export const pjsMoocked : PjType[]= [
       law: 'choatic',
     },
     gold: 12,
-    id: 1,
+    id: '1',
     story: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum odio ac eros rutrum, vel accumsan augue facilisis. Maecenas malesuada, enim quis sodales dictum, mauris eros congue neque, ut rhoncus nibh dolor ut turpis. Sed varius, libero non convallis luctus, libero neque lacinia mi, a vestibulum ex ex non quam. Morbi hendrerit nec arcu sed ultrices. Aliquam tincidunt nulla vel est placerat, sit amet blandit quam hendrerit. Etiam scelerisque risus nunc, vel iaculis ante eleifend id. Aliquam eget dictum quam, sed elementum quam. Vestibulum vehicula nulla et velit auctor ultrices. Fusce malesuada commodo eros, quis malesuada velit congue ac. Aliquam erat volutpat. Integer id erat gravida, sagittis leo nec, mattis sapien. Curabitur nisl sapien, suscipit id rhoncus a, suscipit vitae arcu. Quisque et ornare mauris, et ultricies erat. Fusce tempus dolor orci, eu faucibus erat rutrum sed. Etiam porttitor, neque in elementum pellentesque, est arcu luctus libero, a imperdiet diam leo in ex. ',
   },
   {
@@ -94,7 +94,7 @@ export const pjsMoocked : PjType[]= [
     img: 'http://www.letarnlibre.com/static/img/2014/04/15/jean_luc_melenchon_avril_2012.jpg',
     job: 'Noble',
     race: 'Humain',
-    id: 2,
+    id: '2',
     level: 13,
     positions: {
       coordinate: {
@@ -119,7 +119,7 @@ export const pjsMoocked : PjType[]= [
     job: 'Ingénieur',
     race: 'Humain',
     player: 1,
-    id: 3,
+    id: '3',
     level: 1,
     positions: {
       coordinate: {

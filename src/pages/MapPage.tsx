@@ -1,10 +1,22 @@
 import Map from '../components/map/map';
-import {pjsMoocked, mapsMoocked} from '../moockedData';
-import React, {useState} from 'react';
+import {mapsMoocked} from '../moockedData';
+import React, {useEffect, useState} from 'react';
+import axios from '../api/axios';
+import {PjType} from '../types';
 
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
+  const [pjData, setPjData] = useState<PjType[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () =>{
+      const res = await axios.get('/characters');
+      setPjData(res.data);
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col pb-5 w-full">
@@ -27,7 +39,7 @@ const MapPage = () => {
       <Map
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
-        pjs={pjsMoocked}
+        pjs={pjData}
         mapName={mapsMoocked[mapSelected].name}
       />
     </>

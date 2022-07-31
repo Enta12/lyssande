@@ -3,10 +3,12 @@ import PjCard from '../../components/pjCard';
 import React, {useState, useEffect} from 'react';
 import axios from '../../api/axios';
 import {PjType} from '../../types';
+import {useNavigate} from 'react-router-dom';
 
 const Pj = () => {
   const EmptyCards : JSX.Element[] = [];
   const [pjData, setPjData] = useState<PjType[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () =>{
@@ -32,7 +34,11 @@ const Pj = () => {
     <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
 
       { pjData.map((pjData, index) =>
-        <PjCard key={index} pjData={pjData}/>) }
+        <PjCard
+          key={index}
+          pjData={pjData}
+          onClick={(id, e) => navigate(`/pj/${id}`)}
+        />) }
 
       <a href="/newPj">
         <button className="

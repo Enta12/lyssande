@@ -6,9 +6,9 @@ import PjCard from './pjCard';
 type Props = {
     pjs: PjType[];
     playerName: string;
-    selectedPj: number | null;
+    selectedPj: string | null;
     playerIndex: number;
-    setSelectedPj: (playerIndex: number, pjIndex: number) => void;
+    setSelectedPj: (playerIndex: number, pjID: string) => void;
     quest: number;
 }
 
@@ -23,7 +23,7 @@ const PjSessionSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLInputElement>(null);
   const handleClick= (
-      pjIndex: number,
+      pjIndex: string,
       e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setSelectedPj(playerIndex, pjIndex);
     setIsOpen(false);
@@ -73,7 +73,7 @@ const PjSessionSelector = ({
       >
         {playerName}
         <div className="flex justify-end gap-28">
-          {((selectedPj || selectedPj===0) &&
+          {((selectedPj) &&
             <SelectedPj
               level={selectedPjData.level}
               name={selectedPjData.name} />

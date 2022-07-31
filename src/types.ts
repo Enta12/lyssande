@@ -21,7 +21,7 @@ export type PjType = {
         law: string
     },
     gold: number,
-    id: number,
+    id: string,
 };
 export type Player ={
     name: string,
