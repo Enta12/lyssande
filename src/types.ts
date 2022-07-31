@@ -6,7 +6,7 @@ export type PjType = {
     race: Race,
     level: number,
     positions?:{
-        coordinate : {
+        coordinates : {
             x: number,
             y: number;
         },

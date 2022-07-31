@@ -6,12 +6,19 @@ import ShortSelect from '../shortSelect';
 import React from 'react';
 import Token from './tokens/token';
 import ContextMenu from './contextMenu';
+import PrimaryButton from '../primary-button';
 
 type Props = {
     pjs : PjType[];
     img: string;
     mapName: string;
     scale: number;
+    handleSend: (value: ({
+      map: string,
+      group: number,
+      x: number,
+      y: number,
+    } | undefined)[]) => void;
 }
 
 type ContextMenuProps = {
@@ -23,14 +30,14 @@ type ContextMenuProps = {
 const formatPjToTokenData = (pj :PjType) => {
   if (!pj.positions) return undefined;
   return {
-    ...pj.positions.coordinate,
+    ...pj.positions.coordinates,
     map: pj.positions.map,
     showMouvement: 0,
     group: pj.positions.group,
   };
 };
 
-const Map = ({img, pjs, mapName, scale}: Props) => {
+const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
@@ -38,12 +45,22 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     useState<ContextMenuProps | null>(null);
   const [groupsData, setGroupsData] = useState<(GroupData | undefined)[]>([]);
   const [tokenData, setTokenData] =
-    useState(pjs.map((pj) => formatPjToTokenData(pj)));
+    useState<({
+      map: string;
+      showMouvement:
+      number;
+      group: number;
+      x: number;
+      y: number;
+    } | undefined)[]>([]);
   const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
 
+  useEffect(() => {
+    setTokenData([...pjs.map((pj) => formatPjToTokenData(pj))]);
+  }, [setTokenData, pjs]);
   const tokens: JSX.Element[] = [];
   const groups: JSX.Element[] = [];
   const contextMenu = {
@@ -370,12 +387,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     }
   }, [height]);
 
-  /*
-  const updatePjs = () => {
-     TODO
-     Send pjSelected
-  };
-  */
   createTokens();
   return (
     <>
@@ -428,6 +439,10 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
           );
         })}
       </div>
+      <PrimaryButton
+        text='Mettre à jour les placements'
+        onClick={() => handleSend(tokenData)}
+      />
       {contexMenu !== null && <ContextMenu
         data={contextMenu}
         handleChange={handleContextMenuChange}

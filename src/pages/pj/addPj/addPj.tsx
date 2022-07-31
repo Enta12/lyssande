@@ -29,16 +29,6 @@ const AddPj = () => {
   const navigate = useNavigate();
 
   const saveCharacter = () => {
-    console.log('1',
-        name &&
-        racesMoocked[race] &&
-        level > 0 &&
-        level < 30 &&
-        gold >= 0 &&
-        moral >= 0 &&
-        moral < 3 &&
-        law >= 0 &&
-        law < 3);
     if (
       name &&
       racesMoocked[race] &&
@@ -50,7 +40,6 @@ const AddPj = () => {
       law >= 0 &&
       law < 3
     ) {
-      console.log('2');
       axios.post(
           '/characters',
           {

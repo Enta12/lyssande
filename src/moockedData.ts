@@ -48,7 +48,7 @@ export const pjsMoocked : PjType[]= [
     race: 'Hobbit',
     level: 4,
     positions: {
-      coordinate: {
+      coordinates: {
         x: 0.5,
         y: 0.5,
       },
@@ -72,7 +72,7 @@ export const pjsMoocked : PjType[]= [
     race: 'Humain',
     level: 3,
     positions: {
-      coordinate: {
+      coordinates: {
         x: 0.6,
         y: 0.6,
       },
@@ -97,7 +97,7 @@ export const pjsMoocked : PjType[]= [
     id: '2',
     level: 13,
     positions: {
-      coordinate: {
+      coordinates: {
         x: 0.7,
         y: 0.7,
       },
@@ -122,7 +122,7 @@ export const pjsMoocked : PjType[]= [
     id: '3',
     level: 1,
     positions: {
-      coordinate: {
+      coordinates: {
         x: 0.4,
         y: 0.5,
       },

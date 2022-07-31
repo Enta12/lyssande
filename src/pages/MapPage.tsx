@@ -17,6 +17,41 @@ const MapPage = () => {
     fetchData();
   }, []);
 
+  const updatePoisitions = (
+      newPositions: ({
+      map: string;
+      group: number;
+      x: number;
+      y: number;
+  } | undefined)[]) => {
+    const body: {
+      id: string,
+      positions: {
+        coordinates: {
+          x: number,
+          y: number,
+        }
+        group: number,
+        map: string,
+      }
+    }[] = [];
+    newPositions.forEach((el, index) => {
+      if (el) {
+        body.push({
+          id: pjData[index].id,
+          positions: {
+            coordinates: {
+              x: el.x,
+              y: el.y,
+            },
+            map: el.map,
+            group: el.group,
+          },
+        });
+      }
+    });
+    axios.put('/characters', body);
+  };
   return (
     <>
       <div className="flex flex-col pb-5 w-full">
@@ -37,6 +72,7 @@ const MapPage = () => {
         <div className="bg-darkBrown w-full h-2 rounded-b-lg"/>
       </div>
       <Map
+        handleSend={updatePoisitions}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
         pjs={pjData}
