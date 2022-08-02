@@ -16,6 +16,9 @@ import {PrimaryButton} from '../../../components';
 import axios from '../../../api/axios';
 import {useNavigate, useParams} from 'react-router-dom';
 
+// eslint-disable-next-line max-len
+const textExternCreate = 'Si vous n\'avez pas de personnage vous pouvez en créer un grâce à l\'outil disponible ';
+
 const AddPj = () => {
   const [culte, setCulte] = useState<number | undefined>();
   const [job, setJob] = useState<number | undefined>();
@@ -126,6 +129,7 @@ const AddPj = () => {
             options={jobsMoocked}
             handleChange={(newValue) => setJob(newValue)}
             value={job}
+            emptyValue='Aucun'
           />
           <InputSelect
             title={'Race'}
@@ -168,6 +172,7 @@ const AddPj = () => {
             options={culteMoocked}
             handleChange={(newValue) => setCulte(newValue)}
             value={culte}
+            emptyValue='Aucun'
           />
           <TextInput
             value={story}
@@ -176,8 +181,23 @@ const AddPj = () => {
           />
         </div>
       </div>
+      {
+        !params.id &&
+        <p className='mb-4 text-lg text-bubblegum text-swamp font-semibold'>
+          {textExternCreate}
+          <a
+            className='
+              font-bold
+              hover:underline
+            '
+            href="http://naheulbeuk-db.byethost9.com/charactersheet/charactersheet"
+          >
+            ici
+          </a>
+        </p>
+      }
       <PrimaryButton
-        text="Envoyrer"
+        text="Envoyer"
         onClick={() => saveCharacter()}
       />
     </div>
