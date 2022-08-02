@@ -129,6 +129,7 @@ const CheckInput = ({
           value={name}
           className="
             border-swamp
+            cursor-pointer
             relative
             z-10
             border-2
