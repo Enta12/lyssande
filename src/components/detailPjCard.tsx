@@ -1,8 +1,13 @@
 import {PjType} from '../types';
 import React from 'react';
+import {ReactComponent as EditButton} from '../assets/editButton.svg';
 
-const DetailPjCard = (props : {pjData: PjType}) => {
-  const {pjData} = props;
+type Props = {
+  pjData: PjType;
+  onEdit: () => void
+}
+
+const DetailPjCard = ( {pjData, onEdit} : Props) => {
   return (
     <div className="
       w-96
@@ -11,7 +16,8 @@ const DetailPjCard = (props : {pjData: PjType}) => {
       rounded-2xl
       font-bubblegum
       bg-beige
-      text-swamp"
+      text-swamp
+      relative"
     >
       <div className="
         bg-orange
@@ -43,15 +49,19 @@ const DetailPjCard = (props : {pjData: PjType}) => {
           <Field name="RACE" value={pjData.race}/>
           <Field name="NIVEAU" value={pjData.level.toString()} />
         </span>
-        <Field name="CLASSE" value={pjData.race}/>
+        <Field name="CLASSE" value={pjData.job || 'Aucun'}/>
         <Field name="ALIGNEMENT"
           value={`${pjData.alignment.law} ${pjData.alignment.moral}`}/>
         <Field name="OR" value={pjData.gold.toString()}/>
         <div className="w-full h-1 rounded-b-full bg-orange my-4" />
-        <Field name="LIEU" value="Soon"/>
-        <Field name="DATES" value="Soon"/>
+        <Field name="LIEU" value="Bientôt disponible"/>
+        <Field name="DATES" value="Bientôt disponible"/>
         <div className="w-full h-1 rounded-b-full bg-orange mb-10 my-4" />
       </div>
+      <EditButton
+        className='bottom-0 right-0 absolute cursor-pointer'
+        onClick={onEdit}
+      />
     </div>
   );
 };

@@ -47,7 +47,7 @@ const Player = () => {
       <SubTitle title="PERSONAGES" />
       <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
         { pjs.map((pjData, index) => <PjCard key={index} pjData={pjData}/>) }
-        <a href="/newPj">
+        <a href="/editCharacter">
           <button className="
             border-dashed
             h-96

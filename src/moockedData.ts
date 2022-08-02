@@ -238,3 +238,7 @@ export const locals : Local[] = [
   'swordArm',
   'random',
 ];
+
+export const moralsMoocked = ['GOOD', 'NEUTRAL', 'EVIL'];
+export const lawsMoocked = ['LAWFUL', 'NEUTRAL', 'CHAOTIC'];
+

@@ -1,4 +1,5 @@
 import React from 'react';
+import {lawsMoocked, moralsMoocked} from '../../../moockedData';
 
 type Category = 'moral' | 'law';
 type Props = {
@@ -10,8 +11,8 @@ type Props = {
     setLaw: (newLaw: number) => void;
 }
 const status = {
-  moral: ['GOOD', 'NEUTRAL', 'EVIL'],
-  law: ['LAWFUL', 'NEUTRAL', 'CHAOTIC'],
+  moral: moralsMoocked,
+  law: lawsMoocked,
 };
 
 
@@ -39,6 +40,7 @@ const AlignmentInput = ({
         break;
     }
     if (value !== -1) {
+      console.log('hello');
             category === 'law' ? setLaw(value) : setMoral(value);
     }
   };
@@ -77,8 +79,8 @@ type ColumnProps = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>,
     category: Category) => void
 }
-
 const Column = ({category, value, handleChange, left=false} : ColumnProps) => {
+  console.log('value', value);
   return (
     <div className={`
       flex

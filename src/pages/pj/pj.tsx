@@ -39,8 +39,7 @@ const Pj = () => {
           pjData={pjData}
           onClick={(id, e) => navigate(`/pj/${id}`)}
         />) }
-
-      <a href="/newPj">
+      <a href="/editCharacter">
         <button className="
           border-dashed
           h-96

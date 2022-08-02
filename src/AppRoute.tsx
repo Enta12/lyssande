@@ -40,7 +40,9 @@ const AppRoute = () => {
               element={<Layout><CreateSession /></Layout>}
             />
             <Route path='/fight' element={<Layout><FightPage /></Layout>} />
-            <Route path='/newPj' element={<Layout><AddPj /></Layout>} />
+            <Route path='/editCharacter' element={<Layout><AddPj /></Layout>} />
+            <Route path='/editCharacter/:id' element={
+              <Layout><AddPj /></Layout>} />
             <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
             <Route path='/map' element={<Layout><MapPage /></Layout>} />
             <Route path='/' element={<Layout><Players /></Layout>} />

@@ -37,9 +37,11 @@ const formatPjToTokenData = (pj :PjType) => {
   };
 };
 
+
 const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
 
+  const [initEnd, setInitEnd] = useState(false);
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
@@ -59,8 +61,39 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
       useState({speed: 0, land: 0, duration: 0});
 
   useEffect(() => {
-    setTokenData([...pjs.map((pj) => formatPjToTokenData(pj))]);
+    setTokenData([...pjs.map((pj, index) => formatPjToTokenData(pj))]);
   }, [setTokenData, pjs]);
+
+  useEffect(() => {
+    const defineGroups = (
+        pj: PjType,
+        index: number,
+        groupsDataTemp: (GroupData | undefined)[],
+    ) => {
+      if (pj.positions) {
+        if (pj.positions.group || pj.positions.group === 0) {
+          const group = groupsDataTemp[pj.positions.group];
+          if (group) {
+            group.members.push(index);
+          } else {
+            groupsDataTemp[pj.positions.group] = {
+              members: [index],
+              position: {
+                ...pj.positions.coordinates,
+                map: pj.positions.map,
+              },
+            };
+          }
+        }
+      }
+    };
+    if (!initEnd && pjs.length) {
+      const groupsDataTemps = groupsData;
+      pjs.forEach((pj, index) => defineGroups(pj, index, groupsDataTemps));
+      setGroupsData([...groupsDataTemps]);
+      setInitEnd(true);
+    }
+  }, [pjs, groupsData, setGroupsData, initEnd, setInitEnd]);
   const tokens: JSX.Element[] = [];
   const groups: JSX.Element[] = [];
   const contextMenu = {

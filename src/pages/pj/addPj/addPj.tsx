@@ -1,19 +1,20 @@
 import Input from '../../../components/input';
 import InputSelect from '../../../components/inputSelect';
 import Title from '../../../components/title';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AlignmentInput from './AlignmentInput';
 import TextInput from '../../../components/textInput';
 import {
   culteMoocked,
   jobsMoocked,
+  lawsMoocked,
+  moralsMoocked,
   racesMoocked,
 } from '../../../moockedData';
 import FileInput from '../../../components/fileInput';
 import {PrimaryButton} from '../../../components';
 import axios from '../../../api/axios';
-import {useNavigate} from 'react-router-dom';
-
+import {useNavigate, useParams} from 'react-router-dom';
 
 const AddPj = () => {
   const [culte, setCulte] = useState<number | undefined>();
@@ -27,7 +28,29 @@ const AddPj = () => {
   const [story, setStory] = useState('');
 
   const navigate = useNavigate();
+  const params = useParams();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(`/characters/${params.id}`);
+      if (res.data.id) {
+        if (res.data.culte) setCulte(culteMoocked.indexOf(res.data.culte));
+        if (res.data.job) setJob(jobsMoocked.indexOf(res.data.job));
+        setRace(racesMoocked.indexOf(res.data.race));
+        setName(res.data.name);
+        setLevel(res.data.level);
+        setGold(res.data.gold);
+        setMoral(moralsMoocked.indexOf(res.data.alignment.moral));
+        setLaw(lawsMoocked.indexOf(res.data.alignment.law));
+        setStory(res.data.story);
+      }
+    };
+    if (params.id) {
+      fetchData();
+    }
+  }, [params]);
+
+  // eslint-disable-next-line no-unused-vars
   const saveCharacter = () => {
     if (
       name &&
@@ -40,23 +63,32 @@ const AddPj = () => {
       law >= 0 &&
       law < 3
     ) {
-      axios.post(
-          '/characters',
-          {
-            player: 1,
-            name,
-            culte: culte ? culteMoocked[culte] : undefined,
-            job: job ? jobsMoocked[job] : undefined,
-            race: racesMoocked[race],
-            level,
-            gold,
-            alignment: {
-              law,
-              moral,
-            },
-            story,
-          },
-      );
+      const body = {
+        player: 1,
+        name,
+        culte: culte ? culteMoocked[culte] : undefined,
+        job: job ? jobsMoocked[job] : undefined,
+        race: racesMoocked[race],
+        level,
+        gold,
+        alignment: {
+          moral: moralsMoocked[moral],
+          law: lawsMoocked[law],
+        },
+        story,
+      };
+      console.log('params.id', !!params.id, params.id);
+      if (params.id) {
+        axios.put(
+            '/characters',
+            [{...body, id: params.id}],
+        );
+      } else {
+        axios.post(
+            '/characters',
+            body,
+        );
+      }
       navigate('/');
     }
   };
@@ -145,8 +177,8 @@ const AddPj = () => {
         </div>
       </div>
       <PrimaryButton
-        text="Envoyer"
-        onClick={saveCharacter}
+        text="Envoyrer"
+        onClick={() => saveCharacter()}
       />
     </div>
   );
