@@ -14,7 +14,7 @@ import {
 import FileInput from '../../../components/fileInput';
 import {PrimaryButton} from '../../../components';
 import api from '../../../api/axios';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {AuthContext} from '../../../AppRoute';
 
 // eslint-disable-next-line max-len
@@ -33,6 +33,7 @@ const AddPj = () => {
 
   const {setUser} = useContext(AuthContext);
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +93,7 @@ const AddPj = () => {
             body,
         );
       }
+      navigate('/');
     }
   };
 

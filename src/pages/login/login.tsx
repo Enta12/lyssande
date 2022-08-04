@@ -4,7 +4,7 @@ import {login} from '../../api/auth';
 import {AuthContext} from '../../AppRoute';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
-import {User} from '../../types';
+import {Token} from '../../types';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const Login = () => {
       }
       console.log(token);
       console.log('hello', jwtDecode(token));
-      const tokenDecode = jwtDecode(token) as User;
+      const tokenDecode = jwtDecode(token) as Token;
       setUser({...tokenDecode});
     }
   };

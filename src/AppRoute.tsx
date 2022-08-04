@@ -12,20 +12,20 @@ import DetailPj from './pages/pj/detailPj';
 import Players from './pages/player/players';
 import CreateSession from './pages/createSession';
 import jwtDecode from 'jwt-decode';
-import {User} from './types';
+import {Token} from './types';
 import NotFound from './pages/notFound/NotFound';
 
 
 export const AuthContext =
   React.createContext<{
-    user?: User,
-    setUser:(user?: User) => void
+    user?: Token,
+    setUser:(user?: Token) => void
         }>({setUser: () => console.error('no setuser')});
 
 const AppRoute = () => {
   const token = localStorage.getItem('lysandeLocal');
-  const tokenDecode = token ? jwtDecode(token) as User : null;
-  const [user, setUser] = useState<User | undefined>(
+  const tokenDecode = token ? jwtDecode(token) as Token : null;
+  const [user, setUser] = useState<Token | undefined>(
     tokenDecode ?
     {...tokenDecode} : undefined,
   );

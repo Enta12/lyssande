@@ -57,7 +57,7 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
       x: number;
       y: number;
     } | undefined)[]>([]);
-  const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
+  const [pjSortedByPlayer, setPjSortedByPlayer] = useState<string[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
@@ -169,12 +169,13 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
     });
   };
   const handleChange= (option: number) => {
-    if (pjSortedByPlayer.some((selectedPj) => selectedPj === option)) {
+    if (pjSortedByPlayer.some((selectedPj) =>
+      selectedPj === playerMoocked[option].name)) {
       setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
-        return selectedPj !== option;
+        return selectedPj !== playerMoocked[option].name;
       }));
     } else {
-      setPjSortedByPlayer([...pjSortedByPlayer, option]);
+      setPjSortedByPlayer([...pjSortedByPlayer, playerMoocked[option].name]);
     }
   };
   const placeEntity = (
@@ -450,7 +451,8 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
         <ShortSelect
           textEmpty='Filtrer par joueur'
           options={playerMoocked.map((player) => player.name)}
-          value={pjSortedByPlayer}
+          value={pjSortedByPlayer.map((el) =>
+            playerMoocked.findIndex((player) => player.name === el))}
           handleChange={handleChange} />
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>

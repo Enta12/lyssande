@@ -1,4 +1,4 @@
-import {User} from '../types';
+import {Token} from '../types';
 import api from './axios';
 
 const tokenPlace = 'lysandeLocal';
@@ -6,7 +6,7 @@ const tokenPlace = 'lysandeLocal';
 export const login = (
     email: string,
     password: string,
-    setUser: (user?: User) => void,
+    setUser: (user?: Token) => void,
 ) => {
   return api(setUser)
       .post('auth/login', {
@@ -23,7 +23,7 @@ export const login = (
         return err.code;
       });
 };
-export const logout = (setUser: (user: User | undefined) => void) => {
+export const logout = (setUser: (user: Token | undefined) => void) => {
   localStorage.removeItem(tokenPlace);
   setUser(undefined);
 };

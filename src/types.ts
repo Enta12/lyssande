@@ -14,7 +14,7 @@ export type PjType = {
         group: number;
     },
     quest?: number,
-    player: number,
+    player: string,
     story: string
     alignment: {
         moral: string,
@@ -23,10 +23,6 @@ export type PjType = {
     gold: number,
     id: string,
 };
-export type Player ={
-    name: string,
-    id: number
-}
 export type WorldMap = {
     name: string;
     mapLink: string;
@@ -82,6 +78,12 @@ export type Auth = {
     role?: string;
 }
 export type User = {
+    id: string;
+    role: 'admin' | 'gm' | 'player';
+    name: string;
+    email: string;
+}
+export type Token = {
     userId: string;
     role: 'admin' | 'gm' | 'player';
 }

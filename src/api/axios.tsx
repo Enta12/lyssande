@@ -1,11 +1,11 @@
 import axios from 'axios';
-import {User} from '../types';
+import {Token} from '../types';
 import {getToken, logout} from './auth';
 // todo
 // eslint-disable-next-line no-unused-vars
 const BASE_URL = 'https://api.lysande.pepintrie.fr';
 const BASE_URL_LOCAL = 'http://localhost:3001';
-let setUser: (user?: User) => void | undefined;
+let setUser: (user?: Token) => void | undefined;
 
 
 const instance = axios.create({
@@ -44,7 +44,7 @@ instance.interceptors.response.use(
     },
 );
 
-export default (setUserFunction: (user?: User) => void) => {
+export default (setUserFunction: (user?: Token) => void) => {
   setUser = setUserFunction;
   return instance;
 };
