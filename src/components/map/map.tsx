@@ -1,4 +1,4 @@
-import {MouseEvent, useState, useRef, useEffect} from 'react';
+import {MouseEvent, useState, useRef, useEffect, useContext} from 'react';
 import {landsMoocked, playerMoocked, speedMoocked} from '../../moockedData';
 import {GroupData, PjType} from '../../types';
 import MapButton from './mapButton';
@@ -7,6 +7,7 @@ import React from 'react';
 import Token from './tokens/token';
 import ContextMenu from './contextMenu';
 import PrimaryButton from '../primary-button';
+import {AuthContext} from '../../AppRoute';
 
 type Props = {
     pjs : PjType[];
@@ -40,6 +41,7 @@ const formatPjToTokenData = (pj :PjType) => {
 
 const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
+  const {user} = useContext(AuthContext);
 
   const [initEnd, setInitEnd] = useState(false);
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
@@ -472,10 +474,16 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
           );
         })}
       </div>
-      <PrimaryButton
-        text='Mettre à jour les placements'
-        onClick={() => handleSend(tokenData)}
-      />
+      {
+        (
+          user?.role === 'admin' ||
+          user?.role === 'gm'
+        ) &&
+        <PrimaryButton
+          text='Mettre à jour les placements'
+          onClick={() => handleSend(tokenData)}
+        />
+      }
       {contexMenu !== null && <ContextMenu
         data={contextMenu}
         handleChange={handleContextMenuChange}

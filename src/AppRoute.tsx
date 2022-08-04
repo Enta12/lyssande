@@ -35,22 +35,45 @@ const AppRoute = () => {
         {
           token ?
           <Routes>
-            <Route path='/pj' element={<Layout><Pj /></Layout>} />
-            <Route path='/pj/:id' element={<Layout><DetailPj /></Layout>} />
-            <Route path='/player' element={<Layout><Players /></Layout>} />
-            <Route path='/player/:id' element={<Layout><Player /></Layout>} />
-            <Route
-              path='/newSession'
-              element={<Layout><CreateSession /></Layout>}
-            />
-            <Route path='/fight' element={<Layout><FightPage /></Layout>} />
-            <Route path='/editCharacter' element={<Layout><AddPj /></Layout>} />
+            <Route path='/pj' element={<Layout Page={<Pj />}/>} />
+            <Route path='/pj/:id' element={<Layout Page={<DetailPj />} />} />
+            <Route path='/editCharacter' element={
+              <Layout Page={<AddPj />} />} />
             <Route path='/editCharacter/:id' element={
-              <Layout><AddPj /></Layout>} />
-            <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
-            <Route path='/map' element={<Layout><MapPage /></Layout>} />
-            <Route path='/' element={<Layout><Players /></Layout>} />
-            <Route path='*' element={<Layout><NotFound /></Layout>} />
+              <Layout Page={<AddPj />} />} />
+            <Route path='/calendar' element={<Layout Page={<Calendar />} />} />
+            <Route path='/map' element={<Layout Page={<MapPage />} />} />
+            {
+              (
+                user?.role === 'gm' ||
+                user?.role === 'admin') &&
+                <>
+                  <Route path='/player' element={
+                    <Layout Page={<Players />}/>
+                  } />
+                  <Route path='/player/:id' element={
+                    <Layout Page={<Player />}/>
+                  } />
+                  <Route path='/fight' element={
+                    <Layout Page={<FightPage />}/>
+                  } />
+                  <Route
+                    path='/newSession'
+                    element={
+                      <Layout Page={<CreateSession />} />
+                    }
+                  />
+                </>
+            }
+            <Route path='/' element={
+              <Layout Page={
+                  user?.role === 'gm' ||
+                  user?.role === 'admin' ?
+                  <Players /> :
+                  <Player userId={user?.userId} />
+              }/>
+            } />
+            <Route path='*' element={<Layout Page={<NotFound />} />} />
           </Routes>:
           <Login />
         }

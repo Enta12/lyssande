@@ -5,13 +5,16 @@ import addIcon from '../../assets/add.svg';
 import {pjsMoocked, playerMoocked} from '../../moockedData';
 import Calendar from '../../components/calendar/calendar';
 import {PossibleDate} from '../../types';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import React from 'react';
 
 type Availability = 'no' | 'yes' | 'maybe'
 const availability : Availability[] = [];
 const dates: PossibleDate[] = [];
 
+type Props = {
+  userId?: string
+}
 
 const setDates = () => {
   new Array(7).fill('').forEach((value, index) => {
@@ -30,11 +33,13 @@ const setDates = () => {
 
 setDates();
 
-const Player = () => {
+const Player = ({userId} :Props) => {
   const params = useParams();
-  const id = parseInt(params.id || '0');
-  const selectedPlayer = playerMoocked[id];
-  const pjs = pjsMoocked.filter((pj) => pj.player === id);
+  const navigate = useNavigate();
+  const id = params.id || userId;
+  if (!id) navigate('404');
+  const selectedPlayer = playerMoocked[0];
+  const pjs = pjsMoocked.filter((pj) => pj.player === 0);
   return (
     <div className='
       pt-8
