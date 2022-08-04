@@ -1,13 +1,15 @@
 import axios from 'axios';
-import {getToken, refreshToken} from './auth';
+import {User} from '../types';
+import {getToken, logout} from './auth';
+// todo
+// eslint-disable-next-line no-unused-vars
 const BASE_URL = 'https://api.lysande.pepintrie.fr';
+const BASE_URL_LOCAL = 'http://localhost:3001';
+let setUser: (user?: User) => void | undefined;
 
-export default axios.create({
-  baseURL: BASE_URL,
-});
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: BASE_URL_LOCAL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,7 +18,7 @@ instance.interceptors.request.use(
     (config) => {
       const token = getToken();
       if (token && config.headers) {
-        config.headers['x-access-token'] = token;
+        config.headers['Authorization'] = `Bearer ${token}`;
       }
       return config;
     },
@@ -32,21 +34,7 @@ instance.interceptors.response.use(
       const originalConfig = err.config;
       if (err.response) {
         if (err.response.status === 401 && !originalConfig._retry) {
-          originalConfig._retry = true;
-          try {
-            await refreshToken();
-            const token = getToken();
-            if (token) {
-              instance.defaults.headers.common['x-access-token'] = token;
-              return instance(originalConfig);
-            }
-          } catch (error) {
-            const err = error as any;
-            if (err.response && err.response.data) {
-              return Promise.reject(err.response.data);
-            }
-            return Promise.reject(err);
-          }
+          if (setUser) logout(setUser);
         }
         if (err.response.status === 403 && err.response.data) {
           return Promise.reject(err.response.data);
@@ -56,3 +44,7 @@ instance.interceptors.response.use(
     },
 );
 
+export default (setUserFunction: (user?: User) => void) => {
+  setUser = setUserFunction;
+  return instance;
+};

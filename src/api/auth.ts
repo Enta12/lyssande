@@ -1,42 +1,32 @@
-import axios from './axios';
+import {User} from '../types';
+import api from './axios';
 
-export const login = (email: string, password: string) => {
-  return axios
+const tokenPlace = 'lysandeLocal';
+
+export const login = (
+    email: string,
+    password: string,
+    setUser: (user?: User) => void,
+) => {
+  return api(setUser)
       .post('auth/login', {
         email,
         password,
       })
       .then((response) => {
-        const tokens = response.data.data;
-        if (tokens.refresh_token) {
-          localStorage.setItem('refreshToken', tokens.refresh_token);
-        }
-        if (tokens.access_token) {
-          localStorage.setItem('token', tokens.access_token);
-          return tokens.access_token;
+        const data = response.data;
+        if (data.token) {
+          localStorage.setItem(tokenPlace, data.token);
+          return data.token;
         }
       }).catch((err) => {
         return err.code;
       });
 };
-export const logout = () => {
-  localStorage.removeItem('token');
-};
-export const refreshToken = () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  return axios
-      .post('auth/refresh', {
-        refresh_token: refreshToken,
-      })
-      .then((response) => {
-        const token = response.data.data.accessToken;
-        if (token) {
-          localStorage.setItem('token', token);
-        }
-      });
+export const logout = (setUser: (user: User | undefined) => void) => {
+  localStorage.removeItem(tokenPlace);
+  setUser(undefined);
 };
 export const getToken = () => {
-  return localStorage.getItem('token');
+  return localStorage.getItem(tokenPlace);
 };
-
-

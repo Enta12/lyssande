@@ -82,7 +82,8 @@ export type Auth = {
     role?: string;
 }
 export type User = {
-    userId: number;
+    userId: string;
+    role: 'admin' | 'gm' | 'player';
 }
 export type GroupData = {
     position: {

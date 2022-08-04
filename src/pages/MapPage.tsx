@@ -1,17 +1,20 @@
 import Map from '../components/map/map';
 import {mapsMoocked} from '../moockedData';
-import React, {useEffect, useState} from 'react';
-import axios from '../api/axios';
+import React, {useContext, useEffect, useState} from 'react';
+import api from '../api/axios';
 import {PjType} from '../types';
+import {AuthContext} from '../AppRoute';
 
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
   const [pjData, setPjData] = useState<PjType[]>([]);
+  const {setUser} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await axios.get('/characters');
+      const res = await api(setUser).get('/characters');
+      console.log(res);
       setPjData(res.data);
     };
     fetchData();
@@ -50,7 +53,7 @@ const MapPage = () => {
         });
       }
     });
-    axios.put('/characters', body);
+    api(setUser).put('/characters', body);
   };
   return (
     <>

@@ -1,7 +1,7 @@
 import Input from '../../../components/input';
 import InputSelect from '../../../components/inputSelect';
 import Title from '../../../components/title';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AlignmentInput from './AlignmentInput';
 import TextInput from '../../../components/textInput';
 import {
@@ -13,8 +13,9 @@ import {
 } from '../../../moockedData';
 import FileInput from '../../../components/fileInput';
 import {PrimaryButton} from '../../../components';
-import axios from '../../../api/axios';
-import {useNavigate, useParams} from 'react-router-dom';
+import api from '../../../api/axios';
+import {useParams} from 'react-router-dom';
+import {AuthContext} from '../../../AppRoute';
 
 // eslint-disable-next-line max-len
 const textExternCreate = 'Si vous n\'avez pas de personnage vous pouvez en créer un grâce à l\'outil disponible ';
@@ -30,12 +31,12 @@ const AddPj = () => {
   const [law, setLaw] = useState(0);
   const [story, setStory] = useState('');
 
-  const navigate = useNavigate();
+  const {setUser} = useContext(AuthContext);
   const params = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(`/characters/${params.id}`);
+      const res = await api(setUser).get(`/characters/${params.id}`);
       if (res.data.id) {
         if (res.data.culte) setCulte(culteMoocked.indexOf(res.data.culte));
         if (res.data.job) setJob(jobsMoocked.indexOf(res.data.job));
@@ -53,7 +54,6 @@ const AddPj = () => {
     }
   }, [params]);
 
-  // eslint-disable-next-line no-unused-vars
   const saveCharacter = () => {
     if (
       name &&
@@ -82,17 +82,16 @@ const AddPj = () => {
       };
       console.log('params.id', !!params.id, params.id);
       if (params.id) {
-        axios.put(
+        api(setUser).put(
             '/characters',
             [{...body, id: params.id}],
         );
       } else {
-        axios.post(
+        api(setUser).post(
             '/characters',
             body,
         );
       }
-      navigate('/');
     }
   };
 

@@ -15,21 +15,25 @@ import jwtDecode from 'jwt-decode';
 import {User} from './types';
 import NotFound from './pages/notFound/NotFound';
 
+
 export const AuthContext =
-  React.createContext<{user?: User, setUser?:(user: User) => void}>({});
+  React.createContext<{
+    user?: User,
+    setUser:(user?: User) => void
+        }>({setUser: () => console.error('no setuser')});
 
 const AppRoute = () => {
-  const token = localStorage.getItem('token');
-  const tokenDecode = token ? jwtDecode(token) as any : null;
-  // Change to Type Token
+  const token = localStorage.getItem('lysandeLocal');
+  const tokenDecode = token ? jwtDecode(token) as User : null;
   const [user, setUser] = useState<User | undefined>(
     tokenDecode ?
-    {userId: tokenDecode.user_id} : undefined,
+    {...tokenDecode} : undefined,
   );
-  if (token) {
-    return (
-      <AuthContext.Provider value={{user, setUser}} >
-        <Router>
+  return (
+    <AuthContext.Provider value={{user, setUser}}>
+      <Router>
+        {
+          token ?
           <Routes>
             <Route path='/pj' element={<Layout><Pj /></Layout>} />
             <Route path='/pj/:id' element={<Layout><DetailPj /></Layout>} />
@@ -47,14 +51,12 @@ const AppRoute = () => {
             <Route path='/map' element={<Layout><MapPage /></Layout>} />
             <Route path='/' element={<Layout><Players /></Layout>} />
             <Route path='*' element={<Layout><NotFound /></Layout>} />
-          </Routes>
-        </Router>
-      </AuthContext.Provider>
-
-    );
-  } else {
-    return <Login setUser={setUser}/>;
-  }
+          </Routes>:
+          <Login />
+        }
+      </Router>
+    </AuthContext.Provider>
+  );
 };
 
 export default AppRoute;

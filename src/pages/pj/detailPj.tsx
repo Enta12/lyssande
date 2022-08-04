@@ -1,18 +1,20 @@
 import {useNavigate, useParams} from 'react-router-dom';
 import DetailPjCard from '../../components/detailPjCard';
 import Title from '../../components/title';
-import React, {useState, useEffect} from 'react';
-import axios from '../../api/axios';
+import React, {useState, useEffect, useContext} from 'react';
+import api from '../../api/axios';
 import {PjType} from '../../types';
+import {AuthContext} from '../../AppRoute';
 
 const DetailPj = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [character, setCharacter] = useState<PjType | undefined>();
+  const {setUser} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await axios.get(`/characters/${params.id}`);
+      const res = await api(setUser).get(`/characters/${params.id}`);
       if (res.data && res.data.id) {
         setCharacter(res.data);
       } else {

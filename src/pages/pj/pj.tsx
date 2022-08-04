@@ -1,18 +1,20 @@
 import addIcon from '../../assets/add.svg';
 import PjCard from '../../components/pjCard';
-import React, {useState, useEffect} from 'react';
-import axios from '../../api/axios';
+import React, {useState, useEffect, useContext} from 'react';
+import api from '../../api/axios';
 import {PjType} from '../../types';
 import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../../AppRoute';
 
 const Pj = () => {
   const EmptyCards : JSX.Element[] = [];
   const [pjData, setPjData] = useState<PjType[]>([]);
   const navigate = useNavigate();
+  const {setUser} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await axios.get('/characters');
+      const res = await api(setUser).get('/characters');
       setPjData(res.data);
     };
     fetchData();
