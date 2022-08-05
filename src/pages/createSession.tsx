@@ -1,18 +1,30 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import {AuthContext} from '../AppRoute';
 import {ShortSelect} from '../components';
 import PjSessionSelector from '../components/pjSessionSelector';
 import PrimaryButton from '../components/primary-button';
-import {pjsMoocked, playerMoocked} from '../moockedData';
+import {User, PjType} from '../types';
+import api from '../api/axios';
 
 const CreateSession = () => {
-  const players = playerMoocked;
-  const pjs = pjsMoocked;
+  const {setUser} = useContext(AuthContext);
   const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
   const [lastQuest, setLastQuest] = useState(-1);
   const [selectedDate, setSelectedDate] = useState(0);
+  const [players, setPlayers] = useState<User[]>([]);
+  const [characters, setCharacters] = useState<PjType[]>([]);
+  useEffect(() => {
+    const fetchData = async () =>{
+      const userRes = await api(setUser).get('/users');
+      const charactersRes = await api(setUser).get('/characters');
+      setPlayers(userRes.data);
+      setCharacters(charactersRes.data);
+    };
+    fetchData();
+  }, []);
 
   const getById = (id: string) => {
-    return pjs.filter((el) => el.id === id)[0];
+    return characters?.filter((el) => el.id === id)[0];
   };
 
   const setSelectedPj = (playerIndex: number, pjID: string ) => {
@@ -63,7 +75,7 @@ const CreateSession = () => {
             setSelectedPj={setSelectedPj}
             playerIndex={index}
             key={index}
-            pjs={pjs.filter((pj) => pj.player === player.id)}
+            pjs={characters.filter((pj) => pj.player === player.id)}
             playerName={player.name} />
         );
       })}

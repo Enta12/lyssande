@@ -81,7 +81,6 @@ const AddPj = () => {
         },
         story,
       };
-      console.log('params.id', !!params.id, params.id);
       if (params.id) {
         api(setUser).put(
             '/characters',

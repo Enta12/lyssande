@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import {Local, PjType, User, WorldMap} from './types';
+import {Local, WorldMap} from './types';
 import fanghMap from './assets/maps/fangh.jpg';
 import CaladieMap from './assets/maps/caladie.jpg';
 import FrostMap from './assets/maps/frost.jpg';
@@ -39,11 +39,6 @@ export const culteMoocked : string[]= [
   'Khornettoh',
   'Slanoush',
   'Lafoune',
-];
-export const pjsMoocked : PjType[]= [
-
-];
-export const playerMoocked : User[]= [
 ];
 export const mapsMoocked : WorldMap[] = [
   {

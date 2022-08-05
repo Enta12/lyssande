@@ -40,8 +40,7 @@ const AlignmentInput = ({
         break;
     }
     if (value !== -1) {
-      console.log('hello');
-            category === 'law' ? setLaw(value) : setMoral(value);
+      category === 'law' ? setLaw(value) : setMoral(value);
     }
   };
 
@@ -80,7 +79,6 @@ type ColumnProps = {
     category: Category) => void
 }
 const Column = ({category, value, handleChange, left=false} : ColumnProps) => {
-  console.log('value', value);
   return (
     <div className={`
       flex

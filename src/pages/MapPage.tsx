@@ -2,20 +2,22 @@ import Map from '../components/map/map';
 import {mapsMoocked} from '../moockedData';
 import React, {useContext, useEffect, useState} from 'react';
 import api from '../api/axios';
-import {PjType} from '../types';
+import {PjType, User} from '../types';
 import {AuthContext} from '../AppRoute';
 
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
   const [pjData, setPjData] = useState<PjType[]>([]);
+  const [players, setPlayers] = useState<User[]>([]);
   const {setUser} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await api(setUser).get('/characters');
-      console.log(res);
-      setPjData(res.data);
+      const characterRes = await api(setUser).get('/characters');
+      const usersRes = await api(setUser).get('/users');
+      setPjData(characterRes.data);
+      setPlayers(usersRes.data);
     };
     fetchData();
   }, []);
@@ -75,6 +77,7 @@ const MapPage = () => {
         <div className="bg-darkBrown w-full h-2 rounded-b-lg"/>
       </div>
       <Map
+        players={players}
         handleSend={updatePoisitions}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}

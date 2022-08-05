@@ -1,6 +1,6 @@
 import {MouseEvent, useState, useRef, useEffect, useContext} from 'react';
-import {landsMoocked, playerMoocked, speedMoocked} from '../../moockedData';
-import {GroupData, PjType} from '../../types';
+import {landsMoocked, speedMoocked} from '../../moockedData';
+import {GroupData, PjType, User} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
@@ -10,6 +10,7 @@ import PrimaryButton from '../primary-button';
 import {AuthContext} from '../../AppRoute';
 
 type Props = {
+    players: User[];
     pjs : PjType[];
     img: string;
     mapName: string;
@@ -39,7 +40,7 @@ const formatPjToTokenData = (pj :PjType) => {
 };
 
 
-const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
+const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
   const {user} = useContext(AuthContext);
 
@@ -170,12 +171,12 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
   };
   const handleChange= (option: number) => {
     if (pjSortedByPlayer.some((selectedPj) =>
-      selectedPj === playerMoocked[option].name)) {
+      selectedPj === players[option].name)) {
       setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
-        return selectedPj !== playerMoocked[option].name;
+        return selectedPj !== players[option].name;
       }));
     } else {
-      setPjSortedByPlayer([...pjSortedByPlayer, playerMoocked[option].name]);
+      setPjSortedByPlayer([...pjSortedByPlayer, players[option].name]);
     }
   };
   const placeEntity = (
@@ -450,9 +451,9 @@ const Map = ({img, pjs, mapName, scale, handleSend}: Props) => {
       <div className='flex gap-16 mt-4 w-full'>
         <ShortSelect
           textEmpty='Filtrer par joueur'
-          options={playerMoocked.map((player) => player.name)}
+          options={players.map((player) => player.name)}
           value={pjSortedByPlayer.map((el) =>
-            playerMoocked.findIndex((player) => player.name === el))}
+            players.findIndex((player) => player.name === el))}
           handleChange={handleChange} />
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
