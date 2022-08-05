@@ -1,15 +1,12 @@
 import axios from 'axios';
 import {Token} from '../types';
 import {getToken, logout} from './auth';
-// todo
-// eslint-disable-next-line no-unused-vars
 const BASE_URL = 'https://api.lysande.pepintrie.fr';
-const BASE_URL_LOCAL = 'http://localhost:3001';
 let setUser: (user?: Token) => void | undefined;
 
 
 const instance = axios.create({
-  baseURL: BASE_URL_LOCAL,
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
