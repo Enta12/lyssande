@@ -1,27 +1,28 @@
 import jwtDecode from 'jwt-decode';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {login} from '../../api/auth';
+import {AuthContext} from '../../AppRoute';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
-import {User} from '../../types';
+import {Token} from '../../types';
 
-type Props = {
-  setUser: (user: User) => void
-}
-
-const Login = ({setUser} : Props) => {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {setUser} = useContext(AuthContext);
 
   const handleClick = async () => {
-    const res = await login(email, password);
-    if (res === 'ERR_BAD_REQUEST') {
-      console.log('LOGIN ERROR TODO');
-      return;
+    if (setUser) {
+      const token = await login(email, password, setUser);
+      if (token === 'ERR_BAD_REQUEST') {
+        console.log('LOGIN ERROR TODO');
+        return;
+      }
+      console.log(token);
+      console.log('hello', jwtDecode(token));
+      const tokenDecode = jwtDecode(token) as Token;
+      setUser({...tokenDecode});
     }
-    const tokenDecode = jwtDecode(res) as any; // Change to Type Token
-    console.log('login tokenDecode', tokenDecode);
-    setUser({userId: tokenDecode?.id});
   };
   return (
     <div className="

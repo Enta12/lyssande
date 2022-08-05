@@ -1,10 +1,12 @@
 import React from 'react';
 import Header from './header';
-import Notif from './notif';
 import Footer from './footer';
 
-const Layout = (props : {children: JSX.Element, notifMessage?: string}) => {
-  const {children, notifMessage} = props;
+type Props = {
+  Page : JSX.Element;
+}
+
+const Layout = ({Page} : Props) => {
   return (
     <div className="
         min-h-screen
@@ -16,7 +18,6 @@ const Layout = (props : {children: JSX.Element, notifMessage?: string}) => {
     ">
       <div>
         <Header />
-        {notifMessage && <Notif>{notifMessage}</Notif>}
       </div>
 
       <section className="
@@ -29,7 +30,7 @@ const Layout = (props : {children: JSX.Element, notifMessage?: string}) => {
         flex-col
         mx-40"
       >
-        {children}
+        {Page}
       </section>
       <Footer />
     </div>

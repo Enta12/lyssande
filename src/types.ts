@@ -6,7 +6,7 @@ export type PjType = {
     race: Race,
     level: number,
     positions?:{
-        coordonate : {
+        coordinates : {
             x: number,
             y: number;
         },
@@ -14,19 +14,15 @@ export type PjType = {
         group: number;
     },
     quest?: number,
-    player: number,
+    player: string,
     story: string
-    alignement: {
+    alignment: {
         moral: string,
         law: string
     },
     gold: number,
-    id: number,
+    id: string,
 };
-export type Player ={
-    name: string,
-    id: number
-}
 export type WorldMap = {
     name: string;
     mapLink: string;
@@ -82,7 +78,14 @@ export type Auth = {
     role?: string;
 }
 export type User = {
-    userId: number;
+    id: string;
+    role: 'admin' | 'gm' | 'player';
+    name: string;
+    email: string;
+}
+export type Token = {
+    userId: string;
+    role: 'admin' | 'gm' | 'player';
 }
 export type GroupData = {
     position: {

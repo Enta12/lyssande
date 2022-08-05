@@ -1,10 +1,62 @@
 import Map from '../components/map/map';
-import {pjsMoocked, mapsMoocked} from '../moockedData';
-import React, {useState} from 'react';
+import {mapsMoocked} from '../moockedData';
+import React, {useContext, useEffect, useState} from 'react';
+import api from '../api/axios';
+import {PjType, User} from '../types';
+import {AuthContext} from '../AppRoute';
 
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
+  const [pjData, setPjData] = useState<PjType[]>([]);
+  const [players, setPlayers] = useState<User[]>([]);
+  const {setUser} = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchData = async () =>{
+      const characterRes = await api(setUser).get('/characters');
+      const usersRes = await api(setUser).get('/users');
+      setPjData(characterRes.data);
+      setPlayers(usersRes.data);
+    };
+    fetchData();
+  }, []);
+
+  const updatePoisitions = (
+      newPositions: ({
+      map: string;
+      group: number;
+      x: number;
+      y: number;
+  } | undefined)[]) => {
+    const body: {
+      id: string,
+      positions: {
+        coordinates: {
+          x: number,
+          y: number,
+        }
+        group: number,
+        map: string,
+      }
+    }[] = [];
+    newPositions.forEach((el, index) => {
+      if (el) {
+        body.push({
+          id: pjData[index].id,
+          positions: {
+            coordinates: {
+              x: el.x,
+              y: el.y,
+            },
+            map: el.map,
+            group: el.group,
+          },
+        });
+      }
+    });
+    api(setUser).put('/characters', body);
+  };
   return (
     <>
       <div className="flex flex-col pb-5 w-full">
@@ -25,9 +77,11 @@ const MapPage = () => {
         <div className="bg-darkBrown w-full h-2 rounded-b-lg"/>
       </div>
       <Map
+        players={players}
+        handleSend={updatePoisitions}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
-        pjs={pjsMoocked}
+        pjs={pjData}
         mapName={mapsMoocked[mapSelected].name}
       />
     </>

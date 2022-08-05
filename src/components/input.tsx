@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface Props {
+type Props = {
     placeholder?: string;
     type: string;
     width?: string;
@@ -24,8 +24,9 @@ const Input = ({
   if (!setValueString && !setValueNumber) {
     setValue = () => console.error('no SetValue');
   } else {
-    setValue = type === 'number' ? setValueNumber ||
-    console.error : setValueString || console.error;
+    setValue = type === 'number' ?
+    setValueNumber || (() => console.error('no SetValue')):
+    setValueString || (() => console.error('no SetValue'));
   }
   return (
     <input

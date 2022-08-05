@@ -1,17 +1,26 @@
-import {MouseEvent, useState, useRef, useEffect} from 'react';
-import {landsMoocked, playerMoocked, speedMoocked} from '../../moockedData';
-import {GroupData, PjType} from '../../types';
+import {MouseEvent, useState, useRef, useEffect, useContext} from 'react';
+import {landsMoocked, speedMoocked} from '../../moockedData';
+import {GroupData, PjType, User} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
 import Token from './tokens/token';
 import ContextMenu from './contextMenu';
+import PrimaryButton from '../primary-button';
+import {AuthContext} from '../../AppRoute';
 
 type Props = {
+    players: User[];
     pjs : PjType[];
     img: string;
     mapName: string;
     scale: number;
+    handleSend: (value: ({
+      map: string,
+      group: number,
+      x: number,
+      y: number,
+    } | undefined)[]) => void;
 }
 
 type ContextMenuProps = {
@@ -23,27 +32,71 @@ type ContextMenuProps = {
 const formatPjToTokenData = (pj :PjType) => {
   if (!pj.positions) return undefined;
   return {
-    ...pj.positions.coordonate,
+    ...pj.positions.coordinates,
     map: pj.positions.map,
     showMouvement: 0,
     group: pj.positions.group,
   };
 };
 
-const Map = ({img, pjs, mapName, scale}: Props) => {
-  const mapRef = useRef<HTMLImageElement>(null);
 
+const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
+  const mapRef = useRef<HTMLImageElement>(null);
+  const {user} = useContext(AuthContext);
+
+  const [initEnd, setInitEnd] = useState(false);
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
   const [contexMenu, setContextMenu] =
     useState<ContextMenuProps | null>(null);
   const [groupsData, setGroupsData] = useState<(GroupData | undefined)[]>([]);
   const [tokenData, setTokenData] =
-    useState(pjs.map((pj) => formatPjToTokenData(pj)));
-  const [pjSortedByPlayer, setPjSortedByPlayer] = useState<number[]>([]);
+    useState<({
+      map: string;
+      showMouvement:
+      number;
+      group: number;
+      x: number;
+      y: number;
+    } | undefined)[]>([]);
+  const [playersSorted, setPlayersSorted] = useState<string[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
 
+  useEffect(() => {
+    setTokenData([...pjs.map((pj, index) => formatPjToTokenData(pj))]);
+  }, [setTokenData, pjs]);
+
+  useEffect(() => {
+    const defineGroups = (
+        pj: PjType,
+        index: number,
+        groupsDataTemp: (GroupData | undefined)[],
+    ) => {
+      if (pj.positions) {
+        if (pj.positions.group || pj.positions.group === 0) {
+          const group = groupsDataTemp[pj.positions.group];
+          if (group) {
+            group.members.push(index);
+          } else {
+            groupsDataTemp[pj.positions.group] = {
+              members: [index],
+              position: {
+                ...pj.positions.coordinates,
+                map: pj.positions.map,
+              },
+            };
+          }
+        }
+      }
+    };
+    if (!initEnd && pjs.length) {
+      const groupsDataTemps = groupsData;
+      pjs.forEach((pj, index) => defineGroups(pj, index, groupsDataTemps));
+      setGroupsData([...groupsDataTemps]);
+      setInitEnd(true);
+    }
+  }, [pjs, groupsData, setGroupsData, initEnd, setInitEnd]);
   const tokens: JSX.Element[] = [];
   const groups: JSX.Element[] = [];
   const contextMenu = {
@@ -117,12 +170,13 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     });
   };
   const handleChange= (option: number) => {
-    if (pjSortedByPlayer.some((selectedPj) => selectedPj === option)) {
-      setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
-        return selectedPj !== option;
+    if (playersSorted.some((selectedPlayer) =>
+      selectedPlayer === players[option].name)) {
+      setPlayersSorted(playersSorted.filter((selectedPlayer) => {
+        return selectedPlayer !== players[option].name;
       }));
     } else {
-      setPjSortedByPlayer([...pjSortedByPlayer, option]);
+      setPlayersSorted([...playersSorted, players[option].name]);
     }
   };
   const placeEntity = (
@@ -300,6 +354,8 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       pjs.forEach((pj, index) => {
         if (tokenData[index] && tokenData[index]?.group === -1) {
           if (tokenData[index]?.map === mapName) {
+            const player = players[
+                players.findIndex((player) => pj.player === player.id)];
             tokens[index] =
             <Token
               setIsGrouping={() => isGrouping = true}
@@ -315,9 +371,10 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
               }
               setContexMenu={(e) => openContextMenu(e, index)}
               hidden={
-                !(pjSortedByPlayer.length===0 ||
-                pjSortedByPlayer.some(
-                    (selectedPj) => selectedPj === pj.player))}
+                !(playersSorted.length===0 ||
+                playersSorted.some((playersSorted) =>
+                  playersSorted === player.name))
+              }
               pj={pjs[index]}
               key={pj.name}
               pos={tokenData[index] || {x: 0, y: 0}}
@@ -344,8 +401,8 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
-              !(pjSortedByPlayer.length===0 ||
-                pjSortedByPlayer.some(
+              !(playersSorted.length===0 ||
+                playersSorted.some(
                     (currentPlayer) =>
                       groupsData[index]?.members.some(
                           (currentMember) =>
@@ -370,12 +427,6 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
     }
   }, [height]);
 
-  /*
-  const updatePjs = () => {
-     TODO
-     Send pjSelected
-  };
-  */
   createTokens();
   return (
     <>
@@ -403,31 +454,44 @@ const Map = ({img, pjs, mapName, scale}: Props) => {
       <div className='flex gap-16 mt-4 w-full'>
         <ShortSelect
           textEmpty='Filtrer par joueur'
-          options={playerMoocked.map((player) => player.name)}
-          value={pjSortedByPlayer}
+          options={players.map((player) => player.name)}
+          value={playersSorted.map((el) =>
+            players.findIndex((player) => player.name === el))}
           handleChange={handleChange} />
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
 
         {pjs.map((pj, index) => {
-          return (
+          const player = players[
+              players.findIndex((player) => pj.player === player.id)];
+          return ( player ?
             <MapButton
               setPjDrag={() => setEntityDrag(
                   {entityId: index, group: false},
               )}
               hidden={
-                !(pjSortedByPlayer.length===0 ||
-                  pjSortedByPlayer.some(
-                      (selectedPj) => selectedPj === pj.player)) ||
+                !(playersSorted.length===0 ||
+                  playersSorted.some(
+                      (selectedPj) => selectedPj === player.name)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              key={pj.name}
+              key={index}
               name={pj.name}
               picture={pj.img}
-            />
+            /> : <></>
           );
         })}
       </div>
+      {
+        (
+          user?.role === 'admin' ||
+          user?.role === 'gm'
+        ) &&
+        <PrimaryButton
+          text='Mettre à jour les placements'
+          onClick={() => handleSend(tokenData)}
+        />
+      }
       {contexMenu !== null && <ContextMenu
         data={contextMenu}
         handleChange={handleContextMenuChange}

@@ -46,7 +46,6 @@ const InputSelect = ({
       document.removeEventListener('click', handleClickOutside, true);
     };
   }, [selectRef]);
-
   return (
     <div
       className={`
@@ -67,7 +66,7 @@ const InputSelect = ({
         }}
         className={`
           m-0
-          h-${height}
+          h-${height || '12'}
           ${isOpen? 'rounded-t-2xl' : 'rounded-2xl'}
           flex
           justify-between
@@ -77,7 +76,7 @@ const InputSelect = ({
         `}
       >
         {`${title ? `${title} : ` : ''}
-        ${(value && options[value]) || emptyValue}`}
+        ${(value!== undefined && options[value]) || emptyValue}`}
         <img
           className={isOpen?
             'rotate-180 transition-transform' :

@@ -1,19 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
+import {lawsMoocked, moralsMoocked} from '../../../moockedData';
 
 type Category = 'moral' | 'law';
 type Props = {
     width?: string;
     height?: string;
+    moral: number;
+    law: number;
+    setMoral: (newMoral: number) => void;
+    setLaw: (newLaw: number) => void;
 }
 const status = {
-  moral: ['GOOD', 'NEUTRAL', 'EVIL'],
-  law: ['LAWFUL', 'NEUTRAL', 'CHAOTIC'],
+  moral: moralsMoocked,
+  law: lawsMoocked,
 };
 
 
-const AlignmentInput = ({width= '3/4'}: Props) => {
-  const [moral, setMoral] = useState(0);
-  const [law, setLaw] = useState(0);
+const AlignmentInput = ({
+  width= '3/4', moral, law, setLaw, setMoral}
+: Props) => {
   const handleChange =
   (e: React.ChangeEvent<HTMLInputElement>, category: Category) => {
     let value = -1;
@@ -35,7 +40,7 @@ const AlignmentInput = ({width= '3/4'}: Props) => {
         break;
     }
     if (value !== -1) {
-            category === 'law' ? setLaw(value) : setMoral(value);
+      category === 'law' ? setLaw(value) : setMoral(value);
     }
   };
 
@@ -73,7 +78,6 @@ type ColumnProps = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>,
     category: Category) => void
 }
-
 const Column = ({category, value, handleChange, left=false} : ColumnProps) => {
   return (
     <div className={`
@@ -123,6 +127,7 @@ const CheckInput = ({
           value={name}
           className="
             border-swamp
+            cursor-pointer
             relative
             z-10
             border-2

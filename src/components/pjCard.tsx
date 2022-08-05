@@ -4,12 +4,12 @@ import React from 'react';
 type Props = {
     pjData: PjType;
     onClick?: (
-        index: number,
+        pjId: string,
         e: React.MouseEvent<HTMLDivElement,
         MouseEvent>) => void
     selectable?: boolean,
     suposed?: boolean,
-    selected?: boolean
+    selected?: boolean,
 }
 const PjCard = ({
   selected=false,
@@ -32,6 +32,7 @@ const PjCard = ({
       ${selectable && 'cursor-pointer hover:animate-pulse'}
       ${selected && 'animate-pulse'}
       ${suposed && !selected && 'animate-bounce'}
+      ${onClick && 'cursor-pointer'}
     `}>
       <div className="
         bg-orange
