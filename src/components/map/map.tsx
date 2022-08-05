@@ -58,7 +58,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       x: number;
       y: number;
     } | undefined)[]>([]);
-  const [pjSortedByPlayer, setPjSortedByPlayer] = useState<string[]>([]);
+  const [playersSorted, setPlayersSorted] = useState<string[]>([]);
   const [height, setHeight] = useState(mapRef?.current?.height || 0);
   const [contextValue, setContextValue] =
       useState({speed: 0, land: 0, duration: 0});
@@ -170,13 +170,13 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
     });
   };
   const handleChange= (option: number) => {
-    if (pjSortedByPlayer.some((selectedPj) =>
-      selectedPj === players[option].name)) {
-      setPjSortedByPlayer(pjSortedByPlayer.filter((selectedPj) => {
-        return selectedPj !== players[option].name;
+    if (playersSorted.some((selectedPlayer) =>
+      selectedPlayer === players[option].name)) {
+      setPlayersSorted(playersSorted.filter((selectedPlayer) => {
+        return selectedPlayer !== players[option].name;
       }));
     } else {
-      setPjSortedByPlayer([...pjSortedByPlayer, players[option].name]);
+      setPlayersSorted([...playersSorted, players[option].name]);
     }
   };
   const placeEntity = (
@@ -354,6 +354,8 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       pjs.forEach((pj, index) => {
         if (tokenData[index] && tokenData[index]?.group === -1) {
           if (tokenData[index]?.map === mapName) {
+            const player = players[
+                players.findIndex((player) => pj.player === player.id)];
             tokens[index] =
             <Token
               setIsGrouping={() => isGrouping = true}
@@ -369,9 +371,10 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
               }
               setContexMenu={(e) => openContextMenu(e, index)}
               hidden={
-                !(pjSortedByPlayer.length===0 ||
-                pjSortedByPlayer.some(
-                    (selectedPj) => selectedPj === pj.player))}
+                !(playersSorted.length===0 ||
+                playersSorted.some((playersSorted) =>
+                  playersSorted === player.name))
+              }
               pj={pjs[index]}
               key={pj.name}
               pos={tokenData[index] || {x: 0, y: 0}}
@@ -398,8 +401,8 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
             }
             setContexMenu={(e) => openContextMenu(e, index)}
             hidden={
-              !(pjSortedByPlayer.length===0 ||
-                pjSortedByPlayer.some(
+              !(playersSorted.length===0 ||
+                playersSorted.some(
                     (currentPlayer) =>
                       groupsData[index]?.members.some(
                           (currentMember) =>
@@ -452,28 +455,30 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
         <ShortSelect
           textEmpty='Filtrer par joueur'
           options={players.map((player) => player.name)}
-          value={pjSortedByPlayer.map((el) =>
+          value={playersSorted.map((el) =>
             players.findIndex((player) => player.name === el))}
           handleChange={handleChange} />
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
 
         {pjs.map((pj, index) => {
-          return (
+          const player = players[
+              players.findIndex((player) => pj.player === player.id)];
+          return ( player ?
             <MapButton
               setPjDrag={() => setEntityDrag(
                   {entityId: index, group: false},
               )}
               hidden={
-                !(pjSortedByPlayer.length===0 ||
-                  pjSortedByPlayer.some(
-                      (selectedPj) => selectedPj === pj.player)) ||
+                !(playersSorted.length===0 ||
+                  playersSorted.some(
+                      (selectedPj) => selectedPj === player.name)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
-              key={pj.name}
+              key={index}
               name={pj.name}
               picture={pj.img}
-            />
+            /> : <></>
           );
         })}
       </div>
