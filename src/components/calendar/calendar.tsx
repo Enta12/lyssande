@@ -1,9 +1,16 @@
 import HeaderCase from './headerCase';
 import Checkbox from './checkbox';
-import {PossibleDate} from '../../types';
+import {Availability, Platform} from '../../types';
 import React from 'react';
-
-type Availability = 'no' | 'yes' | 'maybe';
+import Title from '../title';
+import {ReactComponent as AvalabilityNone} from
+  '../../assets/availabilityNone.svg';
+import {ReactComponent as AvalabilityIrl} from
+  '../../assets/availabilityIrl.svg';
+import {ReactComponent as AvalabilityIrlOrIl} from
+  '../../assets/availabilityIrlOrIl.svg';
+import {ReactComponent as AvalabilityIl} from
+  '../../assets/availabilityIl.svg';
 
 const mounths = [
   'jan.',
@@ -29,64 +36,80 @@ const days = [
 ];
 
 type Props = {
-  dates: PossibleDate[];
-  availability: Availability[];
+  availabilities: Availability[];
+  setAvailability: (platform: Platform, index: number) => void;
 };
 
-const Calendar = ({dates, availability}: Props) => {
+const Calendar = ({availabilities, setAvailability}: Props) => {
   return (
-    <div
-      className='
-        py-2
-        rounded-xl
-        bg-lightBrown
-        font-bubblegum
-        text-white
-        overflow-x-auto
-        scrollbar-thin
-        w-full'
-    >
-      <table>
-        <thead>
-          <tr className='flex p-4'>
-            {<HeaderCase firstLine='DATES' />}
-            {dates.map((currentDate, index) => {
-              const day = currentDate.date?.getDay();
-              return (
-                <>
+    <>
+      <div
+        className='
+          py-2
+          rounded-xl
+          bg-lightBrown
+          font-bubblegum
+          text-white
+          overflow-x-auto
+          scrollbar-thin
+          w-full'
+      >
+        <table>
+          <thead>
+            <tr className='flex p-4'>
+              {<HeaderCase firstLine='DATES' />}
+              {availabilities.map((currentDate, index) => {
+                const day = currentDate.at.date.getDay();
+                const month = currentDate.at.date.getMonth();
+                return (
                   <HeaderCase
                     key={`HeaderCase${index}`}
-                    firstLine={`${days[day || currentDate.day || 0]} ${
-                      day ? currentDate.date?.getDate() : ''
-                    } ${day ? mounths[day] : ''} `}
-                    secondLine={`en ${currentDate.moment}`}
+                    firstLine={`${days[day || 0]} ${
+                        day ? currentDate.at.date.getDate() : ''
+                    } ${month ? mounths[month] : ''} `}
+                    secondLine={`en ${currentDate.at.moment}`}
                   />
-                </>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          <tr className='mb-4 flex p-4 bg-brown'>
-            <td className='w-40 flex flex-col justify-center items-center'>
-              {' '}
-              MES DISPO :
-            </td>
-            {availability.map((dayAvailability, index) => {
-              return (
-                <>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            <tr className='mb-4 flex p-4 bg-brown'>
+              <td className='w-40 flex flex-col justify-center items-center'>
+                {' '}
+                MES DISPO :
+              </td>
+              {availabilities.map((availability, index) => {
+                return (
                   <Checkbox
+                    onChange={
+                      (newPlatform) => setAvailability(newPlatform, index)
+                    }
                     key={`Checkbox${index}`}
-                    isEditable={true}
-                    checkboxState={dayAvailability}
+                    checkboxState={availability.platform}
                   />
-                </>
-              );
-            })}
-          </tr>
-        </tbody>
-      </table>
-    </div>
+                );
+              })}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className='absolute flex flex-col gap-1'>
+        <Title subtitle title="Légende" />
+        <div className='flex gap-3 items-center'>
+          <AvalabilityIl /> Disponible en ligne
+        </div>
+        <div className='flex gap-3 items-center'><AvalabilityIrlOrIl />
+          Disponible en ligne ou en vraie
+        </div>
+        <div className='flex gap-3 items-center'>
+          <AvalabilityIrl /> Disponible en vraie
+        </div>
+        <div className='flex gap-3 items-center'>
+          <AvalabilityNone /> Pas Disponible
+        </div>
+      </div>
+    </>
   );
 };
 
