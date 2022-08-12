@@ -27,7 +27,8 @@ const CalendarPage = () => {
       `${today.getTime() + oneMounth}`,
   );
   const initOrUpdateAvalabilitiess = useCallback((startDate: Date) => {
-    const dateEnd = new Date(+endDate);
+    const pattern = /^[0-9]+$/;
+    const dateEnd = new Date(pattern.test(endDate)? +endDate : endDate);
     const availabilities : Availability[] = [];
     let currentDate = startDate;
     while (currentDate < dateEnd) {
@@ -36,7 +37,7 @@ const CalendarPage = () => {
       currentDate = new Date(currentDate.getTime() + oneDay);
     }
     return availabilities;
-  }, [availabilitiesSave]);
+  }, [availabilitiesSave, endDate]);
   const {setUser} = useContext(AuthContext);
   const setInitialAvailability = (
       newDate: Date,

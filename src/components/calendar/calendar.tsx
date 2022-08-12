@@ -64,9 +64,9 @@ const Calendar = ({availabilities, setAvailability}: Props) => {
                 return (
                   <HeaderCase
                     key={`HeaderCase${index}`}
-                    firstLine={`${days[day || 0]} ${
-                        day ? currentDate.at.date.getDate() : ''
-                    } ${month ? mounths[month] : ''} `}
+                    firstLine={`${days[day || 0]}
+                    ${currentDate.at.date.getDate()}
+                    ${month ? mounths[month] : ''} `}
                     secondLine={`en ${currentDate.at.moment}`}
                   />
                 );
