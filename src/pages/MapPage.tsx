@@ -4,6 +4,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import api from '../api/axios';
 import {PjType, User} from '../types';
 import {AuthContext} from '../AppRoute';
+import {toast} from 'react-toastify';
 
 
 const MapPage = () => {
@@ -22,7 +23,7 @@ const MapPage = () => {
     fetchData();
   }, []);
 
-  const updatePoisitions = (
+  const updatePositions = async (
       newPositions: ({
       map: string;
       group: number;
@@ -55,7 +56,10 @@ const MapPage = () => {
         });
       }
     });
-    api(setUser).put('/characters', body);
+    const res = await api(setUser).put('/characters', body);
+    if (res.data.err) {
+      toast.error(res.data.err);
+    } else toast.success('Mise à jour réussie');
   };
   return (
     <>
@@ -78,7 +82,7 @@ const MapPage = () => {
       </div>
       <Map
         players={players}
-        handleSend={updatePoisitions}
+        handleSend={updatePositions}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
         pjs={pjData}

@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import React, {useContext, useState} from 'react';
+import {toast} from 'react-toastify';
 import {login} from '../../api/auth';
 import {AuthContext} from '../../AppRoute';
 import Input from '../../components/input';
@@ -11,15 +12,31 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const {setUser} = useContext(AuthContext);
 
+  const isEmail = () => {
+    const pattern =
+        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    return email.match(pattern);
+  };
+
   const handleClick = async () => {
+    if (!isEmail()) {
+      toast.error(
+        email ? 'L\'email n\'est pas au bon format':
+        'L\'email est obligatoire',
+      );
+      return;
+    }
+    if (!password) {
+      toast.error('Mot de passe obligatoire');
+      return;
+    }
     if (setUser) {
       const token = await login(email, password, setUser);
       if (token === 'ERR_BAD_REQUEST') {
-        console.log('LOGIN ERROR TODO');
+        toast.error('Login ou mot de passe incorrect');
         return;
       }
       console.log(token);
-      console.log('hello', jwtDecode(token));
       const tokenDecode = jwtDecode(token) as Token;
       setUser({...tokenDecode});
     }

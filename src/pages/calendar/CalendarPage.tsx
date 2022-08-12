@@ -5,6 +5,7 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Availability, Platform} from '../../types';
 import api from '../../api/axios';
 import {AuthContext} from '../../AppRoute';
+import {toast} from 'react-toastify';
 
 type AvailabilitySave = {
   platform: Platform;
@@ -92,8 +93,13 @@ const CalendarPage = () => {
     }
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
-  const onSubmit = () => {
-    api(setUser).put('/availabilities', availabilities);
+  const onSubmit = async () => {
+    const res = await api(setUser).put('/availabilities', availabilities);
+    if (res.data.err) {
+      toast.error(res.data.err);
+    } else {
+      toast.success('mise à jour réussite');
+    }
   };
   const handleChange = (newPlatForm: Platform, index: number) => {
     const availabilitiesTemp = [...availabilities];

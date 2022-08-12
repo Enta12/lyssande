@@ -14,7 +14,11 @@ const Footer = () => {
         font-bubblegum
       "
     >
-      Fait par Karen, Valentin, Baptiste, Yasmine
+      Fait par Karen, Valentin, Baptiste, Yasmine.
+      Pour toutes questions, veuillez contacter
+      <span className='text-sky-500 underline ml-1'>
+        admin.lysande@gmail.com
+      </span>
     </footer>
   );
 };

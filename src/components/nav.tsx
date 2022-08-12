@@ -15,7 +15,7 @@ const Nav = () => {
           user?.role === 'gm'
         ) &&
           <>
-            <NavLink href="/player">Joeurs</NavLink>
+            <NavLink href="/player">Joueurs</NavLink>
             <NavLink href="/fight">Combat</NavLink>
             <NavLink href="newSession">Créer une session</NavLink>
           </>

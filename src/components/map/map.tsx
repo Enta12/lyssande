@@ -488,6 +488,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
           user?.role === 'gm'
         ) &&
         <PrimaryButton
+          className='mt-4'
           text='Mettre à jour les placements'
           onClick={() => handleSend(tokenData)}
         />
