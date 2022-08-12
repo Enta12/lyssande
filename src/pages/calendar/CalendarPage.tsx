@@ -1,8 +1,18 @@
 import Title from '../../components/title';
 import Calendar from '../../components/calendar/calendar';
 import PrimaryButton from '../../components/primary-button';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {Availability, Platform} from '../../types';
+import api from '../../api/axios';
+import {AuthContext} from '../../AppRoute';
+
+type AvailabilitySave = {
+  platform: Platform;
+  at: {
+    date: number;
+    moment: 'journée' | 'soirée',
+  }
+}
 
 const oneDay = 86400000;
 const oneMounth = oneDay * 31;
@@ -10,44 +20,65 @@ const today = new Date();
 
 
 const CalendarPage = () => {
-  const setDates = useCallback((startDate: Date, endDate: Date) => {
+  const [availabilitiesSave, setAvailabilitiesSave] =
+      useState<Availability[]>([]);
+  const [availabilities, setAvailabilities] = useState<Availability[]>([]);
+  const [endDate, setEndDate] = useState<string>(
+      `${today.getTime() + oneMounth}`,
+  );
+  const setDates = useCallback((startDate: Date) => {
+    const dateEnd = new Date(+endDate);
     const availabilities : Availability[] = [];
     let currentDate = startDate;
-    while (currentDate < endDate) {
-      availabilities.push({
-        platform: currentDate.getDay() === 0 ||
-          currentDate.getDay() === 6 ? 'irl-or-online' : 'none',
-        at: {
-          date: currentDate,
-          moment: 'journée',
-        },
-      });
-      availabilities.push({
-        platform: currentDate.getDay() === 0 ||
-          currentDate.getDay() === 6 ? 'irl-or-online' : 'none',
-        at: {
-          date: currentDate,
-          moment: 'journée',
-        },
-      });
+    while (currentDate < dateEnd) {
+      availabilities.push(setInitialAvailability(currentDate, 'journée'));
+      availabilities.push(setInitialAvailability(currentDate, 'soirée'));
       currentDate = new Date(currentDate.getTime() + oneDay);
     }
     return availabilities;
-  }, []);
-  const [availabilities, setAvailabilities] =
-      useState<Availability[]>(
-          setDates(today, new Date(today.getTime() + oneMounth)));
-  const [endDate, setEndDate] = useState<string | undefined>();
-
-  const handleChange = (newPlatForm: Platform, index: number) => {
-    const availabilitiesTemp = [...availabilities];
-    availabilitiesTemp[index].platform = newPlatForm;
-    setAvailabilities(availabilitiesTemp);
+  }, [availabilitiesSave]);
+  const {setUser} = useContext(AuthContext);
+  const setInitialAvailability = (
+      newDate: Date,
+      newMoment: 'journée' | 'soirée',
+  ) => {
+    const date = new Date(newDate).setHours(0, 0, 0, 0);
+    const index = availabilitiesSave.findIndex((el) => {
+      const currentDate = el.at.date.getTime();
+      return (
+        date === currentDate &&
+        newMoment === el.at.moment
+      );
+    });
+    if (index !== -1) {
+      return availabilitiesSave[index];
+    }
+    const availabilitySet: Availability = {
+      platform: newDate.getDay() === 6 ? 'irl-or-online' : 'none',
+      at: {
+        date: newDate,
+        moment: newMoment,
+      },
+    };
+    return availabilitySet;
   };
   useEffect(() => {
-    if (endDate) {
-      const availabilitiesTemp = availabilities.filter((el) =>
-        new Date(el.at.date) < new Date(endDate));
+    const fetchData = async () =>{
+      const res = await api(setUser).get('/characters/availabilities');
+      setAvailabilitiesSave(res.data.map((el: AvailabilitySave) => ({
+        platform: el.platform,
+        at: {
+          date: new Date(+el.at.date),
+          moment: el.at.moment,
+        },
+      })));
+    };
+    fetchData();
+  }, [setAvailabilitiesSave]);
+  useEffect(() => {
+    const availabilitiesTemp = availabilities.filter((el) =>
+      new Date(el.at.date) < new Date(endDate));
+    if (availabilitiesSave.length) {
       setAvailabilities(
           [
             ...availabilitiesTemp,
@@ -55,10 +86,19 @@ const CalendarPage = () => {
               availabilitiesTemp.length - 1 > 0 ?
                 new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
                     at.date.getTime()) : today,
-              new Date(endDate)),
+            ),
           ]);
     }
   }, [endDate, setAvailabilities, setDates]);
+
+  const onSubmit = () => {
+    api(setUser).put('/availabilities', availabilities);
+  };
+  const handleChange = (newPlatForm: Platform, index: number) => {
+    const availabilitiesTemp = [...availabilities];
+    availabilitiesTemp[index].platform = newPlatForm;
+    setAvailabilities(availabilitiesTemp);
+  };
   return (
     <div className='pt-8 w-full'>
       <Title title="MES DISPONIBILITE POUR LE PROCHAIN MOIS"/>
@@ -85,7 +125,7 @@ const CalendarPage = () => {
         />
       </form>
       <div className='m-8 mb-32 flex justify-center'>
-        <PrimaryButton text={'Envoyer'} />
+        <PrimaryButton text={'Envoyer'} onClick={onSubmit} />
       </div>
 
     </div>
