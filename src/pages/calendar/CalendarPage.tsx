@@ -26,7 +26,7 @@ const CalendarPage = () => {
   const [endDate, setEndDate] = useState<string>(
       `${today.getTime() + oneMounth}`,
   );
-  const setDates = useCallback((startDate: Date) => {
+  const initOrUpdateAvalabilitiess = useCallback((startDate: Date) => {
     const dateEnd = new Date(+endDate);
     const availabilities : Availability[] = [];
     let currentDate = startDate;
@@ -82,14 +82,14 @@ const CalendarPage = () => {
       setAvailabilities(
           [
             ...availabilitiesTemp,
-            ...setDates(
+            ...initOrUpdateAvalabilitiess(
               availabilitiesTemp.length - 1 > 0 ?
                 new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
                     at.date.getTime()) : today,
             ),
           ]);
     }
-  }, [endDate, setAvailabilities, setDates]);
+  }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
   const onSubmit = () => {
     api(setUser).put('/availabilities', availabilities);
