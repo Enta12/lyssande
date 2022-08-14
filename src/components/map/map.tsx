@@ -114,7 +114,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
           `${(index+1)/2} jour${(index+1)/2>1 ? 's' : ''}` :
           `${(index+1)/2 > 0.5 ? `${Math.round((index+1)/2)}
           jour${(index+1)/2>1 ? 's' : ''} et ` : ''}
-          1 demie journée`,
+          1 demi journée`,
       ),
       value: contextValue.duration,
     },

@@ -63,7 +63,7 @@ const Player = ({userId} :Props) => {
       gap-8
     '>
       <Title title={playerSelected.name} />
-      <SubTitle title="PERSONAGES" />
+      <SubTitle title="PERSONNAGES" />
       <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
         { characters.map(
             (characterData, index) =>
