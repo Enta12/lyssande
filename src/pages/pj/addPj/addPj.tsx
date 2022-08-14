@@ -109,7 +109,7 @@ const AddPj = () => {
       justify-around
       items-center
     ">
-      <Title title="CREATIION D'UN PERSONNAGE"/>
+      <Title title="CREATION D'UN PERSONNAGE"/>
       <div className='pt-8 w-full flex justify-between mb-6'>
         <div className='
           flex
