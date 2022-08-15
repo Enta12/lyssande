@@ -142,7 +142,7 @@ const CheckInput = ({
           <div className="
             absolute
             inset-0
-            bg-transparent
+            bg-[#D9D9D9]
             border-brown
             h-6
             border-4
