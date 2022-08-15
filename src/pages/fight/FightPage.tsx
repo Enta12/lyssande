@@ -93,7 +93,7 @@ const FightPage = () => {
         turnSelected + index - lenght;
     return test;
   };
-  const supressToken = (
+  const supressElement = (
       protagonistsTemp: Protagonist[],
       fightElementDataTemp: FightPhaseData[],
       index: number,
@@ -149,7 +149,7 @@ const FightPage = () => {
       });
     }
     fightElementDataTemp.forEach((elt, index) => {
-      if (elt.protagonistA > newIndex && index !== newIndex) {
+      if (elt.protagonistA >= newIndex && index !== newIndex) {
         elt.protagonistA++;
       }
       if (elt.protagonistB === -1) {
@@ -179,7 +179,7 @@ const FightPage = () => {
         fightElementDataTemp.forEach((elt) => {
           if (elt.protagonistB === index) elt.protagonistB = -1;
         });
-        supressToken(protagonistsTemp, fightElementDataTemp, index);
+        supressElement(protagonistsTemp, fightElementDataTemp, index);
         addTurnIntoCorrectPlace(
             protagonist,
             protagonistsTemp,
@@ -189,7 +189,7 @@ const FightPage = () => {
         protagonistsTemp[index] = protagonist;
       }
     } else if (action === 'delete' && index !== undefined) {
-      supressToken(protagonistsTemp, fightElementDataTemp, index);
+      supressElement(protagonistsTemp, fightElementDataTemp, index);
     }
     setFightElementData(fightElementDataTemp);
     setProtagonistList(protagonistsTemp);
