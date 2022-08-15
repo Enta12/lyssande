@@ -3,14 +3,10 @@ import Checkbox from './checkbox';
 import {Availability, Platform} from '../../types';
 import React from 'react';
 import Title from '../title';
-import {ReactComponent as AvalabilityNone} from
-  '../../assets/availabilityNone.svg';
-import {ReactComponent as AvalabilityIrl} from
-  '../../assets/availabilityIrl.svg';
-import {ReactComponent as AvalabilityIrlOrIl} from
-  '../../assets/availabilityIrlOrIl.svg';
-import {ReactComponent as AvalabilityIl} from
-  '../../assets/availabilityIl.svg';
+import availabilityNone from '../../assets/availabilityNone.svg';
+import availabilityIrl from '../../assets/availabilityIrl.svg';
+import availabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
+import availabilityIl from '../../assets/availabilityIl.svg';
 
 const mounths = [
   'jan.',
@@ -97,16 +93,19 @@ const Calendar = ({availabilities, setAvailability}: Props) => {
       <div className='absolute flex flex-col gap-1'>
         <Title subtitle title="Légende" />
         <div className='flex gap-3 items-center'>
-          <AvalabilityIl /> Disponible en ligne
+          <img src={availabilityIl} alt="en ligne"/> Disponible en ligne
         </div>
-        <div className='flex gap-3 items-center'><AvalabilityIrlOrIl />
+        <div className='flex gap-3 items-center'>
+          <img src={availabilityIrlOrIl} alt="en ligne ou en vraie"/>
           Disponible en ligne ou en vraie
         </div>
         <div className='flex gap-3 items-center'>
-          <AvalabilityIrl /> Disponible en vraie
+          <img src={availabilityIrl} alt="en vraie"/>
+          Disponible en vraie
         </div>
         <div className='flex gap-3 items-center'>
-          <AvalabilityNone /> Pas Disponible
+          <img src={availabilityNone} alt="pas dispo"/>
+          Pas Disponible
         </div>
       </div>
     </>

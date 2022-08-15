@@ -109,13 +109,14 @@ const CalendarPage = () => {
           onChange={(e) => setEndDate(e.target.value)}
           value={endDate}
           className='
-          bg-lightBrown
-          text-white
-          p-2
-          border-4
-          border-white
-          rounded-2xl
-          w-44'
+            outline-none
+            bg-lightBrown
+            text-white
+            p-2
+            border-4
+            border-white
+            rounded-2xl
+            w-44'
           type="date"
         />
       </div>
