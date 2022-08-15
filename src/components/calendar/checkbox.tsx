@@ -26,13 +26,32 @@ const Checkbox = ({
     if (handleChange) {
       switch (checkboxState) {
         case 'none':
-          handleChange('online');
+          handleChange('irl-or-online');
           break;
         case 'online':
           handleChange('just-irl');
           break;
         case 'just-irl':
+          handleChange('none');
+          break;
+        case 'irl-or-online':
+          handleChange('online');
+          break;
+      }
+    }
+  };
+  const rightClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    if (handleChange) {
+      switch (checkboxState) {
+        case 'none':
+          handleChange('just-irl');
+          break;
+        case 'online':
           handleChange('irl-or-online');
+          break;
+        case 'just-irl':
+          handleChange('online');
           break;
         case 'irl-or-online':
           handleChange('none');
@@ -42,7 +61,10 @@ const Checkbox = ({
   };
   return (
     <td className="w-40 text-center flex justify-center">
-      <button onClick={onClick}>
+      <button
+        onClick={onClick}
+        onContextMenu={rightClick}
+      >
         <img src={checkbox[checkboxState]} alt={checkboxState}/>
       </button>
     </td>
