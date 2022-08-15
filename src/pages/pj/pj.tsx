@@ -20,7 +20,11 @@ const Pj = () => {
     fetchData();
   }, []);
 
-  for (let i = 0; i < (4 - ((pjData.length+1)%4)); i++) {
+  for (
+    let i = 0;
+    i < (4 - ((pjData.length+1)%4)) && (4 - ((pjData.length+1)%4) !== 4);
+    i++
+  ) {
     EmptyCards.push(
         <div key={i} className='
           border-dashed
@@ -32,6 +36,7 @@ const Pj = () => {
         '/>,
     );
   }
+
   return (
     <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
 
