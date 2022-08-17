@@ -25,10 +25,10 @@ const AddPj = () => {
   const [job, setJob] = useState<number | undefined>();
   const [race, setRace] = useState(0);
   const [name, setName] = useState('');
-  const [level, setLevel] = useState(1);
-  const [gold, setGold] = useState(0);
-  const [moral, setMoral] = useState(0);
-  const [law, setLaw] = useState(0);
+  const [level, setLevel] = useState<number | undefined>();
+  const [gold, setGold] = useState<number | undefined>();
+  const [moral, setMoral] = useState(1);
+  const [law, setLaw] = useState(1);
   const [story, setStory] = useState('');
 
   const {setUser} = useContext(AuthContext);
@@ -59,6 +59,8 @@ const AddPj = () => {
     if (
       name &&
       racesMoocked[race] &&
+      level &&
+      gold &&
       level > 0 &&
       level < 30 &&
       gold >= 0 &&
