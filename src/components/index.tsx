@@ -17,3 +17,4 @@ export {default as SubTitle} from './subTitle';
 export {default as TextInput} from './textInput';
 export {default as Title} from './title';
 export {default as ShortSelect} from './shortSelect';
+export {default as CheckInput} from './CheckInput';
