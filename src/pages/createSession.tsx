@@ -55,12 +55,14 @@ const CreateSession = () => {
   }, []);
 
   const filterAvailabilityByUser = () => {
-    return availabilities.filter((el) => {
+    const availabilitiesTemp = availabilities.filter((el) => {
       if (!moment.includes(el.at.moment)) return false;
       if (el.user === user?.userId) return true;
       return false;
     }).map((el) => `${days[el.at.date.getDay()]}
     ${el.at.date.getDate()} ${mounths[el.at.date.getMonth()]}`);
+    return availabilitiesTemp.filter(
+        (el, index) => availabilitiesTemp.indexOf(el) == index);
   };
   const getById = (id: string) => {
     return characters?.filter((el) => el.id === id)[0];
