@@ -7,29 +7,8 @@ import availabilityNone from '../../assets/availabilityNone.svg';
 import availabilityIrl from '../../assets/availabilityIrl.svg';
 import availabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
+import {days, mounths} from '../../moockedData';
 
-const mounths = [
-  'jan.',
-  'fev.',
-  'mars',
-  'avr.',
-  'mai',
-  'juin',
-  'juil.',
-  'aout',
-  'sept.',
-  'oct.',
-  'nov.',
-];
-const days = [
-  'Dimanche',
-  'Lundi',
-  'Mardi',
-  'Mercredi',
-  'Jeudi',
-  'Vendredi',
-  'Samedi',
-];
 
 type Props = {
   availabilities: Availability[];
