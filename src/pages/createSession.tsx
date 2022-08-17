@@ -28,7 +28,8 @@ const CreateSession = () => {
   const [selectedDate, setSelectedDate] = useState<number | undefined>(0);
   const [players, setPlayers] = useState<User[]>([]);
   const [characters, setCharacters] = useState<PjType[]>([]);
-  const [gmDates, setGmDates] = useState<string[]>([]);
+  const [gmDates, setGmDates] = useState<Date[]>([]);
+  const [gmMoments, setGmMoments] = useState<('soirée' | 'journée')[]>([]);
   const [availabilities, setAvailabilities] =
       useState<AvailabilityPerUser[]>([]);
   const [moment, setMoment] = useState<('soirée' | 'journée')[]>(
@@ -54,19 +55,32 @@ const CreateSession = () => {
     };
     fetchData();
   }, []);
-
   useEffect(() => {
-    const availabilitiesTemp = availabilities.filter((el) => {
-      if (!moment.includes(el.at.moment)) return false;
-      if (el.user === user?.userId) return true;
-      return false;
-    }).map((el) => `${days[el.at.date.getDay()]}
-    ${el.at.date.getDate()} ${mounths[el.at.date.getMonth()]}`);
+    const defineGmDate = () => {
+      return availabilities.filter((el) => {
+        if (el.user === user?.userId) return true;
+        return false;
+      }).map((el) => el.at.date);
+    };
+    const defineGmMoment = () => {
+      return MOMENT.filter((moment) => availabilities.findIndex((el) => (
+        selectedDate !== undefined &&
+        el.at.date.getTime() === gmDates[selectedDate].getTime() &&
+        el.user === user?.userId &&
+        el.at.moment === moment
+      )) !== -1);
+    };
+    const availabilitiesTemp = defineGmDate();
     if (availabilitiesTemp.length === 0) setSelectedDate(undefined);
     else if (!selectedDate) setSelectedDate(0);
     setGmDates(availabilitiesTemp.filter(
-        (el, index) => availabilitiesTemp.indexOf(el) == index));
-  }, [moment, availabilities, selectedDate]);
+        (el, index) => availabilitiesTemp.findIndex(
+            (findEl) => findEl.getTime() === el.getTime()) == index));
+    const currentMoment = defineGmMoment();
+    setGmMoments(currentMoment);
+    setMoment(currentMoment);
+  }, [availabilities, selectedDate]);
+
   const getById = (id: string) => {
     return characters?.filter((el) => el.id === id)[0];
   };
@@ -89,15 +103,17 @@ const CreateSession = () => {
           (newSelectedCharacter.quest || lastQuest ));
   };
   const handleDateChange = (value : number) => {
-    setSelectedDate(value);
+    if (value !== selectedDate) setSelectedDate(value);
   };
   const handleMomentChange = (value : number) => {
     const momentTemp = [...moment];
-    if (momentTemp.includes(MOMENT[value])) {
-      setMoment(MOMENT.filter(
-          (el, index) => moment.includes(el) && index !== value));
+    if (momentTemp.includes(gmMoments[value])) {
+      if (moment.length> 1) {
+        setMoment(gmMoments.filter(
+            (el, index) => moment.includes(el) && index !== value));
+      }
     } else {
-      momentTemp.push(MOMENT[value]);
+      momentTemp.push(gmMoments[value]);
       setMoment(momentTemp);
     };
   };
@@ -109,7 +125,7 @@ const CreateSession = () => {
         font-bubblegum
         text-brown
         items-center
-        gap-5
+        gap-2
         text-lg
       '>
         Selectionner la date
@@ -117,7 +133,8 @@ const CreateSession = () => {
           textEmpty='Aucune date'
           width='40'
           showValue
-          options={gmDates}
+          options={gmDates.map((el) => `${days[el.getDay()]}
+          ${el.getDate()} ${mounths[el.getMonth()]}`)}
           handleChange={handleDateChange}
           value={
             gmDates.length && selectedDate!== undefined ?
@@ -126,12 +143,11 @@ const CreateSession = () => {
         />
         dans la
         <ShortSelect
-          textEmpty='JAMAIS !'
           width='40'
           showValue
-          options={MOMENT}
+          options={gmMoments}
           handleChange={handleMomentChange}
-          value={moment.map((el) => MOMENT.indexOf(el))}
+          value={moment.map((el) => gmMoments.indexOf(el))}
         />
       </span>
       {players.map((player, index) => {
