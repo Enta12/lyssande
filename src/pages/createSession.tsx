@@ -25,9 +25,10 @@ const CreateSession = () => {
   const {setUser, user} = useContext(AuthContext);
   const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
   const [lastQuest, setLastQuest] = useState(-1);
-  const [selectedDate, setSelectedDate] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<number | undefined>(0);
   const [players, setPlayers] = useState<User[]>([]);
   const [characters, setCharacters] = useState<PjType[]>([]);
+  const [gmDates, setGmDates] = useState<string[]>([]);
   const [availabilities, setAvailabilities] =
       useState<AvailabilityPerUser[]>([]);
   const [moment, setMoment] = useState<('soirée' | 'journée')[]>(
@@ -54,16 +55,18 @@ const CreateSession = () => {
     fetchData();
   }, []);
 
-  const filterAvailabilityByUser = () => {
+  useEffect(() => {
     const availabilitiesTemp = availabilities.filter((el) => {
       if (!moment.includes(el.at.moment)) return false;
       if (el.user === user?.userId) return true;
       return false;
     }).map((el) => `${days[el.at.date.getDay()]}
     ${el.at.date.getDate()} ${mounths[el.at.date.getMonth()]}`);
-    return availabilitiesTemp.filter(
-        (el, index) => availabilitiesTemp.indexOf(el) == index);
-  };
+    if (availabilitiesTemp.length === 0) setSelectedDate(undefined);
+    else if (!selectedDate) setSelectedDate(0);
+    setGmDates(availabilitiesTemp.filter(
+        (el, index) => availabilitiesTemp.indexOf(el) == index));
+  }, [moment, availabilities, selectedDate]);
   const getById = (id: string) => {
     return characters?.filter((el) => el.id === id)[0];
   };
@@ -114,10 +117,11 @@ const CreateSession = () => {
           textEmpty='Aucune date'
           width='40'
           showValue
-          options={filterAvailabilityByUser()}
+          options={gmDates}
           handleChange={handleDateChange}
           value={
-            filterAvailabilityByUser().length ?[selectedDate] : []
+            gmDates.length && selectedDate!== undefined ?
+            [selectedDate] : []
           }
         />
         dans la
