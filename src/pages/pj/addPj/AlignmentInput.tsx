@@ -107,4 +107,3 @@ const Column = ({
     </div>
   );
 };
-<<<<<<< HEAD

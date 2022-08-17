@@ -61,15 +61,15 @@ const AddPj = () => {
       toast.error('Le personnage doit avoir un nom');
       return;
     }
-    if (!(level > 0)) {
+    if (level && !(level > 0)) {
       toast.error('Le niveau doit être supérieur à 0');
       return;
     }
-    if (!(level < 31)) {
+    if (level && !(level < 31)) {
       toast.error('Le niveau doit être inférieur à 31');
       return;
     }
-    if (gold < 0) {
+    if (gold && gold < 0) {
       toast.error('L\'or ne peut être négatif');
       return;
     }
