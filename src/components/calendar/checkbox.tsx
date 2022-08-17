@@ -2,11 +2,13 @@ import avalabilityNone from '../../assets/availabilityNone.svg';
 import avalabilityIrl from '../../assets/availabilityIrl.svg';
 import avalabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
 import avalabilityIl from '../../assets/availabilityIl.svg';
+import avalabilityIG from '../../assets/availabilityIG.svg';
+import avalabilityRest from '../../assets/availabilityRest.svg';
 import React from 'react';
 import {Platform} from '../../types';
 
 type Props = {
-    checkboxState: 'none' | 'online' | 'just-irl' | 'irl-or-online';
+    checkboxState: Platform;
     onChange?: (newPlatform: Platform) => void;
 }
 
@@ -15,6 +17,8 @@ const checkbox = {
   'online': avalabilityIl,
   'just-irl': avalabilityIrl,
   'irl-or-online': avalabilityIrlOrIl,
+  'rest': avalabilityRest,
+  'in-game': avalabilityIG,
 };
 
 const Checkbox = ({
@@ -61,12 +65,22 @@ const Checkbox = ({
   };
   return (
     <td className="w-40 text-center flex justify-center">
-      <button
-        onClick={onClick}
-        onContextMenu={rightClick}
-      >
-        <img src={checkbox[checkboxState]} alt={checkboxState}/>
-      </button>
+      {
+        (
+          checkboxState === 'in-game' ||
+          checkboxState === 'rest'
+        ) ?
+        <img
+          className='cursor-no-drop'
+          src={checkbox[checkboxState]}
+          alt={checkboxState}/> :
+        <button
+          onClick={onClick}
+          onContextMenu={rightClick}
+        >
+          <img src={checkbox[checkboxState]} alt={checkboxState}/>
+        </button>
+      }
     </td>
   );
 };

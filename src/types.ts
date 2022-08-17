@@ -95,7 +95,12 @@ export type GroupData = {
     members: number[];
 }
 
-export type Platform = 'none' | 'online' | 'just-irl' | 'irl-or-online';
+export type Platform = 'none' |
+                       'online' |
+                       'just-irl' |
+                       'irl-or-online' |
+                       'in-game' |
+                       'rest';
 
 export type Availability = {
     platform: Platform,

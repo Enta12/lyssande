@@ -2,8 +2,8 @@ import React from 'react';
 
 type Props = {
   checked: boolean,
-  onChange: (value: string) => void,
-  name: string,
+  onChange: () => void,
+  name?: string,
 }
 
 const CheckInput = ({
@@ -14,12 +14,12 @@ const CheckInput = ({
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!checked) {
-      handleChange(name);
+      handleChange();
     }
   };
   return (
     <div className="flex gap-5 text-swamp">
-      <div className="relative">
+      <div className="relative flex items-center">
         <input
           value={name}
           className="

@@ -17,7 +17,7 @@ type AvailabilitySave = {
 
 const oneDay = 86400000;
 const oneMounth = oneDay * 31;
-const today = new Date();
+const tomorow = new Date(new Date().getTime() + oneDay);
 
 
 const CalendarPage = () => {
@@ -25,7 +25,7 @@ const CalendarPage = () => {
       useState<Availability[]>([]);
   const [availabilities, setAvailabilities] = useState<Availability[]>([]);
   const [endDate, setEndDate] = useState<string>(
-      `${today.getTime() + oneMounth}`,
+      `${tomorow.getTime() + oneMounth}`,
   );
   const initOrUpdateAvalabilitiess = useCallback((startDate: Date) => {
     const pattern = /^[0-9]+$/;
@@ -66,7 +66,7 @@ const CalendarPage = () => {
   };
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await api(setUser).get('/characters/availabilities');
+      const res = await api(setUser).get('/users/availabilities');
       setAvailabilitiesSave(res.data.map((el: AvailabilitySave) => ({
         platform: el.platform,
         at: {
@@ -87,7 +87,7 @@ const CalendarPage = () => {
             ...initOrUpdateAvalabilitiess(
               availabilitiesTemp.length - 1 > 0 ?
                 new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
-                    at.date.getTime()) : today,
+                    at.date.getTime()) : tomorow,
             ),
           ]);
     }
@@ -132,7 +132,7 @@ const CalendarPage = () => {
           availabilities={availabilities}
         />
       </form>
-      <div className='m-8 mb-32 flex justify-center'>
+      <div className='m-8 mb-60 flex justify-center'>
         <PrimaryButton text={'Envoyer'} onClick={onSubmit} />
       </div>
 

@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
 import {AuthContext} from '../AppRoute';
-import {ShortSelect} from '../components';
+import {CheckInput, ShortSelect} from '../components';
 import PjSessionSelector from '../components/pjSessionSelector';
 import PrimaryButton from '../components/primary-button';
 import {User, PjType, Availability, Platform} from '../types';
 import api from '../api/axios';
 import {days, mounths} from '../moockedData';
+import availabilityIrl from '../assets/availabilityIrl.svg';
+import availabilityIrlOrIl from '../assets/availabilityIrlOrIl.svg';
+import availabilityIl from '../assets/availabilityIl.svg';
 
 type AvailabilitySend = {
   user: string,
@@ -32,9 +36,9 @@ const CreateSession = () => {
   const [gmMoments, setGmMoments] = useState<('soirée' | 'journée')[]>([]);
   const [availabilities, setAvailabilities] =
       useState<AvailabilityPerUser[]>([]);
-  const [moment, setMoment] = useState<('soirée' | 'journée')[]>(
-      ['soirée', 'journée'],
-  );
+  const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
+  const [gmPlatform, setGmPlatform] = useState<string[]>([]);
+  const [selectedMoment, setSelectedMoment] = useState(0);
   useEffect(() => {
     const fetchData = async () =>{
       const userRes = await api(setUser).get('/users');
@@ -43,7 +47,9 @@ const CreateSession = () => {
       setPlayers(userRes.data);
       setCharacters(charactersRes.data);
       setAvailabilities(availabilitiesRes.data.filter(
-          (el: AvailabilityPerUser) => el.platform !== 'none').map(
+          (el: AvailabilityPerUser) => el.platform !== 'none' &&
+                                       el.platform !== 'rest' &&
+                                       el.platform !== 'in-game').map(
           (el: AvailabilitySend) => ({
             user: el.user,
             at: {
@@ -55,6 +61,7 @@ const CreateSession = () => {
     };
     fetchData();
   }, []);
+
   useEffect(() => {
     const defineGmDate = () => {
       return availabilities.filter((el) => {
@@ -72,14 +79,36 @@ const CreateSession = () => {
     };
     const availabilitiesTemp = defineGmDate();
     if (availabilitiesTemp.length === 0) setSelectedDate(undefined);
-    else if (!selectedDate) setSelectedDate(0);
+    else if (selectedDate === undefined) setSelectedDate(0);
     setGmDates(availabilitiesTemp.filter(
         (el, index) => availabilitiesTemp.findIndex(
             (findEl) => findEl.getTime() === el.getTime()) == index));
-    const currentMoment = defineGmMoment();
-    setGmMoments(currentMoment);
-    setMoment(currentMoment);
-  }, [availabilities, selectedDate]);
+    const momentAvailableOfDate = defineGmMoment();
+    setGmMoments(momentAvailableOfDate);
+    if (selectedMoment === momentAvailableOfDate.length) setSelectedMoment(0);
+    setGmMoments(momentAvailableOfDate);
+    const definePlatform = () => {
+      const availabilityOfGmIndex = availabilities.findIndex((el) => {
+        return (
+          user?.userId === el.user &&
+          selectedDate !== undefined &&
+          el.at.date.getTime() === gmDates[selectedDate].getTime() &&
+          el.at.moment === momentAvailableOfDate[selectedMoment]
+        );
+      });
+      if (availabilityOfGmIndex === -1) return [];
+      else if (
+        availabilities[availabilityOfGmIndex].platform ==='irl-or-online'
+      ) {
+        return ['irl', 'online'];
+      }
+      if (availabilities[availabilityOfGmIndex].platform === 'just-irl') {
+        return ['irl'];
+      }
+      return ['online'];
+    };
+    setGmPlatform(definePlatform());
+  }, [availabilities, selectedDate, selectedMoment]);
 
   const getById = (id: string) => {
     return characters?.filter((el) => el.id === id)[0];
@@ -102,20 +131,14 @@ const CreateSession = () => {
           -1 :
           (newSelectedCharacter.quest || lastQuest ));
   };
+  const handlePlatformChange = (value: number) => {
+    if (value !== selectedPlatform) setSelectedPlatform(value);
+  };
   const handleDateChange = (value : number) => {
     if (value !== selectedDate) setSelectedDate(value);
   };
   const handleMomentChange = (value : number) => {
-    const momentTemp = [...moment];
-    if (momentTemp.includes(gmMoments[value])) {
-      if (moment.length> 1) {
-        setMoment(gmMoments.filter(
-            (el, index) => moment.includes(el) && index !== value));
-      }
-    } else {
-      momentTemp.push(gmMoments[value]);
-      setMoment(momentTemp);
-    };
+    setSelectedMoment(value);
   };
   return (
     <div className="w-full flex items-center flex-col gap-3">
@@ -128,7 +151,7 @@ const CreateSession = () => {
         gap-2
         text-lg
       '>
-        Selectionner la date
+        La partie aura lieu le
         <ShortSelect
           textEmpty='Aucune date'
           width='40'
@@ -147,8 +170,43 @@ const CreateSession = () => {
           showValue
           options={gmMoments}
           handleChange={handleMomentChange}
-          value={moment.map((el) => gmMoments.indexOf(el))}
+          value={[selectedMoment]}
         />
+      </span>
+      <span className='
+        w-full
+        flex
+        font-bubblegum
+        text-brown
+        items-center
+        gap-2
+        text-lg
+        min-h-[51px]
+      '>
+        Platforme :
+        {
+          gmPlatform.length > 1 &&
+          <ShortSelect
+            width='40'
+            showValue
+            options={gmPlatform.map(
+                (el) => el === 'irl' ? 'En vraie' : 'En ligne')}
+            handleChange={handlePlatformChange}
+            value={[selectedPlatform]}
+          />
+        }
+        {
+          gmPlatform[selectedPlatform] == 'online' &&
+          <div className='flex gap-3 items-center'>
+            <img src={availabilityIl} alt="en ligne"/>
+          </div>
+        }
+        {
+          gmPlatform[selectedPlatform] == 'irl' &&
+          <div className='flex gap-3 items-center'>
+            <img src={availabilityIrl} alt="en vraie"/>
+          </div>
+        }
       </span>
       {players.map((player, index) => {
         return (

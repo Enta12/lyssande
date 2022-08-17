@@ -100,7 +100,7 @@ const Column = ({
         <CheckInput
           key={element}
           name={element}
-          onChange={handleChange}
+          onChange={() => handleChange(element)}
           checked={index === value}
         />)}
       <input name={category} value={status[category][value]} type="hidden" />

@@ -7,6 +7,8 @@ import availabilityNone from '../../assets/availabilityNone.svg';
 import availabilityIrl from '../../assets/availabilityIrl.svg';
 import availabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
+import avalabilityIG from '../../assets/availabilityIG.svg';
+import avalabilityRest from '../../assets/availabilityRest.svg';
 import {days, mounths} from '../../moockedData';
 
 
@@ -85,6 +87,13 @@ const Calendar = ({availabilities, setAvailability}: Props) => {
         <div className='flex gap-3 items-center'>
           <img src={availabilityNone} alt="pas dispo"/>
           Pas Disponible
+        </div>
+        <div className='flex gap-3 items-center'>
+          <img src={avalabilityRest} alt="en repo"/>
+          A une partie ce jour
+        </div><div className='flex gap-3 items-center'>
+          <img src={avalabilityIG} alt="pas dispo"/>
+          A une partie à ce moment
         </div>
       </div>
     </>
