@@ -70,11 +70,10 @@ const AddPj = () => {
       return;
     }
     if (gold < 0) {
-      toast.error('L\'or ne peu être négatif');
+      toast.error('L\'or ne peut être négatif');
       return;
     }
     const body = {
-      player: 1,
       name,
       culte: culte ? culteMoocked[culte] : undefined,
       job: job ? jobsMoocked[job] : undefined,
