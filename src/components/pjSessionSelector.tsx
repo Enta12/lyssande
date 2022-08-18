@@ -1,7 +1,9 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
-import {PjType} from '../types';
+import {PjType, Platform} from '../types';
 import PjCard from './pjCard';
+import availabilityIrl from '../assets/availabilityIrl.svg';
+import availabilityIl from '../assets/availabilityIl.svg';
 
 type Props = {
     pjs: PjType[];
@@ -10,6 +12,8 @@ type Props = {
     playerIndex: number;
     setSelectedPj: (playerIndex: number, pjID: string) => void;
     quest: number;
+    disable?: boolean;
+    platform: Platform;
 }
 
 const PjSessionSelector = ({
@@ -19,6 +23,8 @@ const PjSessionSelector = ({
   selectedPj,
   setSelectedPj,
   playerIndex,
+  disable= false,
+  platform,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLInputElement>(null);
@@ -50,10 +56,11 @@ const PjSessionSelector = ({
   return (
     <div
       ref={selectRef}
-      onClick={onCardClick}
+      onClick={() => !disable && onCardClick()}
       className={`
-        ${isOpen? 'bg-darkBrown' : 'bg-brown cursor-pointer'}
-        p-4
+        ${!disable && isOpen? 'bg-darkBrown' : 'bg-brown'}
+        ${disable && !isOpen && 'bg-bladeBrown cursor-not-allowed' }
+        p-2
         w-full
         rounded-lg
         flex
@@ -69,9 +76,19 @@ const PjSessionSelector = ({
           text-white
           text-lg
           items-center"
-        onClick={() =>setIsOpen(!isOpen)}
+        onClick={() => !disable && setIsOpen(!isOpen)}
       >
-        {playerName}
+        <div className='flex gap-5 items-center'>
+          {playerName}
+          <div className='flex gap-2'>
+            {(platform === 'irl-or-online' || platform === 'just-irl') &&
+            <img src={availabilityIrl} alt="en vraie"/>
+            }
+            {(platform === 'irl-or-online' || platform === 'online') &&
+              <img src={availabilityIl} alt="en ligne"/>
+            }
+          </div>
+        </div>
         <div className="flex justify-end gap-28">
           {((selectedPj) &&
             <SelectedPj

@@ -80,17 +80,15 @@ const CalendarPage = () => {
   useEffect(() => {
     const availabilitiesTemp = availabilities.filter((el) =>
       new Date(el.at.date) < new Date(endDate));
-    if (availabilitiesSave.length) {
-      setAvailabilities(
-          [
-            ...availabilitiesTemp,
-            ...initOrUpdateAvalabilitiess(
-              availabilitiesTemp.length - 1 > 0 ?
-                new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
-                    at.date.getTime()) : tomorow,
-            ),
-          ]);
-    }
+    setAvailabilities(
+        [
+          ...availabilitiesTemp,
+          ...initOrUpdateAvalabilitiess(
+            availabilitiesTemp.length - 1 > 0 ?
+              new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
+                  at.date.getTime()) : tomorow,
+          ),
+        ]);
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
   const onSubmit = async () => {

@@ -100,14 +100,16 @@ const CreateSession = () => {
       else if (
         availabilities[availabilityOfGmIndex].platform ==='irl-or-online'
       ) {
-        return ['irl', 'online'];
+        return ['just-irl', 'online'];
       }
       if (availabilities[availabilityOfGmIndex].platform === 'just-irl') {
-        return ['irl'];
+        return ['just-irl'];
       }
       return ['online'];
     };
-    setGmPlatform(definePlatform());
+    const platFormAvailable = definePlatform();
+    setGmPlatform(platFormAvailable);
+    if (platFormAvailable.length < 2) setSelectedPlatform(0);
   }, [availabilities, selectedDate, selectedMoment]);
 
   const getById = (id: string) => {
@@ -190,7 +192,7 @@ const CreateSession = () => {
             width='40'
             showValue
             options={gmPlatform.map(
-                (el) => el === 'irl' ? 'En vraie' : 'En ligne')}
+                (el) => el === 'just-irl' ? 'En vraie' : 'En ligne')}
             handleChange={handlePlatformChange}
             value={[selectedPlatform]}
           />
@@ -202,23 +204,46 @@ const CreateSession = () => {
           </div>
         }
         {
-          gmPlatform[selectedPlatform] == 'irl' &&
+          gmPlatform[selectedPlatform] == 'just-irl' &&
           <div className='flex gap-3 items-center'>
             <img src={availabilityIrl} alt="en vraie"/>
           </div>
         }
       </span>
       {players.map((player, index) => {
-        return (
-          <PjSessionSelector
-            quest={lastQuest}
-            selectedPj={selectedPjs[index]}
-            setSelectedPj={setSelectedPj}
-            playerIndex={index}
-            key={index}
-            pjs={characters.filter((pj) => pj.player === player.id)}
-            playerName={player.name} />
-        );
+        const playerAvailability = availabilities.findIndex((el) => (
+          el.user === player.id &&
+          (
+            el.platform === gmPlatform[selectedPlatform] ||
+            gmPlatform.length === 2
+          ) &&
+          selectedDate !== undefined &&
+          el.at.date.getTime() === gmDates[selectedDate].getTime() &&
+          el.at.moment === gmMoments[selectedMoment]
+        ));
+        // TODO suppress verification player is me ?
+        if (
+          playerAvailability !== -1 &&
+          player.id !== user?.userId
+        ) {
+          return (
+            <PjSessionSelector
+              disable={
+                availabilities[playerAvailability].platform !==
+                gmPlatform[selectedPlatform] &&
+                availabilities[playerAvailability].platform !== 'irl-or-online'
+              }
+              platform={availabilities[playerAvailability].platform}
+              quest={lastQuest}
+              selectedPj={selectedPjs[index]}
+              setSelectedPj={setSelectedPj}
+              playerIndex={index}
+              key={index}
+              pjs={characters.filter((pj) => pj.player === player.id)}
+              playerName={player.name}
+            />
+          );
+        }
       })}
       <PrimaryButton text={'Create Session'} />
     </div>
