@@ -57,7 +57,9 @@ const UnfoldingCard = ({
           text-white
           text-lg
           items-center
-          gap-4"
+          gap-4
+          cursor-pointer
+          px-2"
         onClick={() => !disable && handleOpen(!isOpen)}
       >
         {header}

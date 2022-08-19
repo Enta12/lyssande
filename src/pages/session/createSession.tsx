@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {AuthContext} from '../AppRoute';
-import {ShortSelect} from '../components';
-import PjSessionSelector from '../components/pjSessionSelector';
-import PrimaryButton from '../components/primary-button';
-import {User, PjType, Availability, Platform} from '../types';
-import api from '../api/axios';
-import {days, mounths} from '../moockedData';
-import availabilityIrl from '../assets/availabilityIrl.svg';
-import availabilityIl from '../assets/availabilityIl.svg';
+import {AuthContext} from '../../AppRoute';
+import {ShortSelect} from '../../components';
+import PjSessionSelector from '../../components/pjSessionSelector';
+import PrimaryButton from '../../components/primary-button';
+import {User, PjType, Availability, Platform} from '../../types';
+import api from '../../api/axios';
+import {days, mounths} from '../../moockedData';
+import availabilityIrl from '../../assets/availabilityIrl.svg';
+import availabilityIl from '../../assets/availabilityIl.svg';
 import {toast} from 'react-toastify';
 
 type AvailabilitySend = {

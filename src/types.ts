@@ -80,7 +80,7 @@ export type User = {
     id: string;
     role: 'admin' | 'gm' | 'player';
     name: string;
-    email: string;
+    email?: string;
 }
 export type Token = {
     userId: string;
@@ -105,4 +105,15 @@ export type Platform = 'none' |
 export type Availability = {
     platform: Platform,
     at: PossibleDate,
+}
+
+export type Session = {
+    id: string;
+    date: string,
+    name?: string,
+    description?: string,
+    gm?: string,
+    characters: PjType[],
+    moment: 'journée' | 'soirée',
+    platform: 'online' | 'just-irl';
 }

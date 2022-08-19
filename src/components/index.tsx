@@ -18,3 +18,4 @@ export {default as TextInput} from './textInput';
 export {default as Title} from './title';
 export {default as ShortSelect} from './shortSelect';
 export {default as CheckInput} from './CheckInput';
+export {default as SessionCard} from './SessionCard';
