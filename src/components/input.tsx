@@ -31,6 +31,7 @@ const Input = ({
   return (
     <input
       className={`
+        outline-none
         rounded-2xl
         px-5 text-2xl
         placeholder-brown

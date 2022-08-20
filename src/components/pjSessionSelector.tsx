@@ -11,7 +11,7 @@ type Props = {
     selectedPj: string | null;
     playerIndex: number;
     setSelectedPj: (playerIndex: number, pjID: string) => void;
-    quest: number;
+    quest: string;
     disable?: boolean;
     platform: Platform;
 }

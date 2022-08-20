@@ -13,7 +13,7 @@ export type PjType = {
         map: string;
         group: number;
     },
-    quest?: number,
+    quest?: string,
     player: string,
     story: string
     alignment: {
@@ -110,7 +110,7 @@ export type Availability = {
 export type Session = {
     id: string;
     date: string,
-    name?: string,
+    title?: string,
     description?: string,
     gm?: string,
     characters: PjType[],

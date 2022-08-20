@@ -42,19 +42,24 @@ const SessionCard = ({
               src={platformIcon[data.platform].icon}
               alt={platformIcon[data.platform].alt}
             />
-            <span className='underline'>
-              {`Partie du 
-                ${sessionDate.getDate()} 
-                ${mounths[sessionDate.getMonth()]}`}
+            <span>
+              <span className='underline'>
+                {`Partie du 
+                  ${sessionDate.getDate()} 
+                  ${mounths[sessionDate.getMonth()]}
+                `}
+              </span>
+              {` en ${data.moment}`}
             </span>
+
           </div>
           <div className='text-center'>
             {
-              data.name ? `[${data.name}]` :
+              data.title ? `[ ${data.title} ]` :
               <>
                 {
                   !past ?
-                  '[Pas encore de nom]' :
+                  '[ Pas encore de nom ]' :
                   <>
                     [Sans nom]
                     <span className='text-xs ml-1'>es tu le script ?</span>
@@ -86,7 +91,7 @@ const SessionCard = ({
         >
           {data.description}
           {
-            !data.description && !past ?
+            !data.description && (!past ?
             <>
               [Pas encore de description]
               <span className='text-xs ml-1'>on va pas se spoiler !</span>
@@ -95,7 +100,7 @@ const SessionCard = ({
               [Sans description]
               <span className='text-xs ml-1'>es tu le script ?</span>
             </>
-          }
+            )}
         </p>
         <p className='font-lg p-5 text-white font-bubblegum'>
           AVEC
@@ -131,12 +136,15 @@ const SessionCard = ({
             />,
           )}
         </div>
-        <button
-          className='absolute right-2 bottom-2'
-          onClick={() => navigate(`/sessions/${data.id}`)}
-        >
-          <EditButton />
-        </button>
+        {
+          past &&
+          <button
+            className='absolute right-2 bottom-2'
+            onClick={() => navigate(`/sessions/${data.id}`)}
+          >
+            <EditButton />
+          </button>
+        }
       </div>
     </UnfoldingCard>
   );

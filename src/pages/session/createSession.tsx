@@ -29,7 +29,7 @@ type AvailabilityPerUser = Availability & {
 const CreateSession = () => {
   const {setUser, user} = useContext(AuthContext);
   const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
-  const [lastQuest, setLastQuest] = useState(-1);
+  const [lastQuest, setLastQuest] = useState('');
   const [selectedDate, setSelectedDate] = useState<number | undefined>(0);
   const [players, setPlayers] = useState<User[]>([]);
   const [characters, setCharacters] = useState<PjType[]>([]);
@@ -133,7 +133,7 @@ const CreateSession = () => {
             currentCharacter.quest !== undefined
           );
         }) ?
-          -1 :
+          '' :
           (newSelectedCharacter.quest || lastQuest ));
   };
   const handlePlatformChange = (value: number) => {
@@ -161,7 +161,7 @@ const CreateSession = () => {
       characters: selectedPjs.filter((el) => !!el),
     });
     if (res.status === 201) {
-      toast.success('La session à été créer avec succés');
+      toast.success('La partie à été créer avec succés');
       navigate('/map');
     } else toast.error(res.data.err);
   };
@@ -270,7 +270,7 @@ const CreateSession = () => {
         }
       })}
       <PrimaryButton
-        text={'Créer une session'}
+        text={'Créer une partie'}
         onClick={submit}
       />
     </div>

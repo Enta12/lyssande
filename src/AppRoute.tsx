@@ -15,6 +15,7 @@ import jwtDecode from 'jwt-decode';
 import {Token} from './types';
 import NotFound from './pages/notFound/NotFound';
 import SessionPage from './pages/session/SessionPage';
+import SessionEditPage from './pages/session/SessionEditPage';
 
 
 export const AuthContext =
@@ -44,7 +45,11 @@ const AppRoute = () => {
               <Layout Page={<AddPj />} />} />
             <Route path='/calendar' element={<Layout Page={<Calendar />} />} />
             <Route path='/map' element={<Layout Page={<MapPage />} />} />
-            <Route path='/session' element={<Layout Page={<SessionPage/>}/>}/>
+            <Route path='/sessions' element={<Layout Page={<SessionPage/>}/>}/>
+            <Route
+              path='/sessions/:id'
+              element={<Layout Page={<SessionEditPage/>}/>}
+            />
             {
               (
                 user?.role === 'gm' ||
