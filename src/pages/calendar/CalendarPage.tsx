@@ -44,9 +44,9 @@ const CalendarPage = () => {
       newDate: Date,
       newMoment: 'journée' | 'soirée',
   ) => {
-    const date = new Date(newDate).setHours(0, 0, 0, 0);
+    const date = newDate.setHours(0, 0, 0, 0);
     const index = availabilitiesSave.findIndex((el) => {
-      const currentDate = el.at.date.getTime();
+      const currentDate = el.at.date.setHours(0, 0, 0, 0);
       return (
         date === currentDate &&
         newMoment === el.at.moment
