@@ -142,7 +142,7 @@ export const days = [
   'Vendredi',
   'Samedi',
 ];
-export const mounths = [
+export const months = [
   'jan.',
   'fev.',
   'mars',

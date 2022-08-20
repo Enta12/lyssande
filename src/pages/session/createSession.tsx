@@ -7,7 +7,7 @@ import PjSessionSelector from '../../components/pjSessionSelector';
 import PrimaryButton from '../../components/primary-button';
 import {User, PjType, Availability, Platform} from '../../types';
 import api from '../../api/axios';
-import {days, mounths} from '../../moockedData';
+import {days, months} from '../../moockedData';
 import availabilityIrl from '../../assets/availabilityIrl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
 import {toast} from 'react-toastify';
@@ -183,7 +183,7 @@ const CreateSession = () => {
           width='40'
           showValue
           options={gmDates.map((el) => `${days[el.getDay()]}
-          ${el.getDate()} ${mounths[el.getMonth()]}`)}
+          ${el.getDate()} ${months[el.getMonth()]}`)}
           handleChange={handleDateChange}
           value={
             gmDates.length && selectedDate!== undefined ?

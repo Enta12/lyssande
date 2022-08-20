@@ -1,7 +1,7 @@
 import {Session, User} from '../types';
 import UnfoldingCard from './UnfoldingCard';
 import React, {useState} from 'react';
-import {mounths} from '../moockedData';
+import {months} from '../moockedData';
 import avalabilityIrl from '../assets/availabilityIrl.svg';
 import avalabilityIl from '../assets/availabilityIl.svg';
 import {ReactComponent as EditButton} from '../assets/editButton.svg';
@@ -46,7 +46,7 @@ const SessionCard = ({
               <span className='underline'>
                 {`Partie du 
                   ${sessionDate.getDate()} 
-                  ${mounths[sessionDate.getMonth()]}
+                  ${months[sessionDate.getMonth()]}
                 `}
               </span>
               {` en ${data.moment}`}

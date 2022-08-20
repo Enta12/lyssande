@@ -6,7 +6,7 @@ import {Input, PjCard, PrimaryButton, TextInput, Title} from '../../components';
 import {useNavigate, useParams} from 'react-router-dom';
 import avalabilityIrl from '../../assets/availabilityIrl.svg';
 import avalabilityIl from '../../assets/availabilityIl.svg';
-import {mounths} from '../../moockedData';
+import {months} from '../../moockedData';
 import {toast} from 'react-toastify';
 
 const platformIcon = {
@@ -66,7 +66,7 @@ const SessionEditPage = () => {
         title={session ?
           `Partie du
               ${' ' + sessionDate.getDate()}
-              ${' ' + mounths[sessionDate.getMonth()] + ' '}
+              ${' ' + months[sessionDate.getMonth()] + ' '}
               en ${session?.moment}` :
               ''
         }
