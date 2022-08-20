@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../AppRoute';
-import {CheckInput, ShortSelect} from '../components';
-import PjSessionSelector from '../components/pjSessionSelector';
-import PrimaryButton from '../components/primary-button';
-import {User, PjType, Availability, Platform} from '../types';
-import api from '../api/axios';
-import {days, mounths} from '../moockedData';
-import availabilityIrl from '../assets/availabilityIrl.svg';
-import availabilityIrlOrIl from '../assets/availabilityIrlOrIl.svg';
-import availabilityIl from '../assets/availabilityIl.svg';
+import {useNavigate} from 'react-router-dom';
+import {AuthContext} from '../../AppRoute';
+import {ShortSelect} from '../../components';
+import PjSessionSelector from '../../components/pjSessionSelector';
+import PrimaryButton from '../../components/primary-button';
+import {User, PjType, Availability, Platform} from '../../types';
+import api from '../../api/axios';
+import {days, months} from '../../moockedData';
+import availabilityIrl from '../../assets/availabilityIrl.svg';
+import availabilityIl from '../../assets/availabilityIl.svg';
+import {toast} from 'react-toastify';
 
 type AvailabilitySend = {
   user: string,
@@ -28,7 +29,7 @@ type AvailabilityPerUser = Availability & {
 const CreateSession = () => {
   const {setUser, user} = useContext(AuthContext);
   const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
-  const [lastQuest, setLastQuest] = useState(-1);
+  const [lastQuest, setLastQuest] = useState('');
   const [selectedDate, setSelectedDate] = useState<number | undefined>(0);
   const [players, setPlayers] = useState<User[]>([]);
   const [characters, setCharacters] = useState<PjType[]>([]);
@@ -39,6 +40,8 @@ const CreateSession = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
   const [gmPlatform, setGmPlatform] = useState<string[]>([]);
   const [selectedMoment, setSelectedMoment] = useState(0);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () =>{
       const userRes = await api(setUser).get('/users');
@@ -130,7 +133,7 @@ const CreateSession = () => {
             currentCharacter.quest !== undefined
           );
         }) ?
-          -1 :
+          '' :
           (newSelectedCharacter.quest || lastQuest ));
   };
   const handlePlatformChange = (value: number) => {
@@ -142,6 +145,27 @@ const CreateSession = () => {
   const handleMomentChange = (value : number) => {
     setSelectedMoment(value);
   };
+  const submit = async () => {
+    if (selectedDate === undefined) {
+      toast.error('Pas de dates selectionnés');
+      return;
+    }
+    if (!selectedPjs.some((el) => !!el)) {
+      toast.error('Veuillez selectionner au moins un personnage');
+      return;
+    }
+    const res = await api(setUser).post('/sessions', {
+      date: `${gmDates[selectedDate].getTime()}`,
+      moment: gmMoments[selectedMoment],
+      platform: gmPlatform[selectedPlatform],
+      characters: selectedPjs.filter((el) => !!el),
+    });
+    if (res.status === 201) {
+      toast.success('La partie à été créer avec succés');
+      navigate('/map');
+    } else toast.error(res.data.err);
+  };
+
   return (
     <div className="w-full flex items-center flex-col gap-3">
       <span className='
@@ -159,7 +183,7 @@ const CreateSession = () => {
           width='40'
           showValue
           options={gmDates.map((el) => `${days[el.getDay()]}
-          ${el.getDate()} ${mounths[el.getMonth()]}`)}
+          ${el.getDate()} ${months[el.getMonth()]}`)}
           handleChange={handleDateChange}
           value={
             gmDates.length && selectedDate!== undefined ?
@@ -245,7 +269,10 @@ const CreateSession = () => {
           );
         }
       })}
-      <PrimaryButton text={'Create Session'} />
+      <PrimaryButton
+        text={'Créer une partie'}
+        onClick={submit}
+      />
     </div>
   );
 };

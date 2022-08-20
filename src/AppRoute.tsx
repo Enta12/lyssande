@@ -10,10 +10,12 @@ import FightPage from './pages/fight/FightPage';
 import Player from './pages/player/player';
 import DetailPj from './pages/pj/detailPj';
 import Players from './pages/player/players';
-import CreateSession from './pages/createSession';
+import CreateSession from './pages/session/createSession';
 import jwtDecode from 'jwt-decode';
 import {Token} from './types';
 import NotFound from './pages/notFound/NotFound';
+import SessionPage from './pages/session/SessionPage';
+import SessionEditPage from './pages/session/SessionEditPage';
 
 
 export const AuthContext =
@@ -43,6 +45,11 @@ const AppRoute = () => {
               <Layout Page={<AddPj />} />} />
             <Route path='/calendar' element={<Layout Page={<Calendar />} />} />
             <Route path='/map' element={<Layout Page={<MapPage />} />} />
+            <Route path='/sessions' element={<Layout Page={<SessionPage/>}/>}/>
+            <Route
+              path='/sessions/:id'
+              element={<Layout Page={<SessionEditPage/>}/>}
+            />
             {
               (
                 user?.role === 'gm' ||

@@ -36,7 +36,6 @@ const Login = () => {
         toast.error('Login ou mot de passe incorrect');
         return;
       }
-      console.log(token);
       const tokenDecode = jwtDecode(token) as Token;
       setUser({...tokenDecode});
     }

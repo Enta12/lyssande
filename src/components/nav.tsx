@@ -7,6 +7,7 @@ const Nav = () => {
     <nav className="">
       { user?.role === 'player' && <NavLink href="/">Accueil</NavLink>}
       <NavLink href="/calendar">Calendrier</NavLink>
+      <NavLink href="/sessions">Mes parties</NavLink>
       <NavLink href="/pj">PJS</NavLink>
       <NavLink href="/map">Carte</NavLink>
       {
@@ -17,7 +18,7 @@ const Nav = () => {
           <>
             <NavLink href="/player">Joueurs</NavLink>
             <NavLink href="/fight">Combat</NavLink>
-            <NavLink href="newSession">Créer une session</NavLink>
+            <NavLink href="/newSession">Créer une partie</NavLink>
           </>
       }
     </nav>

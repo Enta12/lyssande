@@ -9,7 +9,7 @@ import availabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
 import avalabilityIG from '../../assets/availabilityIG.svg';
 import avalabilityRest from '../../assets/availabilityRest.svg';
-import {days, mounths} from '../../moockedData';
+import {days, months} from '../../moockedData';
 
 
 type Props = {
@@ -43,7 +43,7 @@ const Calendar = ({availabilities, setAvailability}: Props) => {
                     key={`HeaderCase${index}`}
                     firstLine={`${days[day || 0]}
                     ${currentDate.at.date.getDate()}
-                    ${month ? mounths[month] : ''} `}
+                    ${month ? months[month] : ''} `}
                     secondLine={`en ${currentDate.at.moment}`}
                   />
                 );

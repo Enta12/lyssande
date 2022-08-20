@@ -1,9 +1,9 @@
-import React, {useRef, useState, useEffect} from 'react';
-import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
+import React, {useState} from 'react';
 import {PjType, Platform} from '../types';
 import PjCard from './pjCard';
 import availabilityIrl from '../assets/availabilityIrl.svg';
 import availabilityIl from '../assets/availabilityIl.svg';
+import UnfoldingCard from './UnfoldingCard';
 
 type Props = {
     pjs: PjType[];
@@ -11,7 +11,7 @@ type Props = {
     selectedPj: string | null;
     playerIndex: number;
     setSelectedPj: (playerIndex: number, pjID: string) => void;
-    quest: number;
+    quest: string;
     disable?: boolean;
     platform: Platform;
 }
@@ -27,7 +27,6 @@ const PjSessionSelector = ({
   platform,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef<HTMLInputElement>(null);
   const handleClick= (
       pjIndex: string,
       e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -35,84 +34,46 @@ const PjSessionSelector = ({
     setIsOpen(false);
     e.stopPropagation();
   };
-  const onCardClick = () => {
-    setIsOpen(!isOpen);
-  };
-  useEffect(() => {
-    const onClickOutside = () => {
-      setIsOpen(false);
-    };
-    const handleClickOutside = (event: any) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [selectRef]);
   const selectedPjData = pjs.filter((pj) => pj.id === selectedPj)[0];
   return (
-    <div
-      ref={selectRef}
-      onClick={() => !disable && onCardClick()}
-      className={`
-        ${!disable && isOpen? 'bg-darkBrown' : 'bg-brown'}
-        ${disable && !isOpen && 'bg-bladeBrown cursor-not-allowed' }
-        p-2
-        w-full
-        rounded-lg
-        flex
-        flex-col
-        gap-4
-      `} >
-      <div
-        className="
-          flex
-          justify-between
-          w-full
-          font-bubblegum
-          text-white
-          text-lg
-          items-center"
-        onClick={() => !disable && setIsOpen(!isOpen)}
-      >
-        <div className='flex gap-5 items-center'>
-          {playerName}
-          <div className='flex gap-2'>
-            {(platform === 'irl-or-online' || platform === 'just-irl') &&
-            <img src={availabilityIrl} alt="en vraie"/>
-            }
-            {(platform === 'irl-or-online' || platform === 'online') &&
-              <img src={availabilityIl} alt="en ligne"/>
+    <UnfoldingCard
+      isOpen={isOpen}
+      handleOpen={setIsOpen}
+      header={
+        <div className='flex justify-between flex-1'>
+          <div className='flex items-center gap-3'>
+            {playerName}
+            <div className='flex gap-2'>
+              {(platform === 'irl-or-online' || platform === 'just-irl') &&
+                <img src={availabilityIrl} alt="en vraie"/>
+              }
+              {(platform === 'irl-or-online' || platform === 'online') &&
+                  <img src={availabilityIl} alt="en ligne"/>
+              }
+            </div>
+          </div>
+          <div className="flex justify-end gap-28">
+            {selectedPj &&
+              <SelectedPj
+                level={selectedPjData.level}
+                name={selectedPjData.name} />
             }
           </div>
         </div>
-        <div className="flex justify-end gap-28">
-          {((selectedPj) &&
-            <SelectedPj
-              level={selectedPjData.level}
-              name={selectedPjData.name} />
-          )|| ''}
-          <OpenIcon className={
-            isOpen? 'rotate-180 transition-transform' :
-            'transition-transform'}
-          />
-        </div>
+      }
+    >
+      <div className="grid grid-cols-4 grid-flow-rows gap-5 w-[62rem]">
+        {pjs.map((pjData, index) =>
+          <PjCard
+            selected={pjData.id === selectedPj}
+            suposed={quest === pjData.quest}
+            onClick={handleClick}
+            selectable key={index}
+            pjData={pjData}
+          />,
+        )}
       </div>
-      <div className={`${!isOpen && 'hidden'}`}>
-        <div className="grid grid-cols-4 grid-flow-rows gap-5 w-[62rem]">
-          {pjs.map((pjData, index) =>
-            <PjCard
-              selected={pjData.id === selectedPj}
-              suposed={quest === pjData.quest}
-              onClick={handleClick}
-              selectable key={index}
-              pjData={pjData}/>)}
-        </div>
-      </div>
-    </div>
+    </UnfoldingCard>
   );
 };
 
@@ -133,4 +94,3 @@ const SelectedPj = ({name, level}: {name: string, level: number}) => {
 
   );
 };
-
