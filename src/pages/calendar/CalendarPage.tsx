@@ -17,7 +17,7 @@ type AvailabilitySave = {
 
 const oneDay = 86400000;
 const oneMounth = oneDay * 31;
-const tomorow = new Date(new Date().getTime() + oneDay);
+const tomorrow = new Date(new Date().getTime() + oneDay);
 
 
 const CalendarPage = () => {
@@ -25,7 +25,7 @@ const CalendarPage = () => {
       useState<Availability[]>([]);
   const [availabilities, setAvailabilities] = useState<Availability[]>([]);
   const [endDate, setEndDate] = useState<string>(
-      `${tomorow.getTime() + oneMounth}`,
+      `${tomorrow.getTime() + oneMounth}`,
   );
   const initOrUpdateAvalabilitiess = useCallback((startDate: Date) => {
     const pattern = /^[0-9]+$/;
@@ -86,7 +86,7 @@ const CalendarPage = () => {
           ...initOrUpdateAvalabilitiess(
             availabilitiesTemp.length - 1 > 0 ?
               new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
-                  at.date.getTime()) : tomorow,
+                  at.date.getTime()) : tomorrow,
           ),
         ]);
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
