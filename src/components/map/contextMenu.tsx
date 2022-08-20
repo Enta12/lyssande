@@ -89,7 +89,7 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
                   pjIndex,
               )}
               className='absolute right-0 top-0'
-              text='distance isochrome ON/OFF'
+              text='distance isochrone ON/OFF'
               width='w-10/12'
               height='h-10'
               short

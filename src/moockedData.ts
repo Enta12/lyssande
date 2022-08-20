@@ -133,3 +133,26 @@ export const locals : Local[] = [
 export const moralsMoocked = ['GOOD', 'NEUTRAL', 'EVIL'];
 export const lawsMoocked = ['LAWFUL', 'NEUTRAL', 'CHAOTIC'];
 
+export const days = [
+  'Dimanche',
+  'Lundi',
+  'Mardi',
+  'Mercredi',
+  'Jeudi',
+  'Vendredi',
+  'Samedi',
+];
+export const mounths = [
+  'jan.',
+  'fev.',
+  'mars',
+  'avr.',
+  'mai',
+  'juin',
+  'juil.',
+  'aout',
+  'sept.',
+  'oct.',
+  'nov.',
+];
+

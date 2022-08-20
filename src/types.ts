@@ -67,8 +67,7 @@ export type FightPhaseData = {
     secondLocal: number;
 }
 export type PossibleDate = {
-    date?: Date,
-    day?: number,
+    date: Date,
     moment: 'soirée' | 'journée'
 }
 export type Auth = {
@@ -94,4 +93,16 @@ export type GroupData = {
         map: string,
     }
     members: number[];
+}
+
+export type Platform = 'none' |
+                       'online' |
+                       'just-irl' |
+                       'irl-or-online' |
+                       'in-game' |
+                       'rest';
+
+export type Availability = {
+    platform: Platform,
+    at: PossibleDate,
 }

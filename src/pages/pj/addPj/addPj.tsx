@@ -16,6 +16,7 @@ import {PrimaryButton} from '../../../components';
 import api from '../../../api/axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import {AuthContext} from '../../../AppRoute';
+import {toast} from 'react-toastify';
 
 // eslint-disable-next-line max-len
 const textExternCreate = 'Si vous n\'avez pas de personnage vous pouvez en créer un grâce à l\'outil disponible ';
@@ -55,47 +56,45 @@ const AddPj = () => {
     }
   }, [params]);
 
-  const saveCharacter = () => {
-    if (
-      name &&
-      racesMoocked[race] &&
-      level &&
-      gold &&
-      level > 0 &&
-      level < 30 &&
-      gold >= 0 &&
-      moral >= 0 &&
-      moral < 3 &&
-      law >= 0 &&
-      law < 3
-    ) {
-      const body = {
-        player: 1,
-        name,
-        culte: culte ? culteMoocked[culte] : undefined,
-        job: job ? jobsMoocked[job] : undefined,
-        race: racesMoocked[race],
-        level,
-        gold,
-        alignment: {
-          moral: moralsMoocked[moral],
-          law: lawsMoocked[law],
-        },
-        story,
-      };
-      if (params.id) {
-        api(setUser).put(
-            '/characters',
-            [{...body, id: params.id}],
-        );
-      } else {
-        api(setUser).post(
-            '/characters',
-            body,
-        );
-      }
-      navigate('/');
+  const saveCharacter = async () => {
+    if (!name) {
+      toast.error('Le personnage doit avoir un nom');
+      return;
     }
+    if (level && !(level > 0)) {
+      toast.error('Le niveau doit être supérieur à 0');
+      return;
+    }
+    if (level && !(level < 31)) {
+      toast.error('Le niveau doit être inférieur à 31');
+      return;
+    }
+    if (gold && gold < 0) {
+      toast.error('L\'or ne peut être négatif');
+      return;
+    }
+    const body = {
+      name,
+      culte: culte ? culteMoocked[culte] : undefined,
+      job: job ? jobsMoocked[job] : undefined,
+      race: racesMoocked[race],
+      level,
+      gold,
+      alignment: {
+        moral: moralsMoocked[moral],
+        law: lawsMoocked[law],
+      },
+      story,
+    };
+    const res = await (params.id?
+      api(setUser).put('/characters', [{...body, id: params.id}]):
+      api(setUser).post('/characters', body));
+    if (res.data.err) {
+      toast.error(res.data.err);
+      return;
+    }
+    toast.success(`${name} créé avec succés`);
+    navigate('/');
   };
 
   return (
@@ -109,7 +108,7 @@ const AddPj = () => {
       justify-around
       items-center
     ">
-      <Title title="CREATIION D'UN PERSONNAGE"/>
+      <Title title="CREATION D'UN PERSONNAGE"/>
       <div className='pt-8 w-full flex justify-between mb-6'>
         <div className='
           flex

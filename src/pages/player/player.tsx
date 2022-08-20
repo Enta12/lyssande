@@ -2,16 +2,14 @@ import PjCard from '../../components/pjCard';
 import SubTitle from '../../components/subTitle';
 import Title from '../../components/title';
 import addIcon from '../../assets/add.svg';
-import Calendar from '../../components/calendar/calendar';
-import {PossibleDate, User, PjType} from '../../types';
+// import Calendar from '../../components/calendar/calendar';
+import {User, PjType, Availability} from '../../types';
 import {useNavigate, useParams} from 'react-router-dom';
 import React, {useContext, useEffect, useState} from 'react';
 import api from '../../api/axios';
 import {AuthContext} from '../../AppRoute';
 
-type Availability = 'no' | 'yes' | 'maybe'
-const availability : Availability[] = [];
-const dates: PossibleDate[] = [];
+const availabilities : Availability[] = [];
 
 type Props = {
   userId?: string
@@ -19,16 +17,20 @@ type Props = {
 
 const setDates = () => {
   new Array(7).fill('').forEach((value, index) => {
-    dates.push({
-      day: index,
-      moment: 'journée',
+    availabilities.push({
+      at: {
+        date: new Date(),
+        moment: 'journée',
+      },
+      platform: (index === 0 || index === 6 ? 'irl-or-online' : 'none'),
     });
-    availability.push(index === 0 || index === 6 ? 'yes' : 'no');
-    dates.push({
-      day: index,
-      moment: 'soirée',
+    availabilities.push({
+      at: {
+        date: new Date(),
+        moment: 'soirée',
+      },
+      platform: (index === 0 || index === 6 ? 'irl-or-online' : 'none'),
     });
-    availability.push(index === 0 || index === 6 ? 'yes' : 'no');
   });
 };
 
@@ -61,7 +63,7 @@ const Player = ({userId} :Props) => {
       gap-8
     '>
       <Title title={playerSelected.name} />
-      <SubTitle title="PERSONAGES" />
+      <SubTitle title="PERSONNAGES" />
       <div className="grid grid-cols-4 grid-flow-rows gap-4 w-[62rem]">
         { characters.map(
             (characterData, index) =>
@@ -87,10 +89,21 @@ const Player = ({userId} :Props) => {
           </button>
         </a>
       </div>
-      <SubTitle title="DATES" />
-      <form >
-        <Calendar dates={dates} availability={availability}/>
-      </form>
+      <SubTitle title="PREFERENCES" />
+      <div className='font-bubblegum text-swamp'>
+        Bientôt disponible
+      </div>
+      {
+        /*
+        <form >
+          <Calendar
+            availabilities={availabilities}
+            setAvailability={
+              (platform: Platform, index: number) => console.log('TODO')}
+          />
+        </form>
+        */
+      }
     </div> : <></>
   );
 };

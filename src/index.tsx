@@ -3,10 +3,24 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import AppRoute from './AppRoute';
 import {createRoot} from 'react-dom/client';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
     <React.StrictMode>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
+      />
       <AppRoute />
       <div className="
         rounded-bl-full

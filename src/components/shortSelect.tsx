@@ -9,9 +9,11 @@ type Props ={
     showValue?: boolean;
     textEmpty?: string;
     handleChange: (values : number) => void
+    width?: string;
 }
 
 const ShortSelect = ({
+  width = '64',
   showValue,
   textEmpty,
   options,
@@ -40,11 +42,20 @@ const ShortSelect = ({
   return (
     <div ref={selectRef} className="relative">
       <div
-        className="flex justify-between p-1.5 bg-slate-300 w-64 rounded-lg"
+        className={`
+          flex
+          justify-between
+          p-1.5
+          bg-slate-300
+          w-${width}
+          rounded-lg`
+        }
         onClick={() =>setIsOpen(!isOpen)}
       >
         <span className='text-swamp'>
-          {showValue? options[value[0]]: textEmpty}
+          {showValue && value.length? options.filter(
+              (el, index) => value.includes(index)).reduce(
+              (a, b) => a.concat(' ', b), ''): textEmpty}
         </span>
         <OpenIcon
           className={

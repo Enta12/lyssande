@@ -1,4 +1,5 @@
 import React from 'react';
+import {CheckInput} from '../../../components';
 import {lawsMoocked, moralsMoocked} from '../../../moockedData';
 
 type Category = 'moral' | 'law';
@@ -20,9 +21,9 @@ const AlignmentInput = ({
   width= '3/4', moral, law, setLaw, setMoral}
 : Props) => {
   const handleChange =
-  (e: React.ChangeEvent<HTMLInputElement>, category: Category) => {
+  (newValue: string, category: Category) => {
     let value = -1;
-    switch (e.target.value) {
+    switch (newValue) {
       case 'GOOD':
         value=0;
         break;
@@ -59,10 +60,13 @@ const AlignmentInput = ({
         <Column
           category="moral"
           value={moral}
-          handleChange={handleChange}
+          onChange={(newValue) => handleChange(newValue, 'moral')}
           left
         />
-        <Column category="law" value={law} handleChange={handleChange}/>
+        <Column
+          category="law"
+          value={law}
+          onChange={(newValue) => handleChange(newValue, 'law')}/>
       </div>
 
     </div>
@@ -75,10 +79,14 @@ type ColumnProps = {
   left?: boolean,
   category: Category,
   value: number,
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>,
-    category: Category) => void
+  onChange: (value: string) => void
 }
-const Column = ({category, value, handleChange, left=false} : ColumnProps) => {
+const Column = ({
+  category,
+  value,
+  onChange: handleChange,
+  left=false,
+} : ColumnProps) => {
   return (
     <div className={`
       flex
@@ -92,64 +100,10 @@ const Column = ({category, value, handleChange, left=false} : ColumnProps) => {
         <CheckInput
           key={element}
           name={element}
-          handleChange={handleChange}
-          category={category}
+          onChange={() => handleChange(element)}
           checked={index === value}
         />)}
       <input name={category} value={status[category][value]} type="hidden" />
-    </div>
-  );
-};
-
-type CheckInputProps = {
-  category: Category,
-  checked: boolean,
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>, category: Category) =>
-    void,
-  name: string
-}
-
-const CheckInput = ({
-  category,
-  checked,
-  handleChange,
-  name,
-} : CheckInputProps) => {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!checked) {
-      handleChange(e, category);
-    }
-  };
-  return (
-    <div className="flex gap-5 text-swamp">
-      <div className="relative">
-        <input
-          value={name}
-          className="
-            border-swamp
-            cursor-pointer
-            relative
-            z-10
-            border-2
-            appearance-none
-            w-6
-            h-6
-            rounded-full"
-          type="checkbox"
-          onChange={(e) => onChange(e)}
-        />
-        {checked &&
-          <div className="
-            absolute
-            inset-0
-            bg-[#D9D9D9]
-            border-brown
-            h-6
-            border-4
-            rounded-full"
-          />}
-      </div>
-      {name}
     </div>
   );
 };
