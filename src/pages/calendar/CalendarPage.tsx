@@ -17,7 +17,7 @@ type AvailabilitySave = {
 
 const oneDay = 86400000;
 const oneMounth = oneDay * 31;
-const tomorrow = new Date(new Date().getTime() + oneDay);
+const tomorrow = new Date(new Date().setHours(0, 0, 0, 0) + oneDay);
 
 
 const CalendarPage = () => {
@@ -44,7 +44,7 @@ const CalendarPage = () => {
       newDate: Date,
       newMoment: 'journée' | 'soirée',
   ) => {
-    const date = new Date(newDate).setHours(0, 0, 0, 0);
+    const date = new Date(newDate).getTime();
     const index = availabilitiesSave.findIndex((el) => {
       const currentDate = el.at.date.getTime();
       return (
