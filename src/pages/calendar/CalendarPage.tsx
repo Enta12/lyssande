@@ -17,7 +17,7 @@ type AvailabilitySave = {
 
 const oneDay = 86400000;
 const oneMounth = oneDay * 31;
-const tomorrow = new Date(new Date().getTime() + oneDay);
+const tomorrow = new Date(new Date().setHours(0, 0, 0, 0) + oneDay);
 
 
 const CalendarPage = () => {
@@ -86,7 +86,7 @@ const CalendarPage = () => {
           ...initOrUpdateAvalabilitiess(
             availabilitiesTemp.length - 1 > 0 ?
               new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
-                  at.date.getTime()) : tomorrow,
+                  at.date.getTime() + oneDay) : tomorrow,
           ),
         ]);
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
