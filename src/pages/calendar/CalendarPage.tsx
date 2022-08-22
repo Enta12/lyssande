@@ -92,7 +92,14 @@ const CalendarPage = () => {
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
   const onSubmit = async () => {
-    const res = await api(setUser).put('/availabilities', availabilities);
+    const res = await api(setUser).put('/availabilities', availabilities.map(
+        (el) =>({
+          at: {
+            date: `${el.at.date.getTime()}`,
+            moment: el.at.moment,
+          },
+          platform: el.platform,
+        })));
     if (res.data.err) {
       toast.error(res.data.err);
     } else {
