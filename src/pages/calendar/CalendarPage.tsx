@@ -86,7 +86,7 @@ const CalendarPage = () => {
           ...initOrUpdateAvalabilitiess(
             availabilitiesTemp.length - 1 > 0 ?
               new Date(availabilitiesTemp[availabilitiesTemp.length - 1].
-                  at.date.getTime()) : tomorrow,
+                  at.date.getTime() + oneDay) : tomorrow,
           ),
         ]);
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
