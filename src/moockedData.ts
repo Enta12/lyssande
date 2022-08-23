@@ -52,6 +52,22 @@ export const culteMoocked : string[]= [
   'Khornettoh',
   'Slanoush',
   'Lafoune',
+  'Caddyro',
+  'Dlul',
+  'Crôm',
+  'Braav\'',
+  'Picrate',
+  'Lhamorale',
+  'Vaar\'',
+  'Oboulos',
+  'Delibeuk',
+  'Mankdebol',
+  'Peipani',
+  'Yrfoul',
+  'Fuhala',
+  'Chakhom',
+  'Bloutos',
+  'Keskonspwale',
 ];
 export const mapsMoocked : WorldMap[] = [
   {
