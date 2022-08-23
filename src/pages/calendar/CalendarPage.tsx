@@ -103,7 +103,7 @@ const CalendarPage = () => {
     if (res.data.err) {
       toast.error(res.data.err);
     } else {
-      toast.success('mise à jour réussite');
+      toast.success('mise à jour réussie');
     }
   };
   const handleChange = (newPlatForm: Platform, index: number) => {
