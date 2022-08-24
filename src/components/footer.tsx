@@ -17,7 +17,7 @@ const Footer = () => {
       Fait par Karen, Valentin, Baptiste, Yasmine.
       Pour toutes questions, veuillez contacter
       <span className='text-sky-500 underline ml-1'>
-        contact.lysande@gmail.com
+        contact.lyssande@gmail.com
       </span>
     </footer>
   );

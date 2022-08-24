@@ -1,6 +1,7 @@
 import {PjType} from '../types';
-import React from 'react';
+import React, {useContext} from 'react';
 import {ReactComponent as EditButton} from '../assets/editButton.svg';
+import {AuthContext} from '../AppRoute';
 
 type Props = {
   pjData: PjType;
@@ -8,6 +9,7 @@ type Props = {
 }
 
 const DetailPjCard = ( {pjData, onEdit} : Props) => {
+  const {user} = useContext(AuthContext);
   return (
     <div className="
       w-96
@@ -58,10 +60,13 @@ const DetailPjCard = ( {pjData, onEdit} : Props) => {
         <Field name="DATES" value="Bientôt disponible"/>
         <div className="w-full h-1 rounded-b-full bg-orange mb-10 my-4" />
       </div>
-      <EditButton
-        className='bottom-0 right-0 absolute cursor-pointer'
-        onClick={onEdit}
-      />
+      {
+        user?.userId === pjData.player &&
+        <EditButton
+          className='bottom-0 right-0 absolute cursor-pointer'
+          onClick={onEdit}
+        />
+      }
     </div>
   );
 };
