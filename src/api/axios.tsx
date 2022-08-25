@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Token} from '../types';
 import {getToken, logout} from './auth';
-const BASE_URL = 'https://api.lysande.pepintrie.fr';
+const BASE_URL = 'https://api.lyssande.pepintrie.fr';
 let setUser: (user?: Token) => void | undefined;
 
 
