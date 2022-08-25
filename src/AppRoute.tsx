@@ -25,7 +25,7 @@ export const AuthContext =
         }>({setUser: () => console.error('no setuser')});
 
 const AppRoute = () => {
-  const token = localStorage.getItem('lysandeLocal');
+  const token = localStorage.getItem('lyssandeLocal');
   const tokenDecode = token ? jwtDecode(token) as Token : null;
   const [user, setUser] = useState<Token | undefined>(
     tokenDecode ?

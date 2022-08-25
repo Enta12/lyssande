@@ -13,6 +13,6 @@ jobs:
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
           username: ${{ secrets.USERNAME }} 
           host: ${{ secrets.SERVER }} 
-          command : cd lysande && ./deploy.sh
+          command : cd lyssande && ./deploy.sh
           
     

@@ -101,7 +101,9 @@ const AddPj = () => {
       toast.error(res.data.err);
       return;
     }
-    toast.success(`${name} créé avec succés`);
+    toast.success(
+      params.id ? `${name} mis à jour avec succés` : `${name} créé avec succés`,
+    );
     navigate('/');
   };
 

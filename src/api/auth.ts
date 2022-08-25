@@ -1,7 +1,7 @@
 import {Token} from '../types';
 import api from './axios';
 
-const tokenPlace = 'lysandeLocal';
+const tokenPlace = 'lyssandeLocal';
 
 export const login = (
     email: string,
