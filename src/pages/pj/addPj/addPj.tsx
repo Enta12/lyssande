@@ -11,7 +11,7 @@ import {
   moralsMoocked,
   racesMoocked,
 } from '../../../moockedData';
-import FileInput from '../../../components/fileInput';
+// import FileInput from '../../../components/fileInput';
 import {PrimaryButton} from '../../../components';
 import api from '../../../api/axios';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -31,6 +31,7 @@ const AddPj = () => {
   const [moral, setMoral] = useState(1);
   const [law, setLaw] = useState(1);
   const [story, setStory] = useState('');
+  const [img, setImg] = useState('');
 
   const {setUser} = useContext(AuthContext);
   const params = useParams();
@@ -46,6 +47,7 @@ const AddPj = () => {
         setName(res.data.name);
         setLevel(res.data.level);
         setGold(res.data.gold);
+        setImg(res.data.img);
         setMoral(moralsMoocked.indexOf(res.data.alignment.moral));
         setLaw(lawsMoocked.indexOf(res.data.alignment.law));
         setStory(res.data.story);
@@ -88,6 +90,7 @@ const AddPj = () => {
       race: racesMoocked[race],
       level,
       gold,
+      img,
       alignment: {
         moral: moralsMoocked[moral],
         law: lawsMoocked[law],
@@ -161,7 +164,18 @@ const AddPj = () => {
             value={gold}
             setValueNumber={(newValue) => setGold(parseInt(newValue))}
           />
-          <FileInput text="PHOTO" />
+          <Input
+            placeholder="Lien de l'image"
+            type="text"
+            value={img}
+            setValueString={setImg}
+          />
+          {
+            /*
+            TODO update to file input
+            <FileInput text="PHOTO" />
+            */
+          }
         </div>
         <div className='
           flex
