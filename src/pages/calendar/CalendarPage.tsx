@@ -113,7 +113,7 @@ const CalendarPage = () => {
   };
   return (
     <div className='pt-8 w-full'>
-      <Title title="MES DISPONIBILITE POUR LE PROCHAIN MOIS"/>
+      <Title title="MES DISPONIBILITES POUR LE PROCHAIN MOIS"/>
       <div className='my-4 text-swamp font-bubblegum text-xl'>
         {'Affiché jusqu\'au : '}
         <input
