@@ -6,12 +6,14 @@ import {PjType, User} from '../types';
 import {AuthContext} from '../AppRoute';
 import {toast} from 'react-toastify';
 
+// eslint-disable-next-line max-len
+const noSaveMsg = 'Attention, vous pouvez déplacer vos tokens mais leur position n\'est pas enregistrée';
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
   const [pjData, setPjData] = useState<PjType[]>([]);
   const [players, setPlayers] = useState<User[]>([]);
-  const {setUser} = useContext(AuthContext);
+  const {setUser, user} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () =>{
@@ -63,6 +65,12 @@ const MapPage = () => {
   };
   return (
     <>
+      {
+        user?.role === 'player' &&
+        <p className='m-4 font-bold text-darkBrown text-xl'>
+          {noSaveMsg}
+        </p>
+      }
       <div className="flex flex-col pb-5 w-full">
         <div className="flex w-full justify-between relative">
           {mapsMoocked.map((map, index) => {
