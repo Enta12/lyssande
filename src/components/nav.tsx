@@ -5,7 +5,7 @@ const Nav = () => {
   const {user} = useContext(AuthContext);
   return (
     <nav className="">
-      { user?.role === 'player' && <NavLink href="/">Accueil</NavLink>}
+      { user?.role === 'player' && <NavLink href="/">Mon compte</NavLink>}
       <NavLink href="/calendar">Calendrier</NavLink>
       <NavLink href="/sessions">Mes parties</NavLink>
       <NavLink href="/pj">PJS</NavLink>

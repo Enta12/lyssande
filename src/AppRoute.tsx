@@ -74,10 +74,7 @@ const AppRoute = () => {
             }
             <Route path='/' element={
               <Layout Page={
-                  user?.role === 'gm' ||
-                  user?.role === 'admin' ?
-                  <Players /> :
-                  <Player userId={user?.userId} />
+                <Player userId={user?.userId} />
               }/>
             } />
             <Route path='*' element={<Layout Page={<NotFound />} />} />
