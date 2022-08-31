@@ -77,22 +77,22 @@ const Calendar = ({availabilities, setAvailability}: Props) => {
           <img src={availabilityIl} alt="en ligne"/> Disponible en ligne
         </div>
         <div className='flex gap-3 items-center'>
-          <img src={availabilityIrlOrIl} alt="en ligne ou en vraie"/>
-          Disponible en ligne ou en vraie
+          <img src={availabilityIrlOrIl} alt="en ligne ou IRL"/>
+          Disponible en ligne ou IRL
         </div>
         <div className='flex gap-3 items-center'>
-          <img src={availabilityIrl} alt="en vraie"/>
-          Disponible en vraie
+          <img src={availabilityIrl} alt="irl"/>
+          Disponible IRL
         </div>
         <div className='flex gap-3 items-center'>
-          <img src={availabilityNone} alt="pas dispo"/>
-          Pas Disponible
+          <img src={availabilityNone} alt="non dispo"/>
+          Non Disponible
         </div>
         <div className='flex gap-3 items-center'>
-          <img src={avalabilityRest} alt="en repo"/>
+          <img src={avalabilityRest} alt="en repos"/>
           A une partie ce jour
         </div><div className='flex gap-3 items-center'>
-          <img src={avalabilityIG} alt="pas dispo"/>
+          <img src={avalabilityIG} alt="en jeu"/>
           A une partie à ce moment
         </div>
       </div>

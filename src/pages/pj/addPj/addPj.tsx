@@ -222,7 +222,7 @@ const AddPj = () => {
         </p>
       }
       <PrimaryButton
-        text="Envoyer"
+        text="Enregistrer"
         onClick={() => saveCharacter()}
       />
     </div>

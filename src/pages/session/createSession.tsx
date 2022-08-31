@@ -230,7 +230,7 @@ const CreateSession = () => {
         {
           gmPlatform[selectedPlatform] == 'just-irl' &&
           <div className='flex gap-3 items-center'>
-            <img src={availabilityIrl} alt="en vraie"/>
+            <img src={availabilityIrl} alt="IRL"/>
           </div>
         }
       </span>

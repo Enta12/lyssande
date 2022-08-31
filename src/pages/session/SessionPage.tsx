@@ -52,7 +52,7 @@ const SessionPage = () => {
               'text-gray-500' }
           `}
         >
-          Futures parties
+          Parties à venir
         </button>
       </div>
       {
