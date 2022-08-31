@@ -45,7 +45,7 @@ const PjSessionSelector = ({
             {playerName}
             <div className='flex gap-2'>
               {(platform === 'irl-or-online' || platform === 'just-irl') &&
-                <img src={availabilityIrl} alt="en vraie"/>
+                <img src={availabilityIrl} alt="IRL"/>
               }
               {(platform === 'irl-or-online' || platform === 'online') &&
                   <img src={availabilityIl} alt="en ligne"/>

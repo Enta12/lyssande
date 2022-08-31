@@ -138,7 +138,7 @@ const CalendarPage = () => {
         />
       </form>
       <div className='m-8 mb-60 flex justify-center'>
-        <PrimaryButton text={'Envoyer'} onClick={onSubmit} />
+        <PrimaryButton text='Enregistrer' onClick={onSubmit} />
       </div>
 
     </div>

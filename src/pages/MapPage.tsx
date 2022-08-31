@@ -7,7 +7,7 @@ import {AuthContext} from '../AppRoute';
 import {toast} from 'react-toastify';
 
 // eslint-disable-next-line max-len
-const noSaveMsg = 'Attention, vous pouvez déplacer vos tokens mais leur position n\'est pas enregistrée';
+const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens mais leur position n\'est pas enregistrée';
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
