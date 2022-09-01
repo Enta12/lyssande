@@ -6,10 +6,11 @@ interface Props {
     height?: string;
     options: string[];
     title?: string;
-    handleChange: (value: number) => void;
+    handleChange: (value?: number) => void;
     value?: number;
     className?: string;
     emptyValue?: string;
+    canBeEmpty?: boolean;
 }
 
 const InputSelect = ({
@@ -21,12 +22,13 @@ const InputSelect = ({
   handleChange,
   value,
   emptyValue = '',
+  canBeEmpty = false,
 } : Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
   const selectAnOption = (
       e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-      index: number,
+      index?: number,
   ) => {
     e.stopPropagation();
     setIsOpen(false);
@@ -95,7 +97,8 @@ const InputSelect = ({
           name={option || emptyValue}
           display={isOpen}
           selectAnOption={(e) => {
-            selectAnOption(e, index);
+            if (canBeEmpty && index === value) selectAnOption(e, undefined);
+            else selectAnOption(e, index);
           }}
         />)}
       </div>
