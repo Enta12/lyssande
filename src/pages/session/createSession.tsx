@@ -238,6 +238,7 @@ const CreateSession = () => {
         const playerAvailability = availabilities.findIndex((el) => (
           el.user === player.id &&
           (
+            el.platform === 'irl-or-online' ||
             el.platform === gmPlatform[selectedPlatform] ||
             gmPlatform.length === 2
           ) &&
