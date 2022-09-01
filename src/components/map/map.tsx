@@ -459,7 +459,16 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
             players.findIndex((player) => player.id === el))}
           handleChange={handleChange} />
       </div>
-      <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
+      <div className='
+        flex
+        flex-wrap
+        gap-16
+        mt-4
+        w-full
+        pb-5
+        pl-5
+        min-h-[100px]
+      '>
 
         {pjs.map((pj, index) => {
           const player = players[
