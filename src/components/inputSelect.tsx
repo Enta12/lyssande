@@ -10,7 +10,6 @@ interface Props {
     value?: number;
     className?: string;
     emptyValue?: string;
-    canBeEmpty?: boolean;
 }
 
 const InputSelect = ({
@@ -22,7 +21,6 @@ const InputSelect = ({
   handleChange,
   value,
   emptyValue = '',
-  canBeEmpty = false,
 } : Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -97,8 +95,7 @@ const InputSelect = ({
           name={option || emptyValue}
           display={isOpen}
           selectAnOption={(e) => {
-            if (canBeEmpty && index === value) selectAnOption(e, undefined);
-            else selectAnOption(e, index);
+            selectAnOption(e, index === value ? undefined : index);
           }}
         />)}
       </div>

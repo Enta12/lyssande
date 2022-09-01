@@ -181,7 +181,7 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateOposing
               width='[157px]'
               height='[50px]'
               options={getOpponentList()}
-              handleChange={(protagonist) => updateOposing(protagonist || 0, false)}
+              handleChange={(protagonist) => protagonist && updateOposing(protagonist, false)}
               value={data.protagonistC}
             />
             <div className='relative w-48'>
@@ -191,7 +191,7 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateOposing
                 width='[157px]'
                 height='[50px]'
                 options={locals.map((elt) => localsTrad[elt])}
-                handleChange={(local) => updateLocal(local || 0, false)}
+                handleChange={(local) => local && updateLocal(local, false)}
                 value={data.secondLocal}
               />
             </div>
@@ -251,7 +251,7 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateOposing
           width='[157px]'
           height='[50px]'
           options={getOpponentList()}
-          handleChange={(protagonist) => updateOposing(protagonist || 0, true)}
+          handleChange={(protagonist) => protagonist && updateOposing(protagonist, true)}
           value={data.protagonistB}
         />
         <div className='relative w-48'>
@@ -261,7 +261,7 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateOposing
             width='[157px]'
             height='[50px]'
             options={locals.map((elt) => localsTrad[elt])}
-            handleChange={(local) => updateLocal(local || 0, true)}
+            handleChange={(local) => local && updateLocal(local, true)}
             value={data.local}
           />
         </div>

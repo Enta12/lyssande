@@ -144,13 +144,12 @@ const AddPj = () => {
             handleChange={(newValue) => setJob(newValue)}
             value={job}
             emptyValue='Aucun'
-            canBeEmpty
           />
           <InputSelect
             title={'Race'}
             height='16'
             options={racesMoocked}
-            handleChange={(newValue) => setRace(newValue || 0)}
+            handleChange={(newValue) => newValue && setRace(newValue)}
             value={race}
           />
           <Input
@@ -199,7 +198,6 @@ const AddPj = () => {
             handleChange={(newValue) => setCulte(newValue)}
             value={culte}
             emptyValue='Aucun'
-            canBeEmpty
           />
           <TextInput
             value={story}
