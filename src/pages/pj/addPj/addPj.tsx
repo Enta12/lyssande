@@ -149,7 +149,7 @@ const AddPj = () => {
             title={'Race'}
             height='16'
             options={racesMoocked}
-            handleChange={(newValue) => setRace(newValue)}
+            handleChange={(newValue) => newValue && setRace(newValue)}
             value={race}
           />
           <Input
