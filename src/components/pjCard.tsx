@@ -24,6 +24,7 @@ const PjCard = ({
     }} className={`
       h-96
       w-full
+      max-w-[400px]
       border-orange
       border-8
       rounded-2xl
