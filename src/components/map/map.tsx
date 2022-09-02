@@ -323,7 +323,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
             characterA.group = entityId;
             characterA.x = groupB.position.x;
             characterA.y = groupB.position.y;
-          } else if (characterB) {
+          } else if (characterB && characterA.group !== characterB.group) {
             for (let i =0; true; i++) {
               if (!groupsData[i]) {
                 characterB.group = i;
