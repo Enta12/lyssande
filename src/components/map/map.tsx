@@ -171,12 +171,12 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
   };
   const handleChange= (option: number) => {
     if (playersSorted.some((selectedPlayer) =>
-      selectedPlayer === players[option].name)) {
+      selectedPlayer === players[option].id)) {
       setPlayersSorted(playersSorted.filter((selectedPlayer) => {
-        return selectedPlayer !== players[option].name;
+        return selectedPlayer !== players[option].id;
       }));
     } else {
-      setPlayersSorted([...playersSorted, players[option].name]);
+      setPlayersSorted([...playersSorted, players[option].id]);
     }
   };
   const placeEntity = (
@@ -319,11 +319,12 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
         const characterA = tokenDataTemp[entityDrag.entityId];
         if (characterA) {
           if (group && groupB) {
+            ungroupToken(entityDrag.entityId);
             groupB.members.push(entityDrag.entityId);
             characterA.group = entityId;
             characterA.x = groupB.position.x;
             characterA.y = groupB.position.y;
-          } else if (characterB) {
+          } else if (characterB && characterA.group !== characterB.group) {
             for (let i =0; true; i++) {
               if (!groupsData[i]) {
                 characterB.group = i;
@@ -373,7 +374,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
               hidden={
                 !(playersSorted.length===0 ||
                 playersSorted.some((playersSorted) =>
-                  playersSorted === player.name))
+                  playersSorted === player.id))
               }
               pj={pjs[index]}
               key={pj.name}
@@ -456,10 +457,20 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
           textEmpty='Filtrer par joueur'
           options={players.map((player) => player.name)}
           value={playersSorted.map((el) =>
-            players.findIndex((player) => player.name === el))}
+            players.findIndex((player) => player.id === el))}
           handleChange={handleChange} />
       </div>
-      <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
+      <div className='
+        flex
+        items-center
+        flex-wrap
+        gap-8
+        mt-4
+        w-full
+        pb-5
+        pl-5
+        min-h-[100px]
+      '>
 
         {pjs.map((pj, index) => {
           const player = players[

@@ -14,13 +14,12 @@ const MapButton = ({
 }: Props) => {
   return (
     <div
-      className={
-        `relative
-        border-darkBrown
-        rounded-full
-        cursor-grab
-        ${hidden && 'hidden'}`
-      }
+      className={`
+        flex
+        flex-col
+        items-center
+        ${hidden ? 'hidden' : ''}
+      `}
     >
       <img
         onDragStart={setPjDrag}
@@ -31,6 +30,7 @@ const MapButton = ({
             border-4
             object-cover
             border-darkBrown
+            bg-lightBrown
             z-10
             relative"
         src={picture}
@@ -39,18 +39,17 @@ const MapButton = ({
       <div
         className="
           text-orange
-          p-1
-          flex
-          flex-col-reverse
-          items-center
+          p-3
+          pt-10
+          text-center
+          bottom-[40px]
+          relative
+          rounded-t-[400px]
           rounded-b-[100px]
-          left-[-23px]
-          top-[39px]
-          absolute
-          rounded-t-[200px]
+          min-w-[80px]
+          max-w-[200px]
           bg-darkBrown
-          h-16
-          w-32
+          min-h-8
           z-0"
       >
         {name}
