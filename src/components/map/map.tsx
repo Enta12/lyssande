@@ -319,6 +319,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
         const characterA = tokenDataTemp[entityDrag.entityId];
         if (characterA) {
           if (group && groupB) {
+            ungroupToken(entityDrag.entityId);
             groupB.members.push(entityDrag.entityId);
             characterA.group = entityId;
             characterA.x = groupB.position.x;
