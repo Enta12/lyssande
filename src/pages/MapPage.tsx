@@ -5,6 +5,7 @@ import api from '../api/axios';
 import {PjType, User} from '../types';
 import {AuthContext} from '../AppRoute';
 import {toast} from 'react-toastify';
+import {ReactComponent as Corner} from '../assets/reverseBorder/corner.svg';
 
 // eslint-disable-next-line max-len
 const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens mais leur position n\'est pas enregistrée';
@@ -72,7 +73,7 @@ const MapPage = () => {
         </p>
       }
       <div className="flex flex-col pb-5 w-full">
-        <div className="flex w-full justify-between relative">
+        <div className="flex w-full justify-between relative gap-2">
           {mapsMoocked.map((map, index) => {
             return (
               <MapSelector
@@ -86,7 +87,13 @@ const MapPage = () => {
             );
           })}
         </div>
-        <div className="bg-darkBrown w-full h-2 rounded-b-lg"/>
+        <div className="
+          bg-darkBrown
+          w-full
+          h-2
+          rounded-b-lg
+          min-w-[522px]"
+        />
       </div>
       <Map
         players={players}
@@ -116,36 +123,59 @@ const MapSelector = ({
   actif,
   index,
   handleChange,
-  last}: MapSelectorProps) => {
+  last,
+}: MapSelectorProps) => {
   return (
-    <div className="bg-darkBrown rounded-t-full flex">
-      {index !== 0 && <div className={`
-      bg-amber-100
-        ${actif && 'rounded-br-full'}
-        w-2
-        h-full
-        self-end
-      `} />}
-      <div
-        onClick={() => handleChange(index)}
-        className={`
-          text-lg
-          font-semibold
-          cursor-pointer
-          ${actif? 'bg-darkBrown text-orange' : 'bg-lightBrown text-darkBrown'}
-          p-3
-          rounded-t-lg`}
-      >
-        {`~ ${name} ~`}
+    <>
+      <div className='flex relative'>
+        { index !== 0 && actif &&
+          <Corner
+            className='
+              absolute
+              bottom-[-7px]
+              left-[-11px]
+              fill-darkBrown'
+          />
+        }
+        <div
+          onClick={() => handleChange(index)}
+          className={`
+            px-3
+            2xl:text-lg
+            text-base
+            font-semibold
+            cursor-pointer
+            ${actif? 'bg-darkBrown text-orange' :
+                     'bg-orange text-darkBrown'}
+            m-auto
+            rounded-t-xl
+            h-9
+            flex
+            items-center
+          `}
+        >
+          <span
+            className='
+              max-h-6
+              text-ellipsis
+              overflow-hidden'
+          >
+            <span className='hidden 2xl:inline' >~</span>
+            {name}
+            <span className='hidden 2xl:inline' >~</span>
+          </span>
+        </div>
+        { !last && actif &&
+          <Corner
+            className='
+              absolute
+              bottom-[-7px]
+              right-[-11px]
+              rotate-[102deg]
+              fill-darkBrown'
+          />
+        }
       </div>
-      {!last && <div className={`
-      bg-amber-100
-      ${actif && 'rounded-bl-full'}
-      w-2
-      h-full
-      self-end
-    `} />}
-    </div>
-
+    </>
   );
 };
