@@ -42,16 +42,16 @@ const PjCard = ({
       ">
         {pjData.name}
       </div>
-      <img
-        className="
-          min-w-full
-          h-72
-          object-cover
-          border-y-8
-          border-orange"
-        alt={pjData.name}
-        src={pjData.img}
-      />
+      <div className='h-72 border-orange border-y-8 overflow-hidden'>
+        <img
+          className="
+            min-w-full
+            min-h-full
+            object-cover"
+          alt={pjData.name}
+          src={pjData.img}
+        />
+      </div>
       <div className="flex justify-between mx-1.5 font-bubblegum">
         <span>{pjData.race}</span>
         <span>Niveau {pjData.level}</span>
