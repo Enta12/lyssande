@@ -29,15 +29,16 @@ const DetailPjCard = ( {pjData, onEdit} : Props) => {
       ">
         {pjData.name}
       </div>
-      <img
-        className="
-          min-w-full
-          h-60
-          object-cover
-          border-y-8
-          border-orange"
-        alt={pjData.name}
-        src={pjData.img}/>
+      <div className='h-60 border-orange border-y-8 overflow-hidden'>
+        <img
+          className="
+            min-w-full
+            min-h-full
+            object-cover"
+          alt={pjData.name}
+          src={pjData.img}
+        />
+      </div>
       <div
         className="
           flex
