@@ -19,7 +19,7 @@ const Players = () => {
   return (
     <div className='pt-8 w-full flex flex-col'>
       <Title title="LES JOUEURS" />
-      <div className="mt-8 grid grid-cols-3 grid-flow-rows gap-8 ">
+      <div className="mt-8 grid grid-cols-auto-fit-220 gap-4">
         {
           users &&
           users.map((user, index) =>

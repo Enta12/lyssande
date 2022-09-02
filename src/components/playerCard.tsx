@@ -10,7 +10,7 @@ const PlayerCard = ({player}: Props) => {
     <a href={`player/${player.id}`} className="
             text-lg
             h-24
-            w-80
+            w-full
             font-bubblegum
             text-white
             bg-brown

@@ -23,7 +23,8 @@ const PjCard = ({
       onClick && onClick(pjData.id, e);
     }} className={`
       h-96
-      w-56
+      w-full
+      max-w-[400px]
       border-orange
       border-8
       rounded-2xl
