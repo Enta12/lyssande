@@ -62,7 +62,13 @@ const PjSessionSelector = ({
         </div>
       }
     >
-      <div className="grid grid-cols-4 grid-flow-rows gap-5 w-[62rem]">
+      <div className="
+        grid
+        grid-cols-auto-fit-220
+        grid-flow-rows
+        gap-5
+        w-full"
+      >
         {pjs.map((pjData, index) =>
           <PjCard
             selected={pjData.id === selectedPj}
