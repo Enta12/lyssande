@@ -146,7 +146,7 @@ const MapSelector = ({
             font-semibold
             cursor-pointer
             ${actif? 'bg-darkBrown text-orange' :
-                     'bg-orange text-darkBrown'}
+                     'bg-lightBrown text-darkBrown'}
             m-auto
             rounded-t-xl
             h-9

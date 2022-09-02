@@ -461,8 +461,9 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       </div>
       <div className='
         flex
+        items-center
         flex-wrap
-        gap-16
+        gap-8
         mt-4
         w-full
         pb-5
