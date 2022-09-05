@@ -66,7 +66,7 @@ const Player = ({userId} :Props) => {
       <SubTitle title="PERSONNAGES" />
       <div className="
         grid
-        grid-cols-auto-fit-220
+        grid-cols-auto-fill-220
         grid-flow-rows
         gap-4
         w-full
