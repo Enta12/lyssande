@@ -22,7 +22,7 @@ const Pj = () => {
   return (
     <div className="
       grid
-      grid-cols-auto-fit-220
+      grid-cols-auto-fill-220
       grid-flow-rows
       w-full
       gap-4
