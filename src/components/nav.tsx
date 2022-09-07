@@ -21,6 +21,10 @@ const Nav = () => {
             <NavLink href="/newSession">Créer une partie</NavLink>
           </>
       }
+      {
+        user?.role === 'admin' &&
+        <NavLink href="/addUser">Ajouter un utilisateur</NavLink>
+      }
     </nav>
   );
 };
