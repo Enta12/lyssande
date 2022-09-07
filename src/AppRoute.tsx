@@ -16,6 +16,7 @@ import {Token} from './types';
 import NotFound from './pages/notFound/NotFound';
 import SessionPage from './pages/session/SessionPage';
 import SessionEditPage from './pages/session/SessionEditPage';
+import AddUser from './pages/player/addUser';
 
 
 export const AuthContext =
@@ -71,6 +72,15 @@ const AppRoute = () => {
                     }
                   />
                 </>
+            }
+            {
+              user?.role === 'admin' &&
+              <Route
+                path='/addUser'
+                element={
+                  <Layout Page={<AddUser />} />
+                }
+              />
             }
             <Route path='/' element={
               <Layout Page={
