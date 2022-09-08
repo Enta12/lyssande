@@ -4,6 +4,7 @@ import Title from '../../components/title';
 import React, {useState, useEffect} from 'react';
 import {PjType} from '../../types';
 import {useApi} from '../../hook';
+import {toast} from 'react-toastify';
 
 const DetailPj = () => {
   const params = useParams();
@@ -12,15 +13,19 @@ const DetailPj = () => {
   const api = useApi();
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const res = await api.get(`/characters/${params.id}`);
-      if (res.data && res.data.id) {
-        setCharacter(res.data);
-      } else {
-        navigate('/404');
-      }
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const res = await api.get(`/characters/${params.id}`);
+        if (res.data && res.data.id) {
+          setCharacter(res.data);
+        } else {
+          navigate('/404');
+        }
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Impossible de récupérer les informations du personnage');
+    }
   }, [params, setCharacter]);
 
   const handleEdit = () => {

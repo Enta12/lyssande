@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {PjType} from '../../types';
 import {useNavigate} from 'react-router-dom';
 import {useApi} from '../../hook';
+import {toast} from 'react-toastify';
 
 const Pj = () => {
   const [pjData, setPjData] = useState<PjType[]>([]);
@@ -11,11 +12,15 @@ const Pj = () => {
   const api = useApi();
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const res = await api.get('/characters');
-      setPjData(res.data);
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const res = await api.get('/characters');
+        setPjData(res.data);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Impossible de récupérer les personnages');
+    }
   }, []);
 
   return (
