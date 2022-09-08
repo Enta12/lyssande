@@ -20,7 +20,6 @@ const createPassword = (
   }
   if (activateNumber) {
     array += '01234567890123456789';
-    // On répète 2 fois les chiffres sinon ils sortent rarement
   }
   for (let i=0; i<lenght; i++) {
     password += array[Math.floor(Math.random()*array.length)];
@@ -43,6 +42,10 @@ const AddUser = () => {
         toast.error('Email pas au bon format');
         return;
       }
+      if (!name) {
+        toast.error('Nom obligatoire');
+        return;
+      }
       await api.post('/auth/signup', {
         email,
         role: roles[role],
@@ -50,8 +53,10 @@ const AddUser = () => {
         password,
       });
       toast.success(`${name} créer avec succés`);
-    } catch (error) {
-      toast.error(error);
+    } catch (error: any) {
+      if (error.name === 'ValidationError') {
+        toast.error('Un utilisateur avec ce mail existe déja');
+      } else toast.error('Erreur lors de la création de l\'utilisateur');
     }
   };
   return (

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SessionCard} from '../../components';
 import useApi from '../../hook/useApi';
 import {Session, UserInfo} from '../../types';
+import {toast} from 'react-toastify';
 
 const SessionPage = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -10,13 +11,17 @@ const SessionPage = () => {
   const api = useApi();
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const sessionRes = await api.get('/sessions');
-      const userRes = await api.get('/users');
-      setSessions(sessionRes.data);
-      setUsers(userRes.data);
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const sessionRes = await api.get('/sessions');
+        const userRes = await api.get('/users');
+        setSessions(sessionRes.data);
+        setUsers(userRes.data);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Impossible de récupérer les sessions');
+    }
   }, []);
   return (
     <div className='flex flex-col gap-3 w-full'>

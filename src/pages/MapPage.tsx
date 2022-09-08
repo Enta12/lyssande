@@ -18,10 +18,14 @@ const MapPage = () => {
 
   useEffect(() => {
     const fetchData = async () =>{
-      const characterRes = await api.get('/characters');
-      const usersRes = await api.get('/users');
-      setPjData(characterRes.data);
-      setPlayers(usersRes.data);
+      try {
+        const characterRes = await api.get('/characters');
+        const usersRes = await api.get('/users');
+        setPjData(characterRes.data);
+        setPlayers(usersRes.data);
+      } catch (error) {
+        toast.error('Impossible de récupérer les personnages');
+      }
     };
     fetchData();
   }, []);
@@ -59,10 +63,12 @@ const MapPage = () => {
         });
       }
     });
-    const res = await api.put('/characters', body);
-    if (res.data.err) {
-      toast.error(res.data.err);
-    } else toast.success('Mise à jour réussie');
+    try {
+      await api.put('/characters', body);
+      toast.error('Mise à jour réussie');
+    } catch (error) {
+      toast.error('Erreur dans la mise à jour des Utilisateurs');
+    }
   };
   return (
     <>

@@ -29,15 +29,19 @@ const SessionEditPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const sessionRes = await api.get(`/sessions/${params.id}`);
-      const userRes = await api.get('/users');
-      setSession(sessionRes.data);
-      setTitle(sessionRes.data.title || '');
-      setDescription(sessionRes.data.description || '');
-      setUsers(userRes.data);
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const sessionRes = await api.get(`/sessions/${params.id}`);
+        const userRes = await api.get('/users');
+        setSession(sessionRes.data);
+        setTitle(sessionRes.data.title || '');
+        setDescription(sessionRes.data.description || '');
+        setUsers(userRes.data);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('impossible de récupéré les infos de la partie');
+    }
   }, []);
   const sessionDate = new Date(session ? +session.date : '');
   const gm = users[users.findIndex(
