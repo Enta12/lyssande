@@ -102,8 +102,8 @@ const AddPj = () => {
         api.post('/characters', body));
       toast.success(
         params.id ?
-          `${name} mis à jour avec succés` :
-          `${name} créé avec succés`,
+          `${name} mis à jour avec succès` :
+          `${name} créé avec succès`,
       );
       navigate('/');
     } catch (error) {

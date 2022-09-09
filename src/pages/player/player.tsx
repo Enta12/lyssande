@@ -54,7 +54,7 @@ const Player = ({userId} :Props) => {
       };
       fetchData();
     } catch (error) {
-      toast.error('Impossible de recupéré les informations du joueur');
+      toast.error('Impossible de recupérer les informations du joueur');
     }
   }, []);
   return (

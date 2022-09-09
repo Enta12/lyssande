@@ -52,10 +52,10 @@ const AddUser = () => {
         name,
         password,
       });
-      toast.success(`${name} créer avec succés`);
+      toast.success(`${name} créer avec succès`);
     } catch (error: any) {
       if (error.name === 'ValidationError') {
-        toast.error('Un utilisateur avec ce mail existe déja');
+        toast.error('Un utilisateur avec ce mail existe déjà');
       } else toast.error('Erreur lors de la création de l\'utilisateur');
     }
   };

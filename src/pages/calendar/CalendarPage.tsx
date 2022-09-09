@@ -78,7 +78,7 @@ const CalendarPage = () => {
           },
         })));
       } catch (error) {
-        toast.error('Impossible de récupérer vos disponibilité');
+        toast.error('Impossible de récupérer vos disponibilités');
       }
     };
     fetchData();

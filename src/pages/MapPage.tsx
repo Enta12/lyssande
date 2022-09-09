@@ -67,7 +67,7 @@ const MapPage = () => {
       await api.put('/characters', body);
       toast.error('Mise à jour réussie');
     } catch (error) {
-      toast.error('Erreur dans la mise à jour des Utilisateurs');
+      toast.error('Erreur dans la mise à jour des utilisateurs');
     }
   };
   return (
