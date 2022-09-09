@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {ReactComponent as PersonIcon} from '../../../assets/person.svg';
+import {useOutsideClicker} from '../../../hook';
 import {GroupData, PjType} from '../../../types';
 import TokenImg from './tokenImg';
 
@@ -20,24 +21,13 @@ const TokenGroups = ({
   setEntityDrag,
   groupTokens,
 }: Props) => {
-  const tokenRef = useRef<HTMLDivElement>(null);
+  const onClickOutside = () => {
+    setShowCharaters(false);
+    setPjDrag(false);
+  };
+  const tokenRef = useOutsideClicker(onClickOutside);
   const [showCharacters, setShowCharaters] = useState(false);
   const [pjDrag, setPjDrag] = useState(false);
-  useEffect(() => {
-    const onClickOutside = () => {
-      setShowCharaters(false);
-      setPjDrag(false);
-    };
-    const handleClickOutside = (event: any) => {
-      if (tokenRef.current && !tokenRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [tokenRef]);
   return (
     <div
       onClick={() => {

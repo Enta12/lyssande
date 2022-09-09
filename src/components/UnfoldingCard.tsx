@@ -1,5 +1,6 @@
-import React, {useRef, useEffect} from 'react';
+import React from 'react';
 import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
+import {useOutsideClicker} from '../hook';
 
 type Props = React.PropsWithChildren<{
     disable?: boolean;
@@ -15,24 +16,10 @@ const UnfoldingCard = ({
   isOpen,
   children,
 }: Props) => {
-  const selectRef = useRef<HTMLInputElement>(null);
+  const selectRef = useOutsideClicker(() => handleOpen(false));
   const onCardClick = () => {
     handleOpen(!isOpen);
   };
-  useEffect(() => {
-    const onClickOutside = () => {
-      handleOpen(false);
-    };
-    const handleClickOutside = (event: any) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [selectRef]);
 
   return (
     <div
