@@ -40,7 +40,7 @@ const SessionEditPage = () => {
       };
       fetchData();
     } catch (error) {
-      toast.error('impossible de récupéré les infos de la partie');
+      toast.error('Impossible de récupérer les informations de la partie');
     }
   }, []);
   const sessionDate = new Date(session ? +session.date : '');
@@ -56,7 +56,7 @@ const SessionEditPage = () => {
         description,
         title,
       });
-      toast.success('La partie à été mise à jour avec succés');
+      toast.success('La partie à été mise à jour avec succès');
       navigate('/');
     } catch (error) {
       toast.error('impossible de mettre à jour la partie');

@@ -65,7 +65,7 @@ const CreateSession = () => {
       };
       fetchData();
     } catch (error) {
-      toast.error('Erreurs lors de la récupération des données');
+      toast.error('Erreur lors de la récupération des données');
     }
   }, []);
 
@@ -165,7 +165,7 @@ const CreateSession = () => {
         platform: gmPlatform[selectedPlatform],
         characters: selectedPjs.filter((el) => !!el),
       });
-      toast.success('La partie à été créer avec succés');
+      toast.success('La partie à été créer avec succès');
       navigate('/map');
     } catch (error) {
       toast.error('Impossible de créer la partie');
