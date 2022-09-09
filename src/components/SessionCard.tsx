@@ -1,4 +1,4 @@
-import {Session, User} from '../types';
+import {Session, UserInfo} from '../types';
 import UnfoldingCard from './UnfoldingCard';
 import React, {useState} from 'react';
 import {months} from '../moockedData';
@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router-dom';
 
 type Props = {
     data: Session;
-    users: User[]
+    users: UserInfo[]
 }
 
 const platformIcon = {

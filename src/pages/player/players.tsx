@@ -1,16 +1,15 @@
 import PlayerCard from '../../components/playerCard';
 import Title from '../../components/title';
-import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../../AppRoute';
-import api from '../../api/axios';
-import {User} from '../../types';
+import React, {useEffect, useState} from 'react';
+import {UserInfo} from '../../types';
+import {useApi} from '../../hook';
 
 const Players = () => {
-  const {setUser} = useContext(AuthContext);
-  const [users, setUsers] = useState<User[] | undefined>();
+  const [users, setUsers] = useState<UserInfo[] | undefined>();
+  const api = useApi();
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await api(setUser).get('/users');
+      const res = await api.get('/users');
       setUsers(res.data);
     };
     fetchData();

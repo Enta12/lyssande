@@ -1,16 +1,16 @@
-import {MouseEvent, useState, useRef, useEffect, useContext} from 'react';
+import {MouseEvent, useState, useRef, useEffect} from 'react';
 import {landsMoocked, speedMoocked} from '../../moockedData';
-import {GroupData, PjType, User} from '../../types';
+import {GroupData, PjType, UserInfo} from '../../types';
 import MapButton from './mapButton';
 import ShortSelect from '../shortSelect';
 import React from 'react';
 import Token from './tokens/token';
 import ContextMenu from './contextMenu';
 import PrimaryButton from '../primary-button';
-import {AuthContext} from '../../AppRoute';
+import {useAuth} from '../../hook';
 
 type Props = {
-    players: User[];
+    players: UserInfo[];
     pjs : PjType[];
     img: string;
     mapName: string;
@@ -42,7 +42,7 @@ const formatPjToTokenData = (pj :PjType) => {
 
 const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
-  const {user} = useContext(AuthContext);
+  const auth = useAuth();
 
   const [initEnd, setInitEnd] = useState(false);
   const [entityDrag, setEntityDrag] = useState({entityId: -1, group: false});
@@ -484,8 +484,8 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       </div>
       {
         (
-          user?.role === 'admin' ||
-          user?.role === 'gm'
+          auth?.user.info?.role === 'admin' ||
+          auth?.user.info?.role === 'gm'
         ) &&
         <PrimaryButton
           className='mt-4'

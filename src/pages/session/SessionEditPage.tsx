@@ -1,13 +1,12 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../../AppRoute';
-import api from '../../api/axios';
-import {Session, User} from '../../types';
+import React, {useEffect, useState} from 'react';
+import {Session, UserInfo} from '../../types';
 import {Input, PjCard, PrimaryButton, TextInput, Title} from '../../components';
 import {useNavigate, useParams} from 'react-router-dom';
 import avalabilityIrl from '../../assets/availabilityIrl.svg';
 import avalabilityIl from '../../assets/availabilityIl.svg';
 import {months} from '../../moockedData';
 import {toast} from 'react-toastify';
+import useApi from '../../hook/useApi';
 
 const platformIcon = {
   'online': {
@@ -21,18 +20,18 @@ const platformIcon = {
 };
 
 const SessionEditPage = () => {
-  const {setUser} = useContext(AuthContext);
   const [session, setSession] = useState<Session>();
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserInfo[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const api = useApi();
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () =>{
-      const sessionRes = await api(setUser).get(`/sessions/${params.id}`);
-      const userRes = await api(setUser).get('/users');
+      const sessionRes = await api.get(`/sessions/${params.id}`);
+      const userRes = await api.get('/users');
       setSession(sessionRes.data);
       setTitle(sessionRes.data.title || '');
       setDescription(sessionRes.data.description || '');
@@ -49,7 +48,7 @@ const SessionEditPage = () => {
       return;
     }
     try {
-      await api(setUser).put(`/sessions/${params.id}`, {
+      await api.put(`/sessions/${params.id}`, {
         description,
         title,
       });
