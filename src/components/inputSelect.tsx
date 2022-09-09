@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import iconOpen from '../assets/openInputSelect.svg';
+import {useOutsideClicker} from '../hook';
 
 interface Props {
     width?: string;
@@ -23,7 +24,7 @@ const InputSelect = ({
   emptyValue = '',
 } : Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef<HTMLDivElement>(null);
+  const selectRef = useOutsideClicker(() => setIsOpen(false));
   const selectAnOption = (
       e: React.MouseEvent<HTMLDivElement, MouseEvent>,
       index?: number,
@@ -32,20 +33,6 @@ const InputSelect = ({
     setIsOpen(false);
     handleChange(index);
   };
-  useEffect(() => {
-    const onClickOutside = () => {
-      setIsOpen(false);
-    };
-    const handleClickOutside = (event: any) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [selectRef]);
   return (
     <div
       className={`

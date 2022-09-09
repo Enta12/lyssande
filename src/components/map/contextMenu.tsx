@@ -1,8 +1,9 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import PrimaryButton from '../primary-button';
 import ShortSelect from '../shortSelect';
 import {ReactComponent as BackArrow} from '../../assets/back.svg';
 import {ReactComponent as Hike} from '../../assets/hike.svg';
+import {useOutsideClicker} from '../../hook';
 
 type Props = {
   y: string;
@@ -27,19 +28,7 @@ type Props = {
 }
 
 const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
-  const contextMenuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (contextMenuRef.current &&
-         !contextMenuRef.current.contains(event.target)) {
-        close();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [contextMenuRef]);
+  const contextMenuRef = useOutsideClicker(() => close());
   return (
     <div
       ref={contextMenuRef}
