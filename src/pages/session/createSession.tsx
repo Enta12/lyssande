@@ -245,8 +245,7 @@ const CreateSession = () => {
           el.user === player.id &&
           (
             el.platform === 'irl-or-online' ||
-            el.platform === gmPlatform[selectedPlatform] ||
-            gmPlatform.length === 2
+            el.platform === gmPlatform[selectedPlatform]
           ) &&
           selectedDate !== undefined &&
           el.at.date.getTime() === gmDates[selectedDate].getTime() &&
