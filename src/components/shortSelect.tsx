@@ -1,6 +1,7 @@
 import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
-import {useEffect, useRef, useState} from 'react';
+import {useState} from 'react';
 import React from 'react';
+import {useOutsideClicker} from '../hook';
 
 
 type Props ={
@@ -20,25 +21,11 @@ const ShortSelect = ({
   handleChange,
   value}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef<HTMLInputElement>(null);
+  const selectRef = useOutsideClicker(() => setIsOpen(false));
   const handleClick = (index: number) => {
     setIsOpen(false);
     handleChange(index);
   };
-  useEffect(() => {
-    const onClickOutside = () => {
-      setIsOpen(false);
-    };
-    const handleClickOutside = (event: any) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        onClickOutside && onClickOutside();
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, [selectRef]);
   return (
     <div ref={selectRef} className="relative">
       <div
