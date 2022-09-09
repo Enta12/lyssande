@@ -1,16 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {AuthContext} from '../../AppRoute';
 import {ShortSelect} from '../../components';
 import PjSessionSelector from '../../components/pjSessionSelector';
 import PrimaryButton from '../../components/primary-button';
-import {User, PjType, Availability, Platform} from '../../types';
-import api from '../../api/axios';
+import {PjType, Availability, Platform, UserInfo} from '../../types';
 import {days, months} from '../../moockedData';
 import availabilityIrl from '../../assets/availabilityIrl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
 import {toast} from 'react-toastify';
+import {useAuth, useApi} from '../../hook';
 
 type AvailabilitySend = {
   user: string,
@@ -27,11 +26,10 @@ type AvailabilityPerUser = Availability & {
   user: string,
 }
 const CreateSession = () => {
-  const {setUser, user} = useContext(AuthContext);
   const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
   const [lastQuest, setLastQuest] = useState('');
   const [selectedDate, setSelectedDate] = useState<number | undefined>(0);
-  const [players, setPlayers] = useState<User[]>([]);
+  const [players, setPlayers] = useState<UserInfo[]>([]);
   const [characters, setCharacters] = useState<PjType[]>([]);
   const [gmDates, setGmDates] = useState<Date[]>([]);
   const [gmMoments, setGmMoments] = useState<('soirée' | 'journée')[]>([]);
@@ -41,12 +39,14 @@ const CreateSession = () => {
   const [gmPlatform, setGmPlatform] = useState<string[]>([]);
   const [selectedMoment, setSelectedMoment] = useState(0);
   const navigate = useNavigate();
+  const api = useApi();
+  const auth = useAuth();
 
   useEffect(() => {
     const fetchData = async () =>{
-      const userRes = await api(setUser).get('/users');
-      const charactersRes = await api(setUser).get('/characters');
-      const availabilitiesRes = await api(setUser).get('/availabilities');
+      const userRes = await api.get('/users');
+      const charactersRes = await api.get('/characters');
+      const availabilitiesRes = await api.get('/availabilities');
       setPlayers(userRes.data);
       setCharacters(charactersRes.data);
       setAvailabilities(availabilitiesRes.data.filter(
@@ -68,7 +68,7 @@ const CreateSession = () => {
   useEffect(() => {
     const defineGmDate = () => {
       return availabilities.filter((el) => {
-        if (el.user === user?.userId) return true;
+        if (el.user === auth?.user?.info?.id) return true;
         return false;
       }).map((el) => el.at.date);
     };
@@ -76,7 +76,7 @@ const CreateSession = () => {
       return MOMENT.filter((moment) => availabilities.findIndex((el) => (
         selectedDate !== undefined &&
         el.at.date.getTime() === gmDates[selectedDate].getTime() &&
-        el.user === user?.userId &&
+        el.user === auth?.user?.info?.id &&
         el.at.moment === moment
       )) !== -1);
     };
@@ -93,7 +93,7 @@ const CreateSession = () => {
     const definePlatform = () => {
       const availabilityOfGmIndex = availabilities.findIndex((el) => {
         return (
-          user?.userId === el.user &&
+          auth?.user?.info?.id === el.user &&
           selectedDate !== undefined &&
           el.at.date.getTime() === gmDates[selectedDate].getTime() &&
           el.at.moment === momentAvailableOfDate[selectedMoment]
@@ -154,7 +154,7 @@ const CreateSession = () => {
       toast.error('Veuillez selectionner au moins un personnage');
       return;
     }
-    const res = await api(setUser).post('/sessions', {
+    const res = await api.post('/sessions', {
       date: `${gmDates[selectedDate].getTime()}`,
       moment: gmMoments[selectedMoment],
       platform: gmPlatform[selectedPlatform],
@@ -249,7 +249,7 @@ const CreateSession = () => {
         // TODO suppress verification player is me ?
         if (
           playerAvailability !== -1 &&
-          player.id !== user?.userId
+          player.id !== auth?.user?.info?.id
         ) {
           return (
             <PjSessionSelector

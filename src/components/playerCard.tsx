@@ -1,8 +1,8 @@
-import {User} from '../types';
+import {UserInfo} from '../types';
 import React from 'react';
 
 type Props = {
-    player: User;
+    player: UserInfo;
 }
 
 const PlayerCard = ({player}: Props) => {

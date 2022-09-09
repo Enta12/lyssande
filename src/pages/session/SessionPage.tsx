@@ -1,19 +1,18 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../../AppRoute';
-import api from '../../api/axios';
+import React, {useEffect, useState} from 'react';
 import {SessionCard} from '../../components';
-import {Session, User} from '../../types';
+import useApi from '../../hook/useApi';
+import {Session, UserInfo} from '../../types';
 
 const SessionPage = () => {
-  const {setUser} = useContext(AuthContext);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [pastSession, setPastSession] = useState(false);
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserInfo[]>([]);
+  const api = useApi();
 
   useEffect(() => {
     const fetchData = async () =>{
-      const sessionRes = await api(setUser).get('/sessions');
-      const userRes = await api(setUser).get('/users');
+      const sessionRes = await api.get('/sessions');
+      const userRes = await api.get('/users');
       setSessions(sessionRes.data);
       setUsers(userRes.data);
     };

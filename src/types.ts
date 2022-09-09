@@ -76,15 +76,11 @@ export type Auth = {
     id?: number;
     role?: string;
 }
-export type User = {
+export type UserInfo = {
     id: string;
     role: 'admin' | 'gm' | 'player';
     name: string;
     email?: string;
-}
-export type Token = {
-    userId: string;
-    role: 'admin' | 'gm' | 'player';
 }
 export type GroupData = {
     position: {

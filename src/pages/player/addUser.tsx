@@ -1,8 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {toast} from 'react-toastify';
-import api from '../../api/axios';
-import {AuthContext} from '../../AppRoute';
 import {Input, InputSelect, PrimaryButton, Title} from '../../components';
+import useApi from '../../hook/useApi';
 import {roles} from '../../moockedData';
 
 // TODO Supress this function when the back create password
@@ -35,7 +34,7 @@ const AddUser = () => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState(0);
   const [password, setPassword] = useState('');
-  const {setUser} = useContext(AuthContext);
+  const api = useApi();
   const submit = async () => {
     try {
       const pattern =
@@ -44,7 +43,7 @@ const AddUser = () => {
         toast.error('Email pas au bon format');
         return;
       }
-      await api(setUser).post('/auth/signup', {
+      await api.post('/auth/signup', {
         email,
         role: roles[role],
         name,

@@ -1,10 +1,10 @@
 import Map from '../components/map/map';
 import {mapsMoocked} from '../moockedData';
-import React, {useContext, useEffect, useState} from 'react';
-import api from '../api/axios';
-import {PjType, User} from '../types';
-import {AuthContext} from '../AppRoute';
+import React, {useEffect, useState} from 'react';
+import {PjType, UserInfo} from '../types';
 import {toast} from 'react-toastify';
+import {useAuth} from '../hook';
+import useApi from '../hook/useApi';
 
 // eslint-disable-next-line max-len
 const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens mais leur position n\'est pas enregistrée';
@@ -12,13 +12,14 @@ const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens ma
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
   const [pjData, setPjData] = useState<PjType[]>([]);
-  const [players, setPlayers] = useState<User[]>([]);
-  const {setUser, user} = useContext(AuthContext);
+  const [players, setPlayers] = useState<UserInfo[]>([]);
+  const auth = useAuth();
+  const api = useApi();
 
   useEffect(() => {
     const fetchData = async () =>{
-      const characterRes = await api(setUser).get('/characters');
-      const usersRes = await api(setUser).get('/users');
+      const characterRes = await api.get('/characters');
+      const usersRes = await api.get('/users');
       setPjData(characterRes.data);
       setPlayers(usersRes.data);
     };
@@ -58,7 +59,7 @@ const MapPage = () => {
         });
       }
     });
-    const res = await api(setUser).put('/characters', body);
+    const res = await api.put('/characters', body);
     if (res.data.err) {
       toast.error(res.data.err);
     } else toast.success('Mise à jour réussie');
@@ -66,7 +67,7 @@ const MapPage = () => {
   return (
     <>
       {
-        user?.role === 'player' &&
+        auth?.user.info?.role === 'player' &&
         <p className='m-4 font-bold text-darkBrown text-xl'>
           {noSaveMsg}
         </p>
