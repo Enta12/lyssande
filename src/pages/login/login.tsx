@@ -1,16 +1,16 @@
-import jwtDecode from 'jwt-decode';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
-import {login} from '../../api/auth';
-import {AuthContext} from '../../AppRoute';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
-import {Token} from '../../types';
+import {useApi, useAuth} from '../../hook';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const {setUser} = useContext(AuthContext);
+  const api = useApi();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const isEmail = () => {
     const pattern =
@@ -30,14 +30,16 @@ const Login = () => {
       toast.error('Mot de passe obligatoire');
       return;
     }
-    if (setUser) {
-      const token = await login(email, password, setUser);
-      if (token === 'ERR_BAD_REQUEST') {
-        toast.error('Login ou mot de passe incorrect');
-        return;
-      }
-      const tokenDecode = jwtDecode(token) as Token;
-      setUser({...tokenDecode});
+    try {
+      const res = await api.post('/auth/login', {
+        email,
+        password,
+      });
+      console.log(res.data);
+      auth?.dispatch({type: 'login', payload: {jwt: res.data.token}});
+      navigate('/');
+    } catch (error) {
+      toast.error('Login ou mot de passe incorrect');
     }
   };
   return (

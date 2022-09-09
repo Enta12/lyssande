@@ -1,7 +1,7 @@
 import Input from '../../../components/input';
 import InputSelect from '../../../components/inputSelect';
 import Title from '../../../components/title';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AlignmentInput from './AlignmentInput';
 import TextInput from '../../../components/textInput';
 import {
@@ -13,10 +13,9 @@ import {
 } from '../../../moockedData';
 // import FileInput from '../../../components/fileInput';
 import {PrimaryButton} from '../../../components';
-import api from '../../../api/axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import {AuthContext} from '../../../AppRoute';
 import {toast} from 'react-toastify';
+import useApi from '../../../hook/useApi';
 
 // eslint-disable-next-line max-len
 const textExternCreate = 'Si vous n\'avez pas de personnage vous pouvez en créer un grâce à l\'outil disponible ';
@@ -33,13 +32,13 @@ const AddPj = () => {
   const [story, setStory] = useState('');
   const [img, setImg] = useState('');
 
-  const {setUser} = useContext(AuthContext);
+  const api = useApi();
   const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api(setUser).get(`/characters/${params.id}`);
+      const res = await api.get(`/characters/${params.id}`);
       if (res.data.id) {
         if (res.data.culte) setCulte(culteMoocked.indexOf(res.data.culte));
         if (res.data.job) setJob(jobsMoocked.indexOf(res.data.job));
@@ -98,8 +97,8 @@ const AddPj = () => {
       story,
     };
     const res = await (params.id?
-      api(setUser).put('/characters', [{...body, id: params.id}]):
-      api(setUser).post('/characters', body));
+      api.put('/characters', [{...body, id: params.id}]):
+      api.post('/characters', body));
     if (res.data.err) {
       toast.error(res.data.err);
       return;

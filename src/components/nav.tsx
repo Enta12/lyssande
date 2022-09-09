@@ -1,19 +1,22 @@
-import React, {useContext} from 'react';
-import {AuthContext} from '../AppRoute';
+import React from 'react';
+import {useAuth} from '../hook';
 
 const Nav = () => {
-  const {user} = useContext(AuthContext);
+  const auth = useAuth();
   return (
     <nav className="">
-      { user?.role === 'player' && <NavLink href="/">Mon compte</NavLink>}
+      {
+        auth?.user.info?.role === 'player' &&
+        <NavLink href="/">Mon compte</NavLink>
+      }
       <NavLink href="/calendar">Calendrier</NavLink>
       <NavLink href="/sessions">Mes parties</NavLink>
       <NavLink href="/pj">PJS</NavLink>
       <NavLink href="/map">Carte</NavLink>
       {
         (
-          user?.role === 'admin' ||
-          user?.role === 'gm'
+          auth?.user.info?.role === 'admin' ||
+          auth?.user.info?.role === 'gm'
         ) &&
           <>
             <NavLink href="/player">Joueurs</NavLink>
@@ -22,7 +25,7 @@ const Nav = () => {
           </>
       }
       {
-        user?.role === 'admin' &&
+        auth?.user.info?.role === 'admin' &&
         <NavLink href="/addUser">Ajouter un utilisateur</NavLink>
       }
     </nav>

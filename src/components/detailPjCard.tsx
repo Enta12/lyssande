@@ -1,7 +1,7 @@
 import {PjType} from '../types';
-import React, {useContext} from 'react';
+import React from 'react';
 import {ReactComponent as EditButton} from '../assets/editButton.svg';
-import {AuthContext} from '../AppRoute';
+import {useAuth} from '../hook';
 
 type Props = {
   pjData: PjType;
@@ -9,7 +9,8 @@ type Props = {
 }
 
 const DetailPjCard = ( {pjData, onEdit} : Props) => {
-  const {user} = useContext(AuthContext);
+  const auth = useAuth();
+
   return (
     <div className="
       w-96
@@ -62,7 +63,7 @@ const DetailPjCard = ( {pjData, onEdit} : Props) => {
         <div className="w-full h-1 rounded-b-full bg-orange mb-10 my-4" />
       </div>
       {
-        user?.userId === pjData.player &&
+        auth?.user.info?.role === pjData.player &&
         <EditButton
           className='bottom-0 right-0 absolute cursor-pointer'
           onClick={onEdit}

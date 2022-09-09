@@ -1,11 +1,10 @@
 import Title from '../../components/title';
 import Calendar from '../../components/calendar/calendar';
 import PrimaryButton from '../../components/primary-button';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Availability, Platform} from '../../types';
-import api from '../../api/axios';
-import {AuthContext} from '../../AppRoute';
 import {toast} from 'react-toastify';
+import useApi from '../../hook/useApi';
 
 type AvailabilitySave = {
   platform: Platform;
@@ -27,6 +26,8 @@ const CalendarPage = () => {
   const [endDate, setEndDate] = useState<string>(
       `${tomorrow.getTime() + oneMounth}`,
   );
+  const api = useApi();
+
   const initOrUpdateAvalabilitiess = useCallback((startDate: Date) => {
     const pattern = /^[0-9]+$/;
     const dateEnd = new Date(pattern.test(endDate)? +endDate : endDate);
@@ -39,7 +40,6 @@ const CalendarPage = () => {
     }
     return availabilities;
   }, [availabilitiesSave, endDate]);
-  const {setUser} = useContext(AuthContext);
   const setInitialAvailability = (
       newDate: Date,
       newMoment: 'journée' | 'soirée',
@@ -66,7 +66,7 @@ const CalendarPage = () => {
   };
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await api(setUser).get('/users/availabilities');
+      const res = await api.get('/users/availabilities');
       setAvailabilitiesSave(res.data.map((el: AvailabilitySave) => ({
         platform: el.platform,
         at: {
@@ -92,7 +92,7 @@ const CalendarPage = () => {
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
   const onSubmit = async () => {
-    const res = await api(setUser).put('/availabilities', availabilities.map(
+    const res = await api.put('/availabilities', availabilities.map(
         (el) =>({
           at: {
             date: `${el.at.date.getTime()}`,
