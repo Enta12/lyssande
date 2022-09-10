@@ -10,6 +10,7 @@ import availabilityIrl from '../../assets/availabilityIrl.svg';
 import availabilityIl from '../../assets/availabilityIl.svg';
 import {toast} from 'react-toastify';
 import {useAuth, useApi} from '../../hook';
+import {platform} from 'os';
 
 type AvailabilitySend = {
   user: string,
@@ -18,6 +19,18 @@ type AvailabilitySend = {
     moment: 'soirée' | 'journée',
   },
   platform: Platform,
+}
+
+type PossibleDate = {
+  date: number;
+  'journée' : {
+    online: string[],
+    'just-irl': string[],
+  },
+  'soirée' : {
+    online: string[],
+    'just-irl': string[],
+  }
 }
 
 const MOMENT: Array<'journée' | 'soirée'> = ['journée', 'soirée'];
@@ -33,6 +46,8 @@ const CreateSession = () => {
   const [characters, setCharacters] = useState<PjType[]>([]);
   const [gmDates, setGmDates] = useState<Date[]>([]);
   const [gmMoments, setGmMoments] = useState<('soirée' | 'journée')[]>([]);
+  const [availabilitiesSorted, setAvailabilitiesSorted] =
+      useState<PossibleDate[]>([]);
   const [availabilities, setAvailabilities] =
       useState<AvailabilityPerUser[]>([]);
   const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
@@ -44,12 +59,73 @@ const CreateSession = () => {
 
   useEffect(() => {
     try {
+      const removeUselessAvailability = (playersOfAvailability: string[]) => {
+        playersOfAvailability
+            .filter((player) => player !== auth?.user.info?.id);
+        return playersOfAvailability.length > 1 ?
+            playersOfAvailability : [];
+      };
       const fetchData = async () =>{
         const userRes = await api.get('/users');
         const charactersRes = await api.get('/characters');
         const availabilitiesRes = await api.get('/availabilities');
         setPlayers(userRes.data);
         setCharacters(charactersRes.data);
+        // tentative
+        const possibleDateTemp: PossibleDate[] = [];
+        availabilitiesRes.data.forEach((availabilityRes : AvailabilitySend) => {
+          let index = possibleDateTemp.findIndex(
+              (possibleDate) =>
+                possibleDate.date === availabilityRes.at.date);
+          if (
+            availabilityRes.platform !== 'none' &&
+            availabilityRes.platform !== 'rest' &&
+            availabilityRes.platform !== 'in-game'
+          ) {
+            if (index === -1) {
+              possibleDateTemp.push({
+                'date': availabilityRes.at.date,
+                'journée': {
+                  'online': [],
+                  'just-irl': [],
+                },
+                'soirée': {
+                  'online': [],
+                  'just-irl': [],
+                },
+              });
+              index = possibleDateTemp.length -1;
+            }
+            if (availabilityRes.platform === 'irl-or-online') {
+              // eslint-disable-next-line max-len
+              possibleDateTemp[index][availabilityRes.at.moment]['just-irl'].push(availabilityRes.user);
+            } else {
+              // eslint-disable-next-line max-len
+              possibleDateTemp[index][availabilityRes.at.moment][availabilityRes.platform].push(availabilityRes.user);
+            }
+          }
+        });
+        possibleDateTemp.map((possibleDate) => ({
+          'journée': {
+            'online': removeUselessAvailability(
+                possibleDate['journée'].online),
+            'just-irl': removeUselessAvailability(
+                possibleDate['journée']['just-irl']),
+          },
+          'soirée': {
+            'online': removeUselessAvailability(
+                possibleDate['soirée'].online),
+            'just-irl': removeUselessAvailability(
+                possibleDate['soirée']['just-irl']),
+          },
+        }));
+        possibleDateTemp.filter((possibleDate) =>
+          possibleDate['journée']['just-irl'].length ||
+          possibleDate['journée'].online.length ||
+          possibleDate['soirée']['just-irl'].length ||
+          possibleDate['soirée'].online.length,
+        );
+        // end tentative
         setAvailabilities(availabilitiesRes.data.filter(
             (el: AvailabilityPerUser) => el.platform !== 'none' &&
                                         el.platform !== 'rest' &&
@@ -71,7 +147,17 @@ const CreateSession = () => {
 
   useEffect(() => {
     const defineGmDate = () => {
-      return availabilities.filter((el) => {
+      return availabilities.filter((availabilityA)=>{
+        return availabilities.findIndex((availabilityB) =>
+          availabilityA.user !== availabilityB.user &&
+          availabilityA.at.date.getTime() === availabilityB.at.date.getTime() &&
+          availabilityA.at.moment === availabilityB.at.moment &&
+          (
+            availabilityA.platform === 'irl-or-online' ||
+            availabilityB.platform === 'irl-or-online' ||
+            availabilityA.platform === availabilityB.platform
+          )) !== -1;
+      }).filter((el) => {
         if (el.user === auth?.user?.info?.id) return true;
         return false;
       }).map((el) => el.at.date);
