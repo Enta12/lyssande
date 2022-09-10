@@ -43,26 +43,30 @@ const CreateSession = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    const fetchData = async () =>{
-      const userRes = await api.get('/users');
-      const charactersRes = await api.get('/characters');
-      const availabilitiesRes = await api.get('/availabilities');
-      setPlayers(userRes.data);
-      setCharacters(charactersRes.data);
-      setAvailabilities(availabilitiesRes.data.filter(
-          (el: AvailabilityPerUser) => el.platform !== 'none' &&
-                                       el.platform !== 'rest' &&
-                                       el.platform !== 'in-game').map(
-          (el: AvailabilitySend) => ({
-            user: el.user,
-            at: {
-              date: new Date(+el.at.date),
-              moment: el.at.moment,
-            },
-            platform: el.platform,
-          })));
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const userRes = await api.get('/users');
+        const charactersRes = await api.get('/characters');
+        const availabilitiesRes = await api.get('/availabilities');
+        setPlayers(userRes.data);
+        setCharacters(charactersRes.data);
+        setAvailabilities(availabilitiesRes.data.filter(
+            (el: AvailabilityPerUser) => el.platform !== 'none' &&
+                                        el.platform !== 'rest' &&
+                                        el.platform !== 'in-game').map(
+            (el: AvailabilitySend) => ({
+              user: el.user,
+              at: {
+                date: new Date(+el.at.date),
+                moment: el.at.moment,
+              },
+              platform: el.platform,
+            })));
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Erreur lors de la récupération des données');
+    }
   }, []);
 
   useEffect(() => {
@@ -154,16 +158,18 @@ const CreateSession = () => {
       toast.error('Veuillez selectionner au moins un personnage');
       return;
     }
-    const res = await api.post('/sessions', {
-      date: `${gmDates[selectedDate].getTime()}`,
-      moment: gmMoments[selectedMoment],
-      platform: gmPlatform[selectedPlatform],
-      characters: selectedPjs.filter((el) => !!el),
-    });
-    if (res.status === 201) {
-      toast.success('La partie à été créer avec succés');
+    try {
+      await api.post('/sessions', {
+        date: `${gmDates[selectedDate].getTime()}`,
+        moment: gmMoments[selectedMoment],
+        platform: gmPlatform[selectedPlatform],
+        characters: selectedPjs.filter((el) => !!el),
+      });
+      toast.success('La partie à été créer avec succès');
       navigate('/map');
-    } else toast.error(res.data.err);
+    } catch (error) {
+      toast.error('Impossible de créer la partie');
+    }
   };
 
   return (

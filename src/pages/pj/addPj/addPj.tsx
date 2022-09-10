@@ -96,17 +96,21 @@ const AddPj = () => {
       },
       story,
     };
-    const res = await (params.id?
-      api.put('/characters', [{...body, id: params.id}]):
-      api.post('/characters', body));
-    if (res.data.err) {
-      toast.error(res.data.err);
-      return;
+    try {
+      await (params.id?
+        api.put('/characters', [{...body, id: params.id}]):
+        api.post('/characters', body));
+      toast.success(
+        params.id ?
+          `${name} mis à jour avec succès` :
+          `${name} créé avec succès`,
+      );
+      navigate('/');
+    } catch (error) {
+      toast.error(
+          `Erreur lors de la ${params.id ? 'mise à jour' : 'création'}`,
+      );
     }
-    toast.success(
-      params.id ? `${name} mis à jour avec succés` : `${name} créé avec succés`,
-    );
-    navigate('/');
   };
 
   return (

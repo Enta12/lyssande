@@ -3,16 +3,21 @@ import Title from '../../components/title';
 import React, {useEffect, useState} from 'react';
 import {UserInfo} from '../../types';
 import {useApi} from '../../hook';
+import {toast} from 'react-toastify';
 
 const Players = () => {
   const [users, setUsers] = useState<UserInfo[] | undefined>();
   const api = useApi();
   useEffect(() => {
-    const fetchData = async () =>{
-      const res = await api.get('/users');
-      setUsers(res.data);
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const res = await api.get('/users');
+        setUsers(res.data);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Erreur dans la récupération des joueurs');
+    }
   }, []);
 
   return (

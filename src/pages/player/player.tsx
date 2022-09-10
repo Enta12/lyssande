@@ -7,6 +7,7 @@ import {UserInfo, PjType, Availability} from '../../types';
 import {useNavigate, useParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import {useApi} from '../../hook';
+import {toast} from 'react-toastify';
 
 const availabilities : Availability[] = [];
 
@@ -44,13 +45,17 @@ const Player = ({userId} :Props) => {
   const id = params.id || userId;
   if (!id) navigate('404');
   useEffect(() => {
-    const fetchData = async () =>{
-      const userRes = await api.get(`/users/${id}`);
-      const charactersRes = await api.get(`/users/${id}/characters`);
-      setPlayerSelected(userRes.data);
-      setCharacters(charactersRes.data);
-    };
-    fetchData();
+    try {
+      const fetchData = async () =>{
+        const userRes = await api.get(`/users/${id}`);
+        const charactersRes = await api.get(`/users/${id}/characters`);
+        setPlayerSelected(userRes.data);
+        setCharacters(charactersRes.data);
+      };
+      fetchData();
+    } catch (error) {
+      toast.error('Impossible de recupérer les informations du joueur');
+    }
   }, []);
   return (
     playerSelected && characters ?
@@ -100,6 +105,7 @@ const Player = ({userId} :Props) => {
       </div>
       {
         /*
+        remove comment when preferences will be add on back-end
         <form >
           <Calendar
             availabilities={availabilities}

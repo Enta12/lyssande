@@ -66,14 +66,18 @@ const CalendarPage = () => {
   };
   useEffect(() => {
     const fetchData = async () =>{
-      const res = await api.get('/users/availabilities');
-      setAvailabilitiesSave(res.data.map((el: AvailabilitySave) => ({
-        platform: el.platform,
-        at: {
-          date: new Date(+el.at.date),
-          moment: el.at.moment,
-        },
-      })));
+      try {
+        const res = await api.get('/users/availabilities');
+        setAvailabilitiesSave(res.data.map((el: AvailabilitySave) => ({
+          platform: el.platform,
+          at: {
+            date: new Date(+el.at.date),
+            moment: el.at.moment,
+          },
+        })));
+      } catch (error) {
+        toast.error('Impossible de récupérer vos disponibilités');
+      }
     };
     fetchData();
   }, [setAvailabilitiesSave]);
@@ -92,18 +96,18 @@ const CalendarPage = () => {
   }, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
 
   const onSubmit = async () => {
-    const res = await api.put('/availabilities', availabilities.map(
-        (el) =>({
-          at: {
-            date: `${el.at.date.getTime()}`,
-            moment: el.at.moment,
-          },
-          platform: el.platform,
-        })));
-    if (res.data.err) {
-      toast.error(res.data.err);
-    } else {
+    try {
+      await api.put('/availabilities', availabilities.map(
+          (el) =>({
+            at: {
+              date: `${el.at.date.getTime()}`,
+              moment: el.at.moment,
+            },
+            platform: el.platform,
+          })));
       toast.success('mise à jour réussie');
+    } catch {
+      toast.error('Impossible de mettre à jour vos disponibilités');
     }
   };
   const handleChange = (newPlatForm: Platform, index: number) => {
