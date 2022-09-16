@@ -88,7 +88,7 @@ export default PjSessionSelector;
 const SelectedPj = ({name, level}: {name: string, level: number}) => {
   return (
     <div className="flex gap-10 items-center">
-      <div className="flex flex-col w-24 items-center">
+      <div className="flex flex-col w-fit items-center">
         <div className="w-full h-1 rounded-t-full bg-orange" />
         {name}
         <div className="w-full h-1 rounded-b-full bg-orange" />
