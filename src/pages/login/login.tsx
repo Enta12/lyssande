@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import Input from '../../components/input';
 import PrimaryButton from '../../components/primary-button';
 import {useApi, useAuth} from '../../hook';
+import background from './login-background.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -47,23 +48,30 @@ const Login = () => {
       min-h-screen
       bg-cover
       h-full
-      bg-[url('pages/login/login-background.png')]
       flex
       items-center
       justify-center
+      relative
+      overflow-hidden
     ">
+      <img
+        src={background}
+        alt="Session"
+        className='absolute min-h-screen bottom-0 object-cover'
+      />
       <form className="
-        gap-4
-        pt-8
-        pb-28
         flex
         flex-col
         bg-orange/[.8]
-        h-3/4
-        w-5/12
-        rounded-3xl
-        justify-around
+        w-full md:w-6/12
+        h-screen md:h-3/4
+        md:rounded-3xl
+        gap-4
+        pt-24 md:pt-12 md:pb-24
         items-center
+        relative
+        max-w-4-md
+        z-10
       ">
         <Input
           value={email}
