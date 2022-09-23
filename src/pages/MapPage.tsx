@@ -5,6 +5,7 @@ import {PjType, UserInfo} from '../types';
 import {toast} from 'react-toastify';
 import {useAuth} from '../hook';
 import useApi from '../hook/useApi';
+import {ReactComponent as Corner} from '../assets/reverseBorder/corner.svg';
 
 // eslint-disable-next-line max-len
 const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens mais leur position n\'est pas enregistrée';
@@ -125,14 +126,18 @@ const MapSelector = ({
   handleChange,
   last}: MapSelectorProps) => {
   return (
-    <div className="bg-darkBrown rounded-t-full flex">
-      {index !== 0 && <div className={`
-      bg-amber-100
-        ${actif && 'rounded-br-full'}
-        w-2
-        h-full
-        self-end
-      `} />}
+    <div className="relative">
+      {
+        !!index && actif &&
+        <Corner
+          className='
+            rotate-[-3deg]
+            absolute
+            fill-darkBrown
+            bottom-[-8px]
+            left-[-11px]'
+        />
+      }
       <div
         onClick={() => handleChange(index)}
         className={`
@@ -145,13 +150,17 @@ const MapSelector = ({
       >
         {`~ ${name} ~`}
       </div>
-      {!last && <div className={`
-      bg-amber-100
-      ${actif && 'rounded-bl-full'}
-      w-2
-      h-full
-      self-end
-    `} />}
+      {
+        actif && !last &&
+        <Corner
+          className='
+            rotate-[100deg]
+            absolute
+            fill-darkBrown
+            bottom-[-8px]
+            right-[-11px]'
+        />
+      }
     </div>
 
   );
