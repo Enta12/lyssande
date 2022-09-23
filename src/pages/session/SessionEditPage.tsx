@@ -44,7 +44,7 @@ const SessionEditPage = () => {
   const gm = users[users.findIndex(
       (el) => el.id === session?.gm)];
   const submit = async () => {
-    if (!(sessionDate > new Date())) {
+    if (sessionDate > new Date()) {
       toast.error('Vous ne pouvez pas mettre à jour une partie à venir');
       return;
     }
