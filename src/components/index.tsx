@@ -6,7 +6,7 @@ export {default as FileInput} from './fileInput';
 export {default as Footer} from './footer';
 export {default as Input} from './input';
 export {default as InputSelect} from './inputSelect';
-export {default as Layout} from './layout';
+export {default as Layout} from './layout/layout';
 export {default as Nav} from './nav';
 export {default as Notif} from './notif';
 export {default as PjCard} from './pjCard';

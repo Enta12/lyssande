@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import React from 'react';
-import Layout from './components/layout';
+import Layout from './components/layout/layout';
 import Login from './pages/login/login';
 import Pj from './pages/pj/pj';
 import AddPj from './pages/pj/addPj/addPj';
