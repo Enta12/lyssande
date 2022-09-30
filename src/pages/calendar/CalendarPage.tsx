@@ -31,11 +31,13 @@ const CalendarPage = () => {
     const pattern = /^[0-9]+$/;
     const dateEnd = new Date(pattern.test(endDate)? +endDate : endDate);
     const availabilities : Availability[] = [];
-    let currentDate = startDate;
-    while (currentDate < dateEnd) {
-      availabilities.push(setInitialAvailability(currentDate, 'journée'));
-      availabilities.push(setInitialAvailability(currentDate, 'soirée'));
-      currentDate = new Date(currentDate.getTime() + oneDay);
+    let currentDate = startDate.getTime();
+    while (currentDate < dateEnd.getTime()) {
+      availabilities.push(
+          setInitialAvailability(new Date(currentDate), 'journée'));
+      availabilities.push(setInitialAvailability(
+          new Date(currentDate), 'soirée'));
+      currentDate = currentDate + oneDay;
     }
     return availabilities;
   }, [availabilitiesSave, endDate]);
