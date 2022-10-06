@@ -1,10 +1,11 @@
 import React from 'react';
-import {useAuth} from '../hook';
+import {useAuth} from 'hook';
+import NavLink from './NavLink';
 
 const Nav = () => {
   const auth = useAuth();
   return (
-    <nav className="">
+    <nav>
       {
         auth?.user.info?.role === 'player' &&
         <NavLink href="/">Mon compte</NavLink>
@@ -29,20 +30,6 @@ const Nav = () => {
         <NavLink href="/addUser">Ajouter un utilisateur</NavLink>
       }
     </nav>
-  );
-};
-
-const NavLink = (props : {children: string, href: string}) => {
-  const {href, children} = props;
-  return (
-    <a href={href} className="
-        text-gray-300
-        mx-2.5
-        font-semibold
-        text-2xl
-    ">
-      {children}
-    </a>
   );
 };
 
