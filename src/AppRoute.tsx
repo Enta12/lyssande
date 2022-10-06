@@ -26,37 +26,38 @@ const AppRoute = () => {
       {
         auth?.user.isLogged ?
         <Routes>
-          <Route path='/pj' element={<Layout Page={<Pj />}/>} />
-          <Route path='/pj/:id' element={<Layout Page={<DetailPj />} />} />
-          <Route path='/editCharacter' element={
-            <Layout Page={<AddPj />} />} />
-          <Route path='/editCharacter/:id' element={
-            <Layout Page={<AddPj />} />} />
-          <Route path='/calendar' element={<Layout Page={<Calendar />} />} />
-          <Route path='/map' element={<Layout Page={<MapPage />} />} />
-          <Route path='/sessions' element={<Layout Page={<SessionPage/>}/>}/>
+          <Route path='/pj' element={<Layout><Pj /></Layout>} />
+          <Route path='/pj/:id' element={<Layout><DetailPj /></Layout>} />
+          <Route path='/editCharacter' element={<Layout><AddPj /></Layout>}/>
+          <Route
+            path='/editCharacter/:id'
+            element={<Layout><AddPj /></Layout>}
+          />
+          <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
+          <Route path='/map' element={<Layout><MapPage /></Layout>} />
+          <Route path='/sessions' element={<Layout><SessionPage/></Layout>}/>
           <Route
             path='/sessions/:id'
-            element={<Layout Page={<SessionEditPage/>}/>}
+            element={<Layout><SessionEditPage/></Layout>}
           />
           {
             (
               auth?.user.info?.role === 'gm' ||
               auth?.user.info?.role === 'admin') &&
               <>
-                <Route path='/player' element={
-                  <Layout Page={<Players />}/>
-                } />
+                <Route
+                  path='/player'
+                  element={<Layout><Players /></Layout>}
+                />
                 <Route path='/player/:id' element={
-                  <Layout Page={<Player />}/>
-                } />
+                  <Layout><Player /></Layout>}
+                />
                 <Route path='/fight' element={
-                  <Layout Page={<FightPage />}/>
-                } />
+                  <Layout><FightPage /></Layout>} />
                 <Route
                   path='/newSession'
                   element={
-                    <Layout Page={<CreateSession />} />
+                    <Layout><CreateSession /></Layout>
                   }
                 />
               </>
@@ -66,16 +67,15 @@ const AppRoute = () => {
             <Route
               path='/addUser'
               element={
-                <Layout Page={<AddUser />} />
+                <Layout><AddUser /></Layout>
               }
             />
           }
-          <Route path='/' element={
-            <Layout Page={
-              <Player userId={auth?.user.info?.id} />
-            }/>
-          } />
-          <Route path='*' element={<Layout Page={<NotFound />} />} />
+          <Route
+            path='/' element={
+              <Layout ><Player userId={auth?.user.info?.id} /></Layout>
+            } />
+          <Route path='*' element={<Layout><NotFound /></Layout>} />
         </Routes>:
         <Login />
       }

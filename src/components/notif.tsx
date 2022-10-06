@@ -1,7 +1,8 @@
 import React from 'react';
 
-const Notif = (props : {children: string}) => {
-  const {children} = props;
+type Props = React.ReactChildren;
+
+const Notif = (children: Props) => {
   return (
     <div className="
       w-full

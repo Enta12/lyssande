@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import Header from './../header';
 import Footer from './../footer';
 
 type Props = {
-  Page : JSX.Element;
+  children: ReactNode
 }
 
-const Layout = ({Page} : Props) => {
+const Layout = ({children} : Props) => {
   return (
     <div className="
         min-h-screen
@@ -29,7 +29,7 @@ const Layout = ({Page} : Props) => {
         flex-col
         mx-40"
       >
-        {Page}
+        {children}
       </section>
       <Footer />
     </div>

@@ -1,5 +1,5 @@
-import Nav from './nav';
-import logo from '../assets/logo.png';
+import Nav from 'components/Nav/Nav';
+import logo from 'assets/logo.png';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 

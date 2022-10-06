@@ -97,8 +97,8 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       setInitEnd(true);
     }
   }, [pjs, groupsData, setGroupsData, initEnd, setInitEnd]);
-  const tokens: JSX.Element[] = [];
-  const groups: JSX.Element[] = [];
+  const tokens: React.ReactNode[] = [];
+  const groups: React.ReactNode[] = [];
   const contextMenu = {
     speed: {
       options: speedMoocked.map((speed) => speed.name),
