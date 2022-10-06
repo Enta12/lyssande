@@ -272,7 +272,7 @@ const CreateSession = () => {
             <span>
               {`
                 ${getPlayerAvailableOnOtherMoment()}
-                joueur(s) présent en ${MOMENT[(selectedMoment+1)%2]}
+                joueur(s) présent(s) en ${MOMENT[(selectedMoment+1)%2]}
               `}
             </span>
           </> :
@@ -301,7 +301,7 @@ const CreateSession = () => {
             <span>
               {`
                 ${getPlayerAvailableOnOtherPlatform()}
-                joueur(s) présent en ${platformTrad[PLATFORM[(selectedPlatform+1)%2]]}
+                joueur(s) présent(s) en ${platformTrad[PLATFORM[(selectedPlatform+1)%2]]}
               `}
             </span>
           </> :
