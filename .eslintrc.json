@@ -5,7 +5,7 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "google"
+        "plugin:sonarjs/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -20,6 +20,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "sonarjs/no-duplicate-string": "off",
+        "sonarjs/no-collapsible-if": "off"
     }
 }
