@@ -1,36 +1,39 @@
 import React from 'react';
 
 type Props = {
-    placeholder?: string;
-    type: string;
-    width?: string;
-    height?: string;
-    className?: string
-    value?: number | string;
-    setValueString?: (newValue: string) => void;
-    setValueNumber?: (newValue: string) => void;
-}
+	placeholder?: string;
+	type: string;
+	width?: string;
+	height?: string;
+	className?: string;
+	value?: number | string;
+	setValueString?: (newValue: string) => void;
+	setValueNumber?: (newValue: string) => void;
+};
+
+const unset = 'no SetValue';
 
 const Input = ({
-  value,
-  setValueString,
-  setValueNumber,
-  placeholder,
-  type,
-  width= '3/4',
-  height = '12',
-} : Props) => {
-  let setValue : (value: any) => void;
-  if (!setValueString && !setValueNumber) {
-    setValue = () => console.error('no SetValue');
-  } else {
-    setValue = type === 'number' ?
-    setValueNumber || (() => console.error('no SetValue')):
-    setValueString || (() => console.error('no SetValue'));
-  }
-  return (
-    <input
-      className={`
+	value,
+	setValueString,
+	setValueNumber,
+	placeholder,
+	type,
+	width = '3/4',
+	height = '12',
+}: Props) => {
+	let setValue: (value: any) => void;
+	if (!setValueString && !setValueNumber) {
+		setValue = () => console.error(unset);
+	} else {
+		setValue =
+			type === 'number'
+				? setValueNumber || (() => console.error(unset))
+				: setValueString || (() => console.error(unset));
+	}
+	return (
+		<input
+			className={`
         outline-none
         rounded-2xl
         px-5 text-2xl
@@ -39,12 +42,12 @@ const Input = ({
         h-${height}
         w-${width}
       `}
-      placeholder={placeholder}
-      type={type}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-    />
-  );
+			placeholder={placeholder}
+			type={type}
+			value={value}
+			onChange={(e) => setValue(e.target.value)}
+		/>
+	);
 };
 
 export default Input;

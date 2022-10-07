@@ -1,0 +1,4 @@
+{
+    "pattern": "^(main|test|develop|demo){1}$|^(us|change|debt|defect)/.+$",
+    "errorMsg": "Branch name format : <type>/<name>"
+}
