@@ -1,6 +1,6 @@
 import React from 'react';
-import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
-import {useOutsideClicker} from '../hook';
+import {ReactComponent as OpenIcon} from 'assets/icon/openInputSelect.svg';
+import {useOutsideClicker} from 'hooks';
 
 type Props = React.PropsWithChildren<{
     disable?: boolean;

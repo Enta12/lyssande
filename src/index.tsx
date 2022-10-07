@@ -5,7 +5,7 @@ import AppRoute from './AppRoute';
 import {createRoot} from 'react-dom/client';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {AuthContextProvider} from './hook/useAuth';
+import {AuthContextProvider} from './hooks/useAuth';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(

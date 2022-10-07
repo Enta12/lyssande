@@ -1,5 +1,5 @@
 import React from 'react';
-import {useAuth} from 'hook';
+import {useAuth} from 'hooks';
 import NavLink from './NavLink';
 
 const Nav = () => {
@@ -12,7 +12,7 @@ const Nav = () => {
       }
       <NavLink href="/calendar">Calendrier</NavLink>
       <NavLink href="/sessions">Mes parties</NavLink>
-      <NavLink href="/pj">PJS</NavLink>
+      <NavLink href="/pc">PJS</NavLink>
       <NavLink href="/map">Carte</NavLink>
       {
         (
@@ -20,14 +20,14 @@ const Nav = () => {
           auth?.user.info?.role === 'gm'
         ) &&
           <>
-            <NavLink href="/player">Joueurs</NavLink>
+            <NavLink href="/players">Joueurs</NavLink>
             <NavLink href="/fight">Combat</NavLink>
-            <NavLink href="/newSession">Créer une partie</NavLink>
+            <NavLink href="/sessions/add">Créer une partie</NavLink>
           </>
       }
       {
         auth?.user.info?.role === 'admin' &&
-        <NavLink href="/addUser">Ajouter un utilisateur</NavLink>
+        <NavLink href="/players/add">Ajouter un utilisateur</NavLink>
       }
     </nav>
   );

@@ -1,4 +1,4 @@
-export type PjType = {
+export type PcType = {
     name: string,
     img: string,
     job?: Job,
@@ -76,9 +76,10 @@ export type Auth = {
     id?: number;
     role?: string;
 }
+export type Role = 'admin' | 'gm' | 'player';
 export type UserInfo = {
     id: string;
-    role: 'admin' | 'gm' | 'player';
+    role: Role;
     name: string;
     email?: string;
 }
@@ -109,7 +110,7 @@ export type Session = {
     title?: string,
     description?: string,
     gm?: string,
-    characters: PjType[],
+    characters: PcType[],
     moment: 'journée' | 'soirée',
     platform: 'online' | 'just-irl';
 }
