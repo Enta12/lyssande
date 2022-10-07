@@ -1,17 +1,17 @@
 import {MouseEvent, useState, useRef, useEffect} from 'react';
-import {landsMoocked, speedMoocked} from '../../moockedData';
-import {GroupData, PjType, UserInfo} from '../../types';
-import MapButton from './mapButton';
-import ShortSelect from '../shortSelect';
+import {landsMoocked, speedMoocked} from 'moockedData';
+import {GroupData, PcType, UserInfo} from 'types';
+import MapButton from './MapButton';
+import {ShortSelect} from 'components';
 import React from 'react';
-import Token from './tokens/token';
-import ContextMenu from './contextMenu';
-import PrimaryButton from '../primary-button';
-import {useAuth} from '../../hook';
+import Token from './Tokens/Token';
+import ContextMenu from './ContextMenu';
+import PrimaryButton from '../Primary-button';
+import {useAuth} from 'hooks';
 
 type Props = {
     players: UserInfo[];
-    pjs : PjType[];
+    pcs : PcType[];
     img: string;
     mapName: string;
     scale: number;
@@ -26,21 +26,21 @@ type Props = {
 type ContextMenuProps = {
   y: string;
   x: string;
-  pjIndex?: number;
+  pcIndex?: number;
 }
 
-const formatPjToTokenData = (pj :PjType) => {
-  if (!pj.positions) return undefined;
+const formatPcToTokenData = (pc :PcType) => {
+  if (!pc.positions) return undefined;
   return {
-    ...pj.positions.coordinates,
-    map: pj.positions.map,
+    ...pc.positions.coordinates,
+    map: pc.positions.map,
     showMouvement: 0,
-    group: pj.positions.group,
+    group: pc.positions.group,
   };
 };
 
 
-const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
+const Map = ({img, pcs, players, mapName, scale, handleSend}: Props) => {
   const mapRef = useRef<HTMLImageElement>(null);
   const auth = useAuth();
 
@@ -64,39 +64,39 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       useState({speed: 0, land: 0, duration: 0});
 
   useEffect(() => {
-    setTokenData([...pjs.map((pj, index) => formatPjToTokenData(pj))]);
-  }, [setTokenData, pjs]);
+    setTokenData([...pcs.map((pc, index) => formatPcToTokenData(pc))]);
+  }, [setTokenData, pcs]);
 
   useEffect(() => {
     const defineGroups = (
-        pj: PjType,
+        pc: PcType,
         index: number,
         groupsDataTemp: (GroupData | undefined)[],
     ) => {
-      if (pj.positions) {
-        if (pj.positions.group || pj.positions.group === 0) {
-          const group = groupsDataTemp[pj.positions.group];
+      if (pc.positions) {
+        if (pc.positions.group || pc.positions.group === 0) {
+          const group = groupsDataTemp[pc.positions.group];
           if (group) {
             group.members.push(index);
           } else {
-            groupsDataTemp[pj.positions.group] = {
+            groupsDataTemp[pc.positions.group] = {
               members: [index],
               position: {
-                ...pj.positions.coordinates,
-                map: pj.positions.map,
+                ...pc.positions.coordinates,
+                map: pc.positions.map,
               },
             };
           }
         }
       }
     };
-    if (!initEnd && pjs.length) {
+    if (!initEnd && pcs.length) {
       const groupsDataTemps = groupsData;
-      pjs.forEach((pj, index) => defineGroups(pj, index, groupsDataTemps));
+      pcs.forEach((pc, index) => defineGroups(pc, index, groupsDataTemps));
       setGroupsData([...groupsDataTemps]);
       setInitEnd(true);
     }
-  }, [pjs, groupsData, setGroupsData, initEnd, setInitEnd]);
+  }, [pcs, groupsData, setGroupsData, initEnd, setInitEnd]);
   const tokens: React.ReactNode[] = [];
   const groups: React.ReactNode[] = [];
   const contextMenu = {
@@ -151,14 +151,14 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
         setTokenData(tokenDataTemp);
         break;
       case 'resetToken':
-        tokenDataTemp[index] = formatPjToTokenData(pjs[index]);
+        tokenDataTemp[index] = formatPcToTokenData(pcs[index]);
         setTokenData(tokenDataTemp);
     }
     setContextMenu(null);
   };
   const openContextMenu =(
       e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
-      pjIndex?: number,
+      pcIndex?: number,
   ) => {
     e.preventDefault();
     const xPos = e.pageX + 'px';
@@ -166,7 +166,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
     setContextMenu({
       x: xPos,
       y: yPos,
-      pjIndex: pjIndex,
+      pcIndex: pcIndex,
     });
   };
   const handleChange= (option: number) => {
@@ -351,11 +351,11 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
   };
   const createTokens = () => {
     if (mapRef?.current) {
-      pjs.forEach((pj, index) => {
+      pcs.forEach((pc, index) => {
         if (tokenData[index] && tokenData[index]?.group === -1) {
           if (tokenData[index]?.map === mapName) {
             const player = players[
-                players.findIndex((player) => pj.player === player.id)];
+                players.findIndex((player) => pc.player === player.id)];
             tokens[index] =
             <Token
               setIsGrouping={() => isGrouping = true}
@@ -375,8 +375,8 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
                 playersSorted.some((playersSorted) =>
                   playersSorted === player.name))
               }
-              pj={pjs[index]}
-              key={pj.name}
+              pc={pcs[index]}
+              key={pc.name}
               pos={tokenData[index] || {x: 0, y: 0}}
             />;
           };
@@ -388,7 +388,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
           <Token
             setIsGrouping={() => isGrouping = true}
             placeEntity={placeEntity}
-            charactersData={pjs}
+            charactersData={pcs}
             groupData={groupsData[index]}
             groupTokens={groupTokens}
             index={index}
@@ -406,7 +406,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
                     (currentPlayer) =>
                       groupsData[index]?.members.some(
                           (currentMember) =>
-                            pjs[currentMember].player === currentPlayer,
+                            pcs[currentMember].player === currentPlayer,
                       ),
                 ))}
             key={index}
@@ -461,23 +461,23 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       </div>
       <div className='flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]'>
 
-        {pjs.map((pj, index) => {
+        {pcs.map((pc, index) => {
           const player = players[
-              players.findIndex((player) => pj.player === player.id)];
+              players.findIndex((player) => pc.player === player.id)];
           return ( player ?
             <MapButton
-              setPjDrag={() => setEntityDrag(
+              setPcDrag={() => setEntityDrag(
                   {entityId: index, group: false},
               )}
               hidden={
                 !(playersSorted.length===0 ||
                   playersSorted.some(
-                      (selectedPj) => selectedPj === player.name)) ||
+                      (selectedPc) => selectedPc === player.name)) ||
                   (!!tokenData[index] && tokenData[index]?.map === mapName)
               }
               key={index}
-              name={pj.name}
-              picture={pj.img}
+              name={pc.name}
+              picture={pc.img}
             /> : <></>
           );
         })}
@@ -496,7 +496,7 @@ const Map = ({img, pjs, players, mapName, scale, handleSend}: Props) => {
       {contexMenu !== null && <ContextMenu
         data={contextMenu}
         handleChange={handleContextMenuChange}
-        pjIndex={contexMenu.pjIndex}
+        pcIndex={contexMenu.pcIndex}
         y={contexMenu.y}
         x={contexMenu.x}
         close={() => setContextMenu(null)}

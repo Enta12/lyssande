@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {toast} from 'react-toastify';
-import {Input, InputSelect, PrimaryButton, Title} from '../../components';
-import useApi from '../../hook/useApi';
-import {roles} from '../../moockedData';
+import {Input, InputSelect, PrimaryButton, Title} from 'components';
+import {useApi} from 'hooks';
+import {roles} from 'moockedData';
 
 // TODO Supress this function when the back create password
 const createPassword = (

@@ -3,14 +3,14 @@ type Props = {
     name: string;
     picture: string;
     hidden: boolean;
-    setPjDrag: () => void;
+    setPcDrag: () => void;
 }
 
 const MapButton = ({
   hidden,
   name,
   picture,
-  setPjDrag,
+  setPcDrag,
 }: Props) => {
   return (
     <div
@@ -23,7 +23,7 @@ const MapButton = ({
       }
     >
       <img
-        onDragStart={setPjDrag}
+        onDragStart={setPcDrag}
         className="
             w-20
             h-20

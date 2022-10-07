@@ -1,4 +1,4 @@
-import {UserInfo} from '../types';
+import {UserInfo} from 'types';
 import React from 'react';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 
 const PlayerCard = ({player}: Props) => {
   return (
-    <a href={`player/${player.id}`} className="
+    <a href={`players/${player.id}`} className="
             text-lg
             h-24
             w-full

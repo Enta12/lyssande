@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {PrimaryButton, Title} from '../../components';
-import {locals} from '../../moockedData';
-import {FightPhaseData, Protagonist} from '../../types';
-import FightLine from './fightLine';
+import {PrimaryButton, Title} from 'components';
+import {locals} from 'moockedData';
+import {FightPhaseData, Protagonist} from 'types';
+import FightLine from './FightLine';
 import ProtagonistListForm from './ProtagonistListForm';
 import {
   ReactComponent as BlowUpButtonRight,
-} from '../../assets/blowUpBoutonRight.svg';
+} from 'assets/icon/blowUpBoutonRight.svg';
 import {
   ReactComponent as BlowUpButtonLeft,
-} from '../../assets/blowUpBoutonLeft.svg';
+} from 'assets/icon/blowUpBoutonLeft.svg';
 
 const FightPage = () => {
   const [protagonistList, setProtagonistList] =

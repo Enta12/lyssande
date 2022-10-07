@@ -1,12 +1,13 @@
-import {Session, UserInfo} from '../types';
+import {Session, UserInfo} from 'types';
 import UnfoldingCard from './UnfoldingCard';
 import React, {useState} from 'react';
-import {months} from '../moockedData';
-import avalabilityIrl from '../assets/availabilityIrl.svg';
-import avalabilityIl from '../assets/availabilityIl.svg';
-import {ReactComponent as EditButton} from '../assets/editButton.svg';
-import PjCard from './pjCard';
+import {months} from 'moockedData';
+import avalabilityIrl from 'assets/icon/availabilityIrl.svg';
+import avalabilityIl from 'assets/icon/availabilityIl.svg';
+import {ReactComponent as EditButton} from 'assets/icon/editButton.svg';
+import PcCard from './PcCard';
 import {useNavigate} from 'react-router-dom';
+import cn from 'classnames';
 
 type Props = {
     data: Session;
@@ -82,12 +83,9 @@ const SessionCard = ({
       <div className='relative'>
         <hr />
         <p
-          className={`
-          text-white
-            font-bubblegum
-            my-4
-            ${!data.description ? 'text-center' : ''}
-          `}
+          className={cn('text-white font-bubblegum my-4', {
+            ['text-center']: !data.description,
+          })}
         >
           {data.description}
           {
@@ -130,9 +128,9 @@ const SessionCard = ({
             p-5"
         >
           {data.characters.map((characterData, index) =>
-            <PjCard
+            <PcCard
               key={index}
-              pjData={characterData}
+              pcData={characterData}
             />,
           )}
         </div>

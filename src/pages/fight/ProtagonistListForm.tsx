@@ -1,8 +1,8 @@
 import React from 'react';
-import {Protagonist} from '../../types';
+import {Protagonist} from 'types';
 import ProtagonistForm from './ProtagonistForm';
-import {ReactComponent as AddIcon} from '../../assets/whiteAdd.svg';
-import {Title} from '../../components';
+import {ReactComponent as AddIcon} from 'assets/icon/whiteAdd.svg';
+import {Title} from 'components';
 
 type Props = {
     height?: number,

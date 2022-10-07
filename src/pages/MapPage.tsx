@@ -1,18 +1,18 @@
-import Map from '../components/map/map';
-import {mapsMoocked} from '../moockedData';
+import Map from 'components/Map/Map';
+import {mapsMoocked} from 'moockedData';
 import React, {useEffect, useState} from 'react';
-import {PjType, UserInfo} from '../types';
+import {PcType, UserInfo} from 'types';
 import {toast} from 'react-toastify';
-import {useAuth} from '../hook';
-import useApi from '../hook/useApi';
-import {ReactComponent as Corner} from '../assets/reverseBorder/corner.svg';
+import {useAuth} from 'hooks';
+import useApi from 'hooks/useApi';
+import {ReactComponent as Corner} from 'assets/reverseBorder/corner.svg';
 
 // eslint-disable-next-line max-len
 const noSaveMsg = 'Attention, vous pouvez temporairement déplacer vos tokens mais leur position n\'est pas enregistrée';
 
 const MapPage = () => {
   const [mapSelected, setMapSelected] = useState(0);
-  const [pjData, setPjData] = useState<PjType[]>([]);
+  const [pcData, setPcData] = useState<PcType[]>([]);
   const [players, setPlayers] = useState<UserInfo[]>([]);
   const auth = useAuth();
   const api = useApi();
@@ -22,7 +22,7 @@ const MapPage = () => {
       try {
         const characterRes = await api.get('/characters');
         const usersRes = await api.get('/users');
-        setPjData(characterRes.data);
+        setPcData(characterRes.data);
         setPlayers(usersRes.data);
       } catch (error) {
         toast.error('Impossible de récupérer les personnages');
@@ -52,7 +52,7 @@ const MapPage = () => {
     newPositions.forEach((el, index) => {
       if (el) {
         body.push({
-          id: pjData[index].id,
+          id: pcData[index].id,
           positions: {
             coordinates: {
               x: el.x,
@@ -101,7 +101,7 @@ const MapPage = () => {
         handleSend={updatePositions}
         scale={mapsMoocked[mapSelected].scale}
         img={mapsMoocked[mapSelected].mapLink}
-        pjs={pjData}
+        pcs={pcData}
         mapName={mapsMoocked[mapSelected].name}
       />
     </>

@@ -1,8 +1,8 @@
-import PlayerCard from '../../components/playerCard';
-import Title from '../../components/title';
+import PlayerCard from 'components/PlayerCard';
+import Title from 'components/Title';
 import React, {useEffect, useState} from 'react';
-import {UserInfo} from '../../types';
-import {useApi} from '../../hook';
+import {UserInfo} from 'types';
+import {useApi} from 'hooks';
 import {toast} from 'react-toastify';
 
 const Players = () => {

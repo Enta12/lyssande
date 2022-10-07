@@ -1,7 +1,7 @@
 import React from 'react';
-import {Protagonist} from '../../types';
-import {ReactComponent as TwoHandsIcon} from '../../assets/twoHands.svg';
-import {PrimaryButton} from '../../components';
+import {Protagonist} from 'types';
+import {ReactComponent as TwoHandsIcon} from 'assets/icon/twoHands.svg';
+import {PrimaryButton} from 'components';
 
 type Props = {
     protagonist: Protagonist,

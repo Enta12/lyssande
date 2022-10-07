@@ -1,11 +1,11 @@
-import avalabilityNone from '../../assets/availabilityNone.svg';
-import avalabilityIrl from '../../assets/availabilityIrl.svg';
-import avalabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
-import avalabilityIl from '../../assets/availabilityIl.svg';
-import avalabilityIG from '../../assets/availabilityIG.svg';
-import avalabilityRest from '../../assets/availabilityRest.svg';
+import avalabilityNone from 'assets/icon/availabilityNone.svg';
+import avalabilityIrl from 'assets/icon/availabilityIrl.svg';
+import avalabilityIrlOrIl from 'assets/icon/availabilityIrlOrIl.svg';
+import avalabilityIl from 'assets/icon/availabilityIl.svg';
+import avalabilityIG from 'assets/icon/availabilityIG.svg';
+import avalabilityRest from 'assets/icon/availabilityRest.svg';
 import React from 'react';
-import {Platform} from '../../types';
+import {Platform} from 'types';
 
 type Props = {
     checkboxState: Platform;

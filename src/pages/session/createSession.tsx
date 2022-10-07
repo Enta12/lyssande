@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ShortSelect} from '../../components';
-import PjSessionSelector from '../../components/pjSessionSelector';
-import PrimaryButton from '../../components/primary-button';
-import {PjType, Platform, UserInfo} from '../../types';
-import {days, months} from '../../moockedData';
+import {ShortSelect} from 'components';
+import PcSessionSelector from 'components/PcSessionSelector';
+import PrimaryButton from 'components/Primary-button';
+import {PcType, Platform, UserInfo} from 'types';
+import {days, months} from 'moockedData';
 import {toast} from 'react-toastify';
-import {useAuth, useApi} from '../../hook';
+import {useAuth, useApi} from 'hooks';
 
 type AvailabilitySend = {
   user: string,
@@ -38,11 +38,11 @@ const platformTrad = {
 };
 
 const CreateSession = () => {
-  const [selectedPjs, setSelectedPjs] = useState<string[]>([]);
+  const [selectedPcs, setSelectedPcs] = useState<string[]>([]);
   const [lastQuest, setLastQuest] = useState('');
   const [selectedDate, setSelectedDate] = useState<number>(0);
   const [players, setPlayers] = useState<UserInfo[]>([]);
-  const [characters, setCharacters] = useState<PjType[]>([]);
+  const [characters, setCharacters] = useState<PcType[]>([]);
   const [possibleDates, setPossibleDates] =
       useState<PossibleDate[]>([]);
   const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
@@ -155,7 +155,7 @@ const CreateSession = () => {
       }
     }
   }, [possibleDates, selectedDate]);
-  useEffect(()=> setSelectedPjs([]), [selectedDate, selectedPlatform, selectedMoment]);
+  useEffect(()=> setSelectedPcs([]), [selectedDate, selectedPlatform, selectedMoment]);
 
   const getPlayerAvailableOnOtherMoment = () => {
     if (!possibleDates[selectedDate][MOMENT[(selectedMoment+1)%2]]?.['just-irl']) {
@@ -174,12 +174,12 @@ const CreateSession = () => {
 
   const loading = !possibleDates.length;
 
-  const setSelectedPj = (playerIndex: number, pjID: string ) => {
-    const selectedPjsTemp = [...selectedPjs];
-    selectedPjsTemp[playerIndex] = pjID;
-    setSelectedPjs(selectedPjsTemp);
-    const newSelectedCharacter = getById(pjID);
-    setLastQuest(selectedPjs.some(
+  const setSelectedPc = (playerIndex: number, pcID: string ) => {
+    const selectedPcsTemp = [...selectedPcs];
+    selectedPcsTemp[playerIndex] = pcID;
+    setSelectedPcs(selectedPcsTemp);
+    const newSelectedCharacter = getById(pcID);
+    setLastQuest(selectedPcs.some(
         (element) => {
           const currentCharacter = getById(element);
           return (
@@ -207,7 +207,7 @@ const CreateSession = () => {
       toast.error('Pas de dates selectionnés');
       return;
     }
-    if (!selectedPjs.some((el) => !!el)) {
+    if (!selectedPcs.some((el) => !!el)) {
       toast.error('Veuillez selectionner au moins un personnage');
       return;
     }
@@ -216,7 +216,7 @@ const CreateSession = () => {
         date: `${possibleDates[selectedDate].date}`,
         moment: MOMENT[selectedMoment],
         platform: PLATFORM[selectedPlatform],
-        characters: selectedPjs.filter((el) => !!el),
+        characters: selectedPcs.filter((el) => !!el),
       });
       toast.success('La partie à été créer avec succès');
       navigate('/map');
@@ -330,14 +330,14 @@ const CreateSession = () => {
                   some(
                       (currentPlayerId) => currentPlayerId === playerId);
               return (
-                <PjSessionSelector
+                <PcSessionSelector
                   platform={irlOrOnline ? 'irl-or-online' : PLATFORM[(selectedPlatform)%2]}
                   quest={lastQuest}
-                  selectedPj={selectedPjs[index]}
-                  setSelectedPj={setSelectedPj}
+                  selectedPc={selectedPcs[index]}
+                  setSelectedPc={setSelectedPc}
                   playerIndex={index}
                   key={index}
-                  pjs={characters.filter((pj) => pj.player === playerId)}
+                  pcs={characters.filter((pc) => pc.player === playerId)}
                   playerName={players.find((player) => player.id === playerId)?.name || 'User introuvable'}
                 />
               );

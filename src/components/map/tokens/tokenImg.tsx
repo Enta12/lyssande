@@ -1,12 +1,12 @@
 
 import React from 'react';
-import {PjType} from '../../../types';
+import {PcType} from 'types';
 
 type Props = {
     setIsGrouping: () => void;
     groupTokens: () => void;
-    setPjDrag: () => void;
-    pj: PjType;
+    setPcDrag: () => void;
+    pc: PcType;
     handleOnDrag?: (e:(React.DragEvent<HTMLDivElement> |
       React.DragEvent<HTMLImageElement>)) => void;
     handleDragEnd?: () => void;
@@ -15,8 +15,8 @@ type Props = {
 const TokenImg = (
     {
       groupTokens,
-      pj,
-      setPjDrag,
+      pc,
+      setPcDrag,
       handleOnDrag,
       handleDragEnd,
       setIsGrouping,
@@ -29,10 +29,10 @@ const TokenImg = (
         setIsGrouping();
       }}
       data-tip
-      data-for={`${pj.name}RegisterTip`}
-      src={pj.img}
-      alt={pj.name}
-      onDragStart={setPjDrag}
+      data-for={`${pc.name}RegisterTip`}
+      src={pc.img}
+      alt={pc.name}
+      onDragStart={setPcDrag}
       onDragEnd={(e) => {
         if (handleDragEnd) handleDragEnd();
         if (handleOnDrag) handleOnDrag(e);

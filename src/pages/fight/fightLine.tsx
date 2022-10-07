@@ -1,15 +1,16 @@
 /* eslint-disable max-len */
 import React from 'react';
-import {InputSelect} from '../../components';
-import {FightPhaseData, Protagonist} from '../../types';
-import {ReactComponent as TargetIcon} from '../../assets/target.svg';
-import {ReactComponent as Blowup} from '../../assets/blowup.svg';
-import {ReactComponent as SwordIcon} from '../../assets/sword.svg';
-import {ReactComponent as ReverseMarginMiddle} from '../../assets/reverseBorder/double13px.svg';
-import {ReactComponent as ReverseMarginY} from '../../assets/reverseBorder/corner.svg';
-import {ReactComponent as HandTopIcon} from '../../assets/handTop.svg';
-import {ReactComponent as HandBottomIcon} from '../../assets/handBottom.svg';
-import {locals} from '../../moockedData';
+import cn from 'classnames';
+import {InputSelect} from 'components';
+import {FightPhaseData, Protagonist} from 'types';
+import {ReactComponent as TargetIcon} from 'assets/icon/target.svg';
+import {ReactComponent as Blowup} from 'assets/icon/blowup.svg';
+import {ReactComponent as SwordIcon} from 'assets/icon/sword.svg';
+import {ReactComponent as ReverseMarginMiddle} from 'assets/reverseBorder/double13px.svg';
+import {ReactComponent as ReverseMarginY} from 'assets/reverseBorder/corner.svg';
+import {ReactComponent as HandTopIcon} from 'assets/icon/handTop.svg';
+import {ReactComponent as HandBottomIcon} from 'assets/icon/handBottom.svg';
+import {locals} from 'moockedData';
 
 type Props = {
     firstLine: boolean;
@@ -135,12 +136,10 @@ const FightLine = ({protagonistList, data, firstLine, updateLocal, updateOposing
   else if (prdC < 0) prdC = 0;
 
   return (
-    <div className={`
-      text-xl
-      flex
-      text-brown
-      ${protagonistList[data.protagonistA].secondAt ? 'my-[46px]' : ''}
-      relative`}
+    <div
+      className={cn('text-xl flex text-brown', {
+        ['my-[46px]']: protagonistList[data.protagonistA].secondAt,
+      })}
     >
       <div className={`
         flex

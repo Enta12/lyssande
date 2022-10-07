@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Session, UserInfo} from '../../types';
-import {Input, PjCard, PrimaryButton, TextInput, Title} from '../../components';
+import {Session, UserInfo} from 'types';
+import {Input, PcCard, PrimaryButton, TextInput, Title} from 'components';
 import {useNavigate, useParams} from 'react-router-dom';
-import avalabilityIrl from '../../assets/availabilityIrl.svg';
-import avalabilityIl from '../../assets/availabilityIl.svg';
-import {months} from '../../moockedData';
+import avalabilityIrl from 'assets/icon/availabilityIrl.svg';
+import avalabilityIl from 'assets/icon/availabilityIl.svg';
+import {months} from 'moockedData';
 import {toast} from 'react-toastify';
-import useApi from '../../hook/useApi';
+import {useApi} from 'hooks';
 
 const platformIcon = {
   'online': {
@@ -136,9 +136,9 @@ const SessionEditPage = () => {
             gap-5"
       >
         {session && session.characters.map((characterData, index) =>
-          <PjCard
+          <PcCard
             key={index}
-            pjData={characterData}
+            pcData={characterData}
           />,
         )}
       </div>

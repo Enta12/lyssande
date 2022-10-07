@@ -1,7 +1,7 @@
-import {ReactComponent as OpenIcon} from '../assets/openInputSelect.svg';
+import {ReactComponent as OpenIcon} from 'assets/icon/openInputSelect.svg';
 import {useState} from 'react';
 import React from 'react';
-import {useOutsideClicker} from '../hook';
+import {useOutsideClicker} from 'hooks';
 
 
 type Props ={
@@ -66,8 +66,8 @@ const ShortSelect = ({
               onClick={(e) => handleClick(index)}
               key={index}
               className={
-                `${value.some((selectedPj) =>
-                  selectedPj === index) && 'bg-blue-400'}
+                `${value.some((selectedPc) =>
+                  selectedPc === index) && 'bg-blue-400'}
                 p-1.5
                 cursor-pointer
                 ${index=== 0 && 'rounded-t-lg'} 

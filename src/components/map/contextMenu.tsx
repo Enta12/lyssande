@@ -1,9 +1,8 @@
 import React from 'react';
-import PrimaryButton from '../primary-button';
-import ShortSelect from '../shortSelect';
-import {ReactComponent as BackArrow} from '../../assets/back.svg';
-import {ReactComponent as Hike} from '../../assets/hike.svg';
-import {useOutsideClicker} from '../../hook';
+import {PrimaryButton, ShortSelect} from 'components';
+import {ReactComponent as BackArrow} from 'assets/icon/back.svg';
+import {ReactComponent as Hike} from 'assets/icon/hike.svg';
+import {useOutsideClicker} from 'hooks';
 
 type Props = {
   y: string;
@@ -24,10 +23,10 @@ type Props = {
     }
   }
   close: () => void;
-  pjIndex?: number;
+  pcIndex?: number;
 }
 
-const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
+const ContextMenu = ({y, x, close, pcIndex, data, handleChange}: Props) => {
   const contextMenuRef = useOutsideClicker(() => close());
   return (
     <div
@@ -57,12 +56,12 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
         handleChange={(index) => handleChange('land', index)}
       />
       {
-        pjIndex!== undefined &&
+        pcIndex!== undefined &&
         <>
           <div className='relative'>
             <BackArrow className='w-10'/>
             <PrimaryButton
-              onClick={() => handleChange('resetToken', pjIndex)}
+              onClick={() => handleChange('resetToken', pcIndex)}
               className='absolute right-0 top-0'
               text="Reinitialisé sa position"
               width='w-11/12'
@@ -75,7 +74,7 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
             <PrimaryButton
               onClick={() => handleChange(
                   'showMouvement',
-                  pjIndex,
+                  pcIndex,
               )}
               className='absolute right-0 top-0'
               text='distance isochrone ON/OFF'
@@ -85,7 +84,7 @@ const ContextMenu = ({y, x, close, pjIndex, data, handleChange}: Props) => {
             />
           </div>
           <PrimaryButton
-            onClick={() => handleChange('supressToken', pjIndex)}
+            onClick={() => handleChange('supressToken', pcIndex)}
             text="Retirer de la carte"
             alterButton width='w-full'
             height='h-10'

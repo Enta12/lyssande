@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {SessionCard} from '../../components';
-import useApi from '../../hook/useApi';
-import {Session, UserInfo} from '../../types';
+import {SessionCard} from 'components';
+import {useApi} from 'hooks';
+import {Session, UserInfo} from 'types';
 import {toast} from 'react-toastify';
 
 const SessionPage = () => {

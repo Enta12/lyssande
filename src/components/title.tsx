@@ -10,7 +10,7 @@ const Title = ({
   title,
   subtitle = false,
   reverse = false,
-  className,
+  className = '',
 } : Props) => {
   return (
     <h1
@@ -18,7 +18,7 @@ const Title = ({
           font-bubblegum
           ${reverse ? 'text-orange' : 'text-swamp'}
           ${subtitle ? 'text-2xl' : 'text-3xl'}
-          ${className || ''}`
+          ${className}`
       }
     >
       ~ {title} ~

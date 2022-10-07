@@ -1,9 +1,9 @@
-import {GroupData, PjType, Pos} from '../../../types';
+import {GroupData, PcType, Pos} from 'types';
 import React from 'react';
-import TokenImg from './tokenImg';
-import TokenGroups from './tokenGroup';
+import TokenImg from './TokenImg';
+import TokenGroups from './TokenGroup';
 import ReactTooltip from 'react-tooltip';
-import PjCard from '../../pjCard';
+import PcCard from 'components/PcCard';
 
 type Style = {
   top: string;
@@ -15,8 +15,8 @@ type Style = {
 };
 type Props = {
     setIsGrouping: () => void;
-    charactersData?: PjType[]
-    pj?: PjType;
+    charactersData?: PcType[]
+    pc?: PcType;
     groupData?: GroupData;
     groupTokens: (entityId: number, group?: boolean)
         => void
@@ -30,7 +30,7 @@ type Props = {
       event: (React.DragEvent<HTMLDivElement> |
         React.DragEvent<HTMLImageElement>)) => void
     setContexMenu: (e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-                    onPj: boolean) => void;
+                    onPc: boolean) => void;
 }
 
 const Token = ({
@@ -38,7 +38,7 @@ const Token = ({
   groupData,
   groupTokens,
   hidden,
-  pj,
+  pc,
   index,
   pos,
   setContexMenu,
@@ -68,7 +68,7 @@ const Token = ({
     <>
       <div
         onContextMenu={(e) => {
-          if (handleContextMenu && pj) handleContextMenu(e);
+          if (handleContextMenu && pc) handleContextMenu(e);
         }}
         onDrag={(e) => e.preventDefault()}
         onDragEnter={(e) => e.preventDefault()}
@@ -98,12 +98,12 @@ const Token = ({
           `}
         >
           {
-            pj &&
+            pc &&
               <TokenImg
                 setIsGrouping={setIsGrouping}
                 groupTokens={() => groupTokens(index)}
-                setPjDrag={() => setEntityDrag({entityId: index, group: false})}
-                pj={pj}
+                setPcDrag={() => setEntityDrag({entityId: index, group: false})}
+                pc={pc}
               />
           }
           {
@@ -124,15 +124,15 @@ const Token = ({
       </div>
 
       {
-        pj &&
+        pc &&
         <ReactTooltip
-          id={`${pj.name}RegisterTip`}
+          id={`${pc.name}RegisterTip`}
           place='right'
           effect='solid'
           backgroundColor='none'
           delayShow={500}
         >
-          <PjCard pjData={pj} />
+          <PcCard pcData={pc} />
         </ReactTooltip>
       }
     </>

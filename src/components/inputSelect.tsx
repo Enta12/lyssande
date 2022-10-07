@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import iconOpen from '../assets/openInputSelect.svg';
-import {useOutsideClicker} from '../hook';
+import iconOpen from 'assets/icon/openInputSelect.svg';
+import {useOutsideClicker} from 'hooks';
+import cn from 'classnames';
 
-interface Props {
+type Props = {
     width?: string;
     height?: string;
     options: string[];
@@ -14,7 +15,7 @@ interface Props {
 }
 
 const InputSelect = ({
-  className,
+  className = '',
   title,
   options,
   width,
@@ -43,7 +44,7 @@ const InputSelect = ({
         text-center
         text-2xl
         font-inter
-        ${className || ''}
+        ${className}
       `}
       ref={selectRef}
     >
@@ -107,14 +108,14 @@ const Option = ({
   last,
 } : OptionProps) => {
   const classNames = display?
-  `h-${height}
-  border-t
-  cursor-pointer
-  flex
-  justify-center
-  items-center
-  ${last?'rounded-b-2xl' : ''}
-  bg-white` :
+  cn(`h-${height}
+    border-t
+    cursor-pointer
+    flex
+    justify-center
+    items-center
+    bg-white`, {['rounded-b-2xl']: last},
+  ) :
   'hidden';
   return (
     <div className={classNames} onClick={(e) => selectAnOption(e)}>{name}</div>

@@ -1,84 +1,148 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import React from 'react';
-import Layout from './components/layout/layout';
-import Login from './pages/login/login';
-import Pj from './pages/pj/pj';
-import AddPj from './pages/pj/addPj/addPj';
-import Calendar from './pages/calendar/CalendarPage';
-import MapPage from './pages/MapPage';
-import FightPage from './pages/fight/FightPage';
-import Player from './pages/player/player';
-import DetailPj from './pages/pj/detailPj';
-import Players from './pages/player/players';
-import CreateSession from './pages/session/createSession';
-import NotFound from './pages/notFound/NotFound';
-import SessionPage from './pages/session/SessionPage';
-import SessionEditPage from './pages/session/SessionEditPage';
-import AddUser from './pages/player/addUser';
-import {useAuth} from './hook';
+import React, {lazy, Suspense} from 'react';
+import Layout from 'components/Layout/Layout';
+import {useAuth} from './hooks';
+import {ProtectedRoute} from 'components';
 
+const Login = lazy(() => import('pages/Login'));
+const Pc = lazy(() => import('pages/Pc/Pc'));
+const AddPc = lazy(() => import('pages/Pc/AddPc/AddPc'));
+const Calendar = lazy(() => import('pages/Calendar/CalendarPage'));
+const MapPage = lazy(() => import('pages/MapPage'));
+const FightPage = lazy(() => import('pages/Fight/FightPage'));
+const Players = lazy(() => import('pages/Player/Player'));
+const Player = lazy(() => import('pages/Player/Players'));
+const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
+const CreateSession = lazy(() => import('pages/Session/createSession'));
+const NotFound = lazy(() => import('pages/NotFound/NotFound'));
+const SessionPage = lazy(() => import('pages/Session/SessionPage'));
+const SessionEditPage = lazy(() => import('pages/Session/SessionEditPage'));
+const AddUser = lazy(() => import('pages/Player/AddUser'));
 
 const AppRoute = () => {
   const auth = useAuth();
   auth?.user;
   return (
     <Router>
-      {
-        auth?.user.isLogged ?
+      <Suspense fallback={
+        <Layout/>}
+      >
         <Routes>
-          <Route path='/pj' element={<Layout><Pj /></Layout>} />
-          <Route path='/pj/:id' element={<Layout><DetailPj /></Layout>} />
-          <Route path='/editCharacter' element={<Layout><AddPj /></Layout>}/>
-          <Route
-            path='/editCharacter/:id'
-            element={<Layout><AddPj /></Layout>}
-          />
-          <Route path='/calendar' element={<Layout><Calendar /></Layout>} />
-          <Route path='/map' element={<Layout><MapPage /></Layout>} />
-          <Route path='/sessions' element={<Layout><SessionPage/></Layout>}/>
-          <Route
-            path='/sessions/:id'
-            element={<Layout><SessionEditPage/></Layout>}
-          />
-          {
-            (
-              auth?.user.info?.role === 'gm' ||
-              auth?.user.info?.role === 'admin') &&
-              <>
-                <Route
-                  path='/player'
-                  element={<Layout><Players /></Layout>}
-                />
-                <Route path='/player/:id' element={
-                  <Layout><Player /></Layout>}
-                />
-                <Route path='/fight' element={
-                  <Layout><FightPage /></Layout>} />
-                <Route
-                  path='/newSession'
-                  element={
-                    <Layout><CreateSession /></Layout>
-                  }
-                />
-              </>
-          }
-          {
-            auth?.user.info?.role === 'admin' &&
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Layout />}>
             <Route
-              path='/addUser'
+              path="map"
               element={
-                <Layout><AddUser /></Layout>
+                <ProtectedRoute>
+                  <MapPage />
+                </ProtectedRoute>
               }
             />
-          }
-          <Route
-            path='/' element={
-              <Layout ><Player userId={auth?.user.info?.id} /></Layout>
-            } />
-          <Route path='*' element={<Layout><NotFound /></Layout>} />
-        </Routes>:
-        <Login />
-      }
+            <Route
+              path="calendar"
+              element={
+                <ProtectedRoute>
+                  <Calendar />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="fight"
+              element={
+                <ProtectedRoute
+                  restricted={{to: ['gm', 'admin'], redirectPath: '/'}}
+                >
+                  <FightPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="sessions">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <SessionPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="add"
+                element={
+                  <ProtectedRoute
+                    restricted={{to: ['gm', 'admin'], redirectPath: '/'}}
+                  >
+                    <CreateSession />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <SessionEditPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            <Route path="players">
+              <Route
+                index
+                element={
+                  <ProtectedRoute
+                    restricted={{to: ['gm', 'admin'], redirectPath: '/'}}
+                  >
+                    <Players />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=':id'
+                element={
+                  <ProtectedRoute>
+                    <Player />
+                  </ProtectedRoute>}
+              />
+              <Route
+                path="add"
+                element={
+                  <ProtectedRoute
+                    restricted={{to: ['admin'], redirectPath: '/'}}
+                  >
+                    <AddUser />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            <Route path="pc">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Pc />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="add"
+                element={
+                  <ProtectedRoute>
+                    <AddPc />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=":id"
+                element={
+                  <ProtectedRoute>
+                    <DetailPc />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+            <Route path="*" element={<NotFound/>} />
+          </Route>
+        </Routes>
+      </Suspense>
     </Router>
   );
 };

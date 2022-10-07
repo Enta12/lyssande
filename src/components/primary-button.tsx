@@ -1,4 +1,5 @@
 import React, {ComponentPropsWithoutRef} from 'react';
+import cn from 'classnames';
 
 type Props = ComponentPropsWithoutRef<'button'> & {
     text: string;
@@ -16,7 +17,7 @@ const PrimaryButton = ({
   width,
   short = false,
   onClick,
-  className,
+  className = '',
 } : Props) => {
   return (
     <button
@@ -36,11 +37,15 @@ const PrimaryButton = ({
         ${alterButton ?
           'bg-red-600' :
           'text-lightGrey'}
-        ${className ? className : ''}
+        ${className}
       `}>
-      <span className={ alterButton ?
-        'text-transparent bg-clip-text bg-gradient-to-b from-black to-red-900' :
-        ''}
+      <span className={cn({
+        [
+        `text-transparent
+        bg-clip-text bg-gradient-to-b
+        from-black to-red-900`
+        ]: alterButton})
+      }
       >
         {text}
       </span>

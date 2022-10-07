@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {ReactComponent as PersonIcon} from '../../../assets/person.svg';
-import {useOutsideClicker} from '../../../hook';
-import {GroupData, PjType} from '../../../types';
-import TokenImg from './tokenImg';
+import {ReactComponent as PersonIcon} from 'assets/icon/person.svg';
+import {useOutsideClicker} from 'hooks';
+import {GroupData, PcType} from 'types';
+import TokenImg from './TokenImg';
 
 type Props = {
   groupData: GroupData;
   setEntityDrag: (value : {entityId: number, group: boolean}) => void;
   groupTokens: (id: number, group: boolean) => void;
-  charactersData?: PjType[];
+  charactersData?: PcType[];
   index: number;
   setIsGrouping: () => void;
 };
@@ -23,11 +23,11 @@ const TokenGroups = ({
 }: Props) => {
   const onClickOutside = () => {
     setShowCharaters(false);
-    setPjDrag(false);
+    setPcDrag(false);
   };
   const tokenRef = useOutsideClicker(onClickOutside);
   const [showCharacters, setShowCharaters] = useState(false);
-  const [pjDrag, setPjDrag] = useState(false);
+  const [pcDrag, setPcDrag] = useState(false);
   return (
     <div
       onClick={() => {
@@ -58,7 +58,7 @@ const TokenGroups = ({
               bg-brown
               mt-[-90%]
               transition-opacity
-              ${pjDrag && 'opacity-50'}
+              ${pcDrag && 'opacity-50'}
           `}
           >
             {
@@ -73,13 +73,13 @@ const TokenGroups = ({
                             groupTokens(characterID, false);
                           }
                         }
-                        handleDragEnd={() => setPjDrag(false)}
-                        setPjDrag={() => {
+                        handleDragEnd={() => setPcDrag(false)}
+                        setPcDrag={() => {
                           setEntityDrag(
                               {entityId: characterID, group: false});
-                          setPjDrag(true);
+                          setPcDrag(true);
                         }}
-                        pj={charactersData[characterID]}
+                        pc={charactersData[characterID]}
                       />
                     );
                   },

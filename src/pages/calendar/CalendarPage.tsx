@@ -1,10 +1,8 @@
-import Title from '../../components/title';
-import Calendar from '../../components/calendar/calendar';
-import PrimaryButton from '../../components/primary-button';
+import {Title, Calendar, PrimaryButton} from 'components';
 import React, {useCallback, useEffect, useState} from 'react';
-import {Availability, Platform} from '../../types';
+import {Availability, Platform} from 'types';
 import {toast} from 'react-toastify';
-import useApi from '../../hook/useApi';
+import useApi from 'hooks/useApi';
 
 type AvailabilitySave = {
   platform: Platform;

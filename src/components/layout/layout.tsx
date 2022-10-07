@@ -1,12 +1,10 @@
-import React, {ReactNode} from 'react';
-import Header from './../header';
-import Footer from './../footer';
+import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import {Outlet} from 'react-router-dom';
 
-type Props = {
-  children: ReactNode
-}
 
-const Layout = ({children} : Props) => {
+const Layout = () => {
   return (
     <div className="
         min-h-screen
@@ -14,7 +12,6 @@ const Layout = ({children} : Props) => {
         flex
         justify-between
         flex-col
-        bg-[url('components/layout/background.jpeg')]
     ">
       <div>
         <Header />
@@ -29,7 +26,7 @@ const Layout = ({children} : Props) => {
         flex-col
         mx-40"
       >
-        {children}
+        <Outlet />
       </section>
       <Footer />
     </div>

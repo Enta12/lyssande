@@ -1,15 +1,15 @@
-import HeaderCase from './headerCase';
-import Checkbox from './checkbox';
-import {Availability, Platform} from '../../types';
+import HeaderCase from './HeaderCase';
+import Checkbox from './Checkbox';
+import {Availability, Platform} from 'types';
 import React from 'react';
-import Title from '../title';
-import availabilityNone from '../../assets/availabilityNone.svg';
-import availabilityIrl from '../../assets/availabilityIrl.svg';
-import availabilityIrlOrIl from '../../assets/availabilityIrlOrIl.svg';
-import availabilityIl from '../../assets/availabilityIl.svg';
-import avalabilityIG from '../../assets/availabilityIG.svg';
-import avalabilityRest from '../../assets/availabilityRest.svg';
-import {days, months} from '../../moockedData';
+import {Title} from 'components';
+import availabilityNone from 'assets/icon/availabilityNone.svg';
+import availabilityIrl from 'assets/icon/availabilityIrl.svg';
+import availabilityIrlOrIl from 'assets/icon/availabilityIrlOrIl.svg';
+import availabilityIl from 'assets/icon/availabilityIl.svg';
+import avalabilityIG from 'assets/icon/availabilityIG.svg';
+import avalabilityRest from 'assets/icon/availabilityRest.svg';
+import {days, months} from 'moockedData';
 
 
 type Props = {

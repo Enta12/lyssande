@@ -1,12 +1,12 @@
-import PjCard from '../../components/pjCard';
-import SubTitle from '../../components/subTitle';
-import Title from '../../components/title';
-import addIcon from '../../assets/add.svg';
-// import Calendar from '../../components/calendar/calendar';
-import {UserInfo, PjType, Availability} from '../../types';
+import PcCard from 'components/PcCard';
+import SubTitle from 'components/SubTitle';
+import Title from 'components/Title';
+import addIcon from 'assets/icon/add.svg';
+// import Calendar from 'components/calendar/calendar';
+import {UserInfo, PcType, Availability} from 'types';
 import {useNavigate, useParams} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
-import {useApi} from '../../hook';
+import {useApi} from 'hooks';
 import {toast} from 'react-toastify';
 
 const availabilities : Availability[] = [];
@@ -40,7 +40,7 @@ const Player = ({userId} :Props) => {
   const params = useParams();
   const navigate = useNavigate();
   const [playerSelected, setPlayerSelected] = useState<UserInfo | undefined>();
-  const [characters, setCharacters] = useState<PjType[] | undefined>();
+  const [characters, setCharacters] = useState<PcType[] | undefined>();
   const api = useApi();
   const id = params.id || userId;
   if (!id) navigate('404');
@@ -77,10 +77,10 @@ const Player = ({userId} :Props) => {
       ">
         { characters.map(
             (characterData, index) =>
-              <PjCard
+              <PcCard
                 key={index}
-                pjData={characterData}
-                onClick={() => navigate(`/pj/${characterData.id}`)}
+                pcData={characterData}
+                onClick={() => navigate(`/pc/${characterData.id}`)}
               />,
         )}
         <a href="/editCharacter">
@@ -95,7 +95,7 @@ const Player = ({userId} :Props) => {
             justify-center
             items-center
           ">
-            <img className="max-h-20" alt="add pj" src={addIcon} />
+            <img className="max-h-20" alt="add pc" src={addIcon} />
           </button>
         </a>
       </div>
