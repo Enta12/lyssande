@@ -71,32 +71,34 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 	const [contextValue, setContextValue] = useState({ speed: 0, land: 0, duration: 0 });
 
 	useEffect(() => {
-		setTokenData([...pcs.map((pc, index) => formatPcToTokenData(pc))]);
+		setTokenData([...pcs.map((pc) => formatPcToTokenData(pc))]);
 	}, [setTokenData, pcs]);
 
 	useEffect(() => {
 		const defineGroups = (pc: PcType, index: number, groupsDataTemp: (GroupData | undefined)[]) => {
-			if (!initEnd && pcs.length) {
-				const groupsDataTemps = groupsData;
-				pcs.forEach((pc, index) => defineGroups(pc, index, groupsDataTemps));
-				setGroupsData([...groupsDataTemps]);
-				setInitEnd(true);
-			}
-			if (pc.positions?.group || pc.positions?.group === 0) {
-				const group = groupsDataTemp[pc.positions.group];
-				if (group) {
-					group.members.push(index);
-				} else {
-					groupsDataTemp[pc.positions.group] = {
-						members: [index],
-						position: {
-							...pc.positions.coordinates,
-							map: pc.positions.map,
-						},
-					};
+			if (pc.positions) {
+				if (pc.positions.group || pc.positions.group === 0) {
+					const group = groupsDataTemp[pc.positions.group];
+					if (group) {
+						group.members.push(index);
+					} else {
+						groupsDataTemp[pc.positions.group] = {
+							members: [index],
+							position: {
+								...pc.positions.coordinates,
+								map: pc.positions.map,
+							},
+						};
+					}
 				}
 			}
 		};
+		if (!initEnd && pcs.length) {
+			const groupsDataTemps = groupsData;
+			pcs.forEach((pc, index) => defineGroups(pc, index, groupsDataTemps));
+			setGroupsData([...groupsDataTemps]);
+			setInitEnd(true);
+		}
 	}, [pcs, groupsData, setGroupsData, initEnd, setInitEnd]);
 	const tokens: React.ReactNode[] = [];
 	const groups: React.ReactNode[] = [];

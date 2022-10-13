@@ -643,7 +643,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 
 	return (
 		<div
-			className={cn('text-xl flex text-brown', {
+			className={cn('text-xl flex text-brown relative', {
 				['my-[46px]']: protagonistList[data.protagonistA].secondAt,
 			})}
 		>
@@ -688,7 +688,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 							width="[157px]"
 							height="[50px]"
 							options={getOpponentList()}
-							handleChange={(protagonist) => protagonist && updateOposing(protagonist, false)}
+							onChange={(protagonist) => updateOposing(protagonist, false)}
 							value={data.protagonistC}
 						/>
 						<div className="relative w-48">
@@ -698,7 +698,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 								width="[157px]"
 								height="[50px]"
 								options={locals.map((elt) => localsTrad[elt])}
-								handleChange={(local) => local && updateLocal(local, false)}
+								onChange={(local) => updateLocal(local, false)}
 								value={data.secondLocal}
 							/>
 						</div>
@@ -759,7 +759,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 					width="[157px]"
 					height="[50px]"
 					options={getOpponentList()}
-					handleChange={(protagonist) => protagonist && updateOposing(protagonist, true)}
+					onChange={(protagonist) => updateOposing(protagonist, true)}
 					value={data.protagonistB}
 				/>
 				<div className="relative w-48">
@@ -769,7 +769,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 						width="[157px]"
 						height="[50px]"
 						options={locals.map((elt) => localsTrad[elt])}
-						handleChange={(local) => local && updateLocal(local, true)}
+						onChange={(local) => updateLocal(local, true)}
 						value={data.local}
 					/>
 				</div>

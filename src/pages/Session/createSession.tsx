@@ -161,7 +161,6 @@ const CreateSession = () => {
 			}
 		}
 	}, [possibleDates, selectedDate]);
-	useEffect(() => setSelectedPcs([]), [selectedDate, selectedPlatform, selectedMoment]);
 
 	const getPlayerAvailableOnOtherMoment = () => {
 		if (!possibleDates[selectedDate][MOMENT[(selectedMoment + 1) % 2]]?.['just-irl']) {
@@ -202,12 +201,15 @@ const CreateSession = () => {
 	};
 
 	const handlePlatformChange = (value: number) => {
+		setSelectedPcs([]);
 		if (value !== selectedPlatform) setSelectedPlatform(value);
 	};
 	const handleDateChange = (value: number) => {
+		setSelectedPcs([]);
 		if (value !== selectedDate) setSelectedDate(value);
 	};
 	const handleMomentChange = (value: number) => {
+		setSelectedPcs([]);
 		setSelectedMoment(value);
 	};
 
@@ -238,11 +240,10 @@ const CreateSession = () => {
 		<div className="w-full flex items-center flex-col gap-3 text-brown font-bubblegum text-lg">
 			<div
 				className="
-        w-full
-        flex
-        items-center
-        gap-2
-      "
+                    w-full
+                    flex
+                    items-center
+                    gap-2"
 			>
 				<span className="w-8">Le</span>
 				<ShortSelect
@@ -261,11 +262,10 @@ const CreateSession = () => {
 			</div>
 			<div
 				className="
-        w-full
-        flex
-        items-center
-        gap-2
-      "
+                    w-full
+                    flex
+                    items-center
+                    gap-2"
 			>
 				<span className="w-8">En</span>
 				{Object.keys(possibleDates[selectedDate]).length === 3 ? (
@@ -292,11 +292,10 @@ const CreateSession = () => {
 			</div>
 			<div
 				className="
-        w-full
-        flex
-        items-center
-        gap-2
-      "
+                    w-full
+                    flex
+                    items-center
+                    gap-2"
 			>
 				<span className="w-8">Sur</span>
 				{Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {}).length === 2 ? (
@@ -329,11 +328,10 @@ const CreateSession = () => {
 			</div>
 			<div
 				className="
-      w-full
-      flex
-      items-center
-      gap-2
-    "
+                    w-full
+                    flex
+                    items-center
+                    gap-2"
 			></div>
 			{possibleDates[selectedDate]?.[MOMENT[selectedMoment]]?.[PLATFORM[selectedPlatform]]?.map(
 				(playerId, index) => {

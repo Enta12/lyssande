@@ -87,7 +87,7 @@ const Player = ({ userId }: Props) => {
 						onClick={() => navigate(`/pc/${characterData.id}`)}
 					/>
 				))}
-				<a href="/editCharacter">
+				<a href="/pc/add">
 					<button
 						className="
             border-dashed

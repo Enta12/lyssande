@@ -166,6 +166,7 @@ export const months = [
 	'sept.',
 	'oct.',
 	'nov.',
+	'dec.',
 ];
 
 export const roles = ['player', 'gm', 'admin'];

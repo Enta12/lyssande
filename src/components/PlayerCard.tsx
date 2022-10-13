@@ -1,13 +1,15 @@
-import {UserInfo} from 'types';
+import { UserInfo } from 'types';
 import React from 'react';
 
 type Props = {
-    player: UserInfo;
-}
+	player: UserInfo;
+};
 
-const PlayerCard = ({player}: Props) => {
-  return (
-    <a href={`players/${player.id}`} className="
+const PlayerCard = ({ player }: Props) => {
+	return (
+		<a
+			href={`/players/${player.id}`}
+			className="
             text-lg
             h-24
             w-full
@@ -18,10 +20,11 @@ const PlayerCard = ({player}: Props) => {
             p-5
             flex
             items-center
-        ">
-      {player.name}
-    </a>
-  );
+        "
+		>
+			{player.name}
+		</a>
+	);
 };
 
 export default PlayerCard;

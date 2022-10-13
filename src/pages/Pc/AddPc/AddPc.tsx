@@ -115,7 +115,7 @@ const AddPc = () => {
       items-center
     "
 		>
-			<Title title="CREATION D'UN PERSONNAGE" />
+			<Title title={`${params.id ? 'MISE A JOUR' : 'CREATION'} D'UN PERSONNAGE"`} />
 			<div className="pt-8 w-full flex justify-between mb-6">
 				<div
 					className="
@@ -137,7 +137,8 @@ const AddPc = () => {
 						title={'Metier'}
 						height="16"
 						options={jobsMoocked}
-						handleChange={(newValue) => setJob(newValue)}
+						onResetValue={() => setJob(undefined)}
+						onChange={(newValue) => setJob(newValue)}
 						value={job}
 						emptyValue="Aucun"
 					/>
@@ -145,7 +146,7 @@ const AddPc = () => {
 						title={'Race'}
 						height="16"
 						options={racesMoocked}
-						handleChange={(newValue) => newValue && setRace(newValue)}
+						onChange={(newValue) => setRace(newValue)}
 						value={race}
 					/>
 					<Input
@@ -181,7 +182,8 @@ const AddPc = () => {
 						title={'Culte'}
 						height="16"
 						options={culteMoocked}
-						handleChange={(newValue) => setCulte(newValue)}
+						onResetValue={() => setCulte(undefined)}
+						onChange={(newValue) => setCulte(newValue)}
 						value={culte}
 						emptyValue="Aucun"
 					/>
