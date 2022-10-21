@@ -62,9 +62,28 @@ const AddUser = () => {
 	return (
 		<div className="flex flex-col  items-center gap-4 font-bubblegum text-brown">
 			<Title title="Crétion d'un utilisateur" />
-			<Input type="text" setValueString={setName} value={name} placeholder="Name" />
-			<Input type="text" setValueString={setEmail} value={email} placeholder="Email" />
-			<InputSelect options={roles} value={role} onChange={(value) => setRole(value)} />
+			<Input
+				required
+				placeholder="Sank Nonk"
+				type="text"
+				onChange={(e) => setName(e.target.value)}
+				value={name}
+				label="Nom"
+			/>
+			<Input
+				required
+				placeholder="example@lyssande.fr"
+				type="text"
+				onChange={(e) => setEmail(e.target.value)}
+				value={email}
+				label="Email"
+			/>
+			<InputSelect
+				required
+				options={roles}
+				values={[role]}
+				onSelectValue={(value) => setRole(value[0])}
+			/>
 			{password ? (
 				<>
 					Son mot de passe sera (copier dans le presse papier):

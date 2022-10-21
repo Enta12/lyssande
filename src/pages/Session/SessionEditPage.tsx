@@ -68,9 +68,9 @@ const SessionEditPage = () => {
 				title={
 					session
 						? `Partie du
-              ${' ' + sessionDate.getDate()}
-              ${' ' + months[sessionDate.getMonth()] + ' '}
-              en ${session?.moment}`
+                        ${' ' + sessionDate.getDate()}
+                        ${' ' + months[sessionDate.getMonth()] + ' '}
+                        en ${session?.moment}`
 						: ''
 				}
 			/>
@@ -98,26 +98,33 @@ const SessionEditPage = () => {
 			</div>
 			<div
 				className="
-          bg-orange/[.8]
-          flex
-          flex-col
-          gap-4
-          p-5
-          rounded-2xl"
+                    bg-orange/[.8]
+                    flex
+                    flex-col
+                    gap-4
+                    p-5
+                    rounded-2xl"
 			>
-				<Input placeholder="Nom de la partie" type="text" value={title} setValueString={setTitle} />
+				<Input
+					label="Nom de la partie"
+					placeholder="Recherche du joyau magique"
+					type="text"
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+				/>
 				<TextInput
 					value={description}
-					onChange={setDescription}
-					placeholder="Résumé de la partie"
+					onChange={(e) => setDescription(e.target.value)}
+					placeholder="Un jour, trois aventuriers..."
+					label="Résumé de la partie"
 				/>
 			</div>
 			<div
 				className="
-            grid
-            grid-cols-auto-fill-220
-            grid-flow-rows
-            gap-5"
+                    grid
+                    grid-cols-auto-fill-220
+                    grid-flow-rows
+                    gap-5"
 			>
 				{session &&
 					session.characters.map((characterData, index) => (

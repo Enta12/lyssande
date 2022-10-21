@@ -1,10 +1,8 @@
 /* eslint-disable sonarjs/cognitive-complexity */
-import Input from 'components/Input';
-import InputSelect from 'components/InputSelect';
+import { Input, InputSelect, TextInput } from 'components';
 import Title from 'components/Title';
 import React, { useEffect, useState } from 'react';
 import AlignmentInput from './AlignmentInput';
-import TextInput from 'components/TextInput';
 import { culteMoocked, jobsMoocked, lawsMoocked, moralsMoocked, racesMoocked } from 'moockedData';
 // import FileInput from 'components/fileInput';
 import { PrimaryButton } from 'components';
@@ -79,8 +77,8 @@ const AddPc = () => {
 		}
 		const body = {
 			name,
-			culte: culte ? culteMoocked[culte] : undefined,
-			job: job ? jobsMoocked[job] : undefined,
+			culte: culte ? culteMoocked[culte] : [],
+			job: job ? jobsMoocked[job] : [],
 			race: racesMoocked[race],
 			level,
 			gold,
@@ -105,89 +103,104 @@ const AddPc = () => {
 	return (
 		<div
 			className="
-      p-8
-      flex
-      flex-col
-      bg-orange/[.8]
-      w-full
-      rounded-3xl
-      justify-around
-      items-center
-    "
+                p-8
+                flex
+                flex-col
+                bg-orange/[.8]
+                w-full
+                rounded-3xl
+                justify-around
+                items-center
+            "
 		>
 			<Title title={`${params.id ? 'MISE A JOUR' : 'CREATION'} D'UN PERSONNAGE`} />
 			<div className="pt-8 w-full flex justify-between mb-6">
 				<div
 					className="
-          flex
-          flex-col
-          gap-3
-          justify-between
-          items-center
-          flex-1
-        "
+                        flex
+                        flex-col
+                        gap-3
+                        justify-between
+                        items-center
+                        flex-1
+                    "
 				>
 					<Input
-						placeholder="Nom du personnage"
+						required
+						placeholder="Sank Nonk"
+						label="Nom"
 						type="text"
 						value={name}
-						setValueString={setName}
+						onChange={(e) => setName(e.target.value)}
 					/>
 					<InputSelect
 						title={'Metier'}
-						height="16"
 						options={jobsMoocked}
-						onResetValue={() => setJob(undefined)}
-						onChange={(newValue) => setJob(newValue)}
-						value={job}
-						emptyValue="Aucun"
+						onSelectValue={(newValue) => {
+							setJob(newValue[0]);
+						}}
+						values={[job]}
+						placeholder="Aucun"
 					/>
 					<InputSelect
+						required
 						title={'Race'}
-						height="16"
 						options={racesMoocked}
-						onChange={(newValue) => setRace(newValue)}
-						value={race}
+						values={[race]}
+						onSelectValue={(newValue) => setRace(newValue[0])}
 					/>
 					<Input
-						placeholder="Niveau du personnage"
+						required
+						placeholder="1"
+						label="Niveau"
 						type="number"
 						value={level}
-						setValueNumber={(newValue) => setLevel(parseInt(newValue))}
+						onChange={(e) => setLevel(parseInt(e.target.value))}
 					/>
 					<Input
-						placeholder="Nombre de PO"
+						label="Or (en PO)"
+						placeholder="0"
+						required
 						type="number"
 						value={gold}
-						setValueNumber={(newValue) => setGold(parseInt(newValue))}
+						onChange={(e) => setGold(parseInt(e.target.value))}
 					/>
-					<Input placeholder="Lien de l'image" type="text" value={img} setValueString={setImg} />
+					<Input
+						placeholder="https://example.com"
+						label="Lien de l'image"
+						type="text"
+						value={img}
+						onChange={(e) => setImg(e.target.value)}
+					/>
 					{/*
-            TODO update to file input
-            <FileInput text="PHOTO" />
-            */}
+                        TODO update to file input
+                        <FileInput text="PHOTO" />
+                    */}
 				</div>
 				<div
 					className="
-          flex
-          flex-col
-          gap-4
-          justify-around
-          flex-1
-          h-full
-        "
+                        flex
+                        flex-col
+                        gap-4
+                        justify-around
+                        flex-1
+                        h-full
+                    "
 				>
 					<AlignmentInput moral={moral} law={law} setMoral={setMoral} setLaw={setLaw} />
 					<InputSelect
 						title={'Culte'}
-						height="16"
 						options={culteMoocked}
-						onResetValue={() => setCulte(undefined)}
-						onChange={(newValue) => setCulte(newValue)}
-						value={culte}
-						emptyValue="Aucun"
+						onSelectValue={(newValue) => setCulte(newValue[0])}
+						values={[culte]}
+						placeholder="Aucun"
 					/>
-					<TextInput value={story} onChange={setStory} placeholder="Histoire du personnage" />
+					<TextInput
+						value={story}
+						onChange={(e) => setStory(e.target.value)}
+						placeholder="Il était une fois ..."
+						label="Histoire du personnage"
+					/>
 				</div>
 			</div>
 			{!params.id && (
