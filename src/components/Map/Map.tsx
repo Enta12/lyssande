@@ -17,7 +17,7 @@ type Props = {
 	img: string;
 	mapName: string;
 	scale: number;
-	handleSend: (
+	onSend: (
 		value: (
 			| {
 					map: string;
@@ -46,7 +46,7 @@ const formatPcToTokenData = (pc: PcType) => {
 	};
 };
 
-const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
+const Map = ({ img, pcs, players, mapName, scale, onSend: handleSend }: Props) => {
 	const mapRef = useRef<HTMLImageElement>(null);
 	const auth = useAuth();
 
@@ -135,7 +135,7 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 		}
 		const tokenDataTemp = tokenData;
 		switch (action) {
-			case 'supressToken':
+			case 'deleteToken':
 				tokenDataTemp[index] = undefined;
 				setTokenData(tokenDataTemp);
 				break;
@@ -342,11 +342,11 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 						const player = players[players.findIndex((player) => pc.player === player.id)];
 						tokens[index] = (
 							<Token
-								setIsGrouping={() => (isGrouping = true)}
+								onGroup={() => (isGrouping = true)}
 								placeEntity={placeEntity}
 								groupTokens={groupTokens}
 								index={index}
-								setEntityDrag={setEntityDrag}
+								onEntityDrag={setEntityDrag}
 								showMouvement={tokenData[index]?.showMouvement === 1}
 								mouvement={
 									(speedMoocked[contextValue.speed].speedMod *
@@ -354,7 +354,7 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 										(contextValue.duration + 1)) /
 									(scale * 30)
 								}
-								setContexMenu={(e) => openContextMenu(e, index)}
+								onContextMenu={(e) => openContextMenu(e, index)}
 								hidden={
 									!(
 										playersSorted.length === 0 ||
@@ -373,13 +373,13 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 				if (groupsData[index] && groupsData[index]?.position.map === mapName) {
 					groups[index] = (
 						<Token
-							setIsGrouping={() => (isGrouping = true)}
+							onGroup={() => (isGrouping = true)}
 							placeEntity={placeEntity}
 							charactersData={pcs}
 							groupData={groupsData[index]}
 							groupTokens={groupTokens}
 							index={index}
-							setEntityDrag={setEntityDrag}
+							onEntityDrag={setEntityDrag}
 							showMouvement={tokenData[index]?.showMouvement === 1}
 							mouvement={
 								(speedMoocked[contextValue.speed].speedMod *
@@ -387,7 +387,7 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 									(contextValue.duration + 1)) /
 								(scale * 30)
 							}
-							setContexMenu={(e) => openContextMenu(e, index)}
+							onContextMenu={(e) => openContextMenu(e, index)}
 							hidden={
 								!(
 									playersSorted.length === 0 ||
@@ -443,7 +443,7 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 					textEmpty="Filtrer par joueur"
 					options={players.map((player) => player.name)}
 					value={playersSorted.map((el) => players.findIndex((player) => player.name === el))}
-					handleChange={handleChange}
+					onChange={handleChange}
 				/>
 			</div>
 			<div className="flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]">
@@ -451,7 +451,7 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 					const player = players[players.findIndex((player) => pc.player === player.id)];
 					return player ? (
 						<MapButton
-							setPcDrag={() => setEntityDrag({ entityId: index, group: false })}
+							onPcDrag={() => setEntityDrag({ entityId: index, group: false })}
 							hidden={
 								!(
 									playersSorted.length === 0 ||
@@ -478,11 +478,11 @@ const Map = ({ img, pcs, players, mapName, scale, handleSend }: Props) => {
 			{contexMenu !== null && (
 				<ContextMenu
 					data={contextMenu}
-					handleChange={handleContextMenuChange}
+					onChange={handleContextMenuChange}
 					pcIndex={contexMenu.pcIndex}
 					y={contexMenu.y}
 					x={contexMenu.x}
-					close={() => setContextMenu(null)}
+					onClose={() => setContextMenu(null)}
 				/>
 			)}
 		</>

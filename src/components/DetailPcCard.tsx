@@ -8,7 +8,7 @@ type Props = {
 	onEdit: () => void;
 };
 
-const DetailPcCard = ({ pcData, onEdit }: Props) => {
+const DetailPcCard = ({ pcData, onEdit: handleEdit }: Props) => {
 	const auth = useAuth();
 
 	return (
@@ -63,7 +63,7 @@ const DetailPcCard = ({ pcData, onEdit }: Props) => {
 				<div className="w-full h-1 rounded-b-full bg-orange mb-10 my-4" />
 			</div>
 			{auth?.user.info?.id === pcData.player && (
-				<EditButton className="bottom-0 right-0 absolute cursor-pointer" onClick={onEdit} />
+				<EditButton className="bottom-0 right-0 absolute cursor-pointer" onClick={handleEdit} />
 			)}
 		</div>
 	);

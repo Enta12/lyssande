@@ -50,9 +50,9 @@ const FightPage = () => {
 		window.addEventListener('keydown', (e) => onPress(e));
 		return window.removeEventListener('keydown', (e) => onPress(e));
 	});
-	const handleSupress = (indexToSupress: number) => {
+	const handleDelete = (indexToDelete: number) => {
 		const fightElementDataTemp = fightElementData.filter((el, index) => {
-			return index !== indexToSupress;
+			return index !== indexToDelete;
 		});
 		setFightElementData(fightElementDataTemp);
 	};
@@ -69,7 +69,7 @@ const FightPage = () => {
 	const getOrderIndex = (index: number, lenght: number) => {
 		return turnSelected + index < lenght ? turnSelected + index : turnSelected + index - lenght;
 	};
-	const supressElement = (
+	const deleteElement = (
 		protagonistsTemp: Protagonist[],
 		fightElementDataTemp: FightPhaseData[],
 		index: number
@@ -145,13 +145,13 @@ const FightPage = () => {
 				fightElementDataTemp.forEach((elt) => {
 					if (elt.protagonistB === index) elt.protagonistB = -1;
 				});
-				supressElement(protagonistsTemp, fightElementDataTemp, index);
+				deleteElement(protagonistsTemp, fightElementDataTemp, index);
 				addTurnIntoCorrectPlace(protagonist, protagonistsTemp, fightElementDataTemp);
 			} else {
 				protagonistsTemp[index] = protagonist;
 			}
 		} else if (action === 'delete' && index !== undefined) {
-			supressElement(protagonistsTemp, fightElementDataTemp, index);
+			deleteElement(protagonistsTemp, fightElementDataTemp, index);
 		}
 		setFightElementData(fightElementDataTemp);
 		setProtagonistList(protagonistsTemp);
@@ -211,13 +211,13 @@ const FightPage = () => {
 									firstLine={!index && haveStart}
 									protagonistList={protagonistList}
 									data={fightElementData[indexInOrder]}
-									updateOposing={(newOposing, protagonistB) =>
+									onChangeOpposing={(newOposing, protagonistB) =>
 										updateOposing(indexInOrder, newOposing, protagonistB)
 									}
-									updateLocal={(newLocal, firstLine) =>
+									onChangeLocal={(newLocal, firstLine) =>
 										updateLocal(indexInOrder, newLocal, firstLine)
 									}
-									handleSupress={handleSupress}
+									onDelete={handleDelete}
 									index={indexInOrder}
 								/>
 								{!index && haveStart && (
@@ -245,12 +245,12 @@ const FightPage = () => {
 				height={haveStart ? screenHeight - 220 : undefined}
 				protagonistsLenght={protagonistsLenght}
 				protagonists={protagonistList}
-				handleaAddProtagonist={(protagonist: Protagonist) => {
+				onAddProtagonist={(protagonist: Protagonist) => {
 					updateProtagonists('add', protagonist);
 					setProtagonistsLenght(protagonistsLenght + 1);
 				}}
-				handleDeleteProtagonist={(index) => updateProtagonists('delete', undefined, index)}
-				handleUpdateProtagonist={(protagonist, index, cou) =>
+				onDeleteProtagonist={(index) => updateProtagonists('delete', undefined, index)}
+				onProtagonistChange={(protagonist, index, cou) =>
 					updateProtagonists('update', protagonist, index, cou)
 				}
 			/>

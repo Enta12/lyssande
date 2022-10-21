@@ -99,7 +99,7 @@ const MapPage = () => {
 			</div>
 			<Map
 				players={players}
-				handleSend={updatePositions}
+				onSend={updatePositions}
 				scale={mapsMoocked[mapSelected].scale}
 				img={mapsMoocked[mapSelected].mapLink}
 				pcs={pcData}

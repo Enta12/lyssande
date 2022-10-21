@@ -4,7 +4,7 @@ import { Input, InputSelect, PrimaryButton, Title } from 'components';
 import { useApi } from 'hooks';
 import { roles } from 'moockedData';
 
-// TODO Supress this function when the back create password
+// TODO Delete this function when the back create password
 const createPassword = (
 	lenght: number,
 	activateMAJ: boolean,

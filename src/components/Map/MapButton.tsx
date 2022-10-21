@@ -1,30 +1,23 @@
 import React from 'react';
 type Props = {
-    name: string;
-    picture: string;
-    hidden: boolean;
-    setPcDrag: () => void;
-}
+	name: string;
+	picture: string;
+	hidden: boolean;
+	onPcDrag: () => void;
+};
 
-const MapButton = ({
-  hidden,
-  name,
-  picture,
-  setPcDrag,
-}: Props) => {
-  return (
-    <div
-      className={
-        `relative
+const MapButton = ({ hidden, name, picture, onPcDrag: handlePcDrag }: Props) => {
+	return (
+		<div
+			className={`relative
         border-darkBrown
         rounded-full
         cursor-grab
-        ${hidden && 'hidden'}`
-      }
-    >
-      <img
-        onDragStart={setPcDrag}
-        className="
+        ${hidden && 'hidden'}`}
+		>
+			<img
+				onDragStart={handlePcDrag}
+				className="
             w-20
             h-20
             rounded-full
@@ -33,11 +26,11 @@ const MapButton = ({
             border-darkBrown
             z-10
             relative"
-        src={picture}
-        alt={name}
-      />
-      <div
-        className="
+				src={picture}
+				alt={name}
+			/>
+			<div
+				className="
           text-orange
           p-1
           flex
@@ -52,11 +45,11 @@ const MapButton = ({
           h-16
           w-32
           z-0"
-      >
-        {name}
-      </div>
-    </div>
-  );
+			>
+				{name}
+			</div>
+		</div>
+	);
 };
 
 export default MapButton;

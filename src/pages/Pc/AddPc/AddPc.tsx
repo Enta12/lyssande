@@ -115,7 +115,7 @@ const AddPc = () => {
       items-center
     "
 		>
-			<Title title={`${params.id ? 'MISE A JOUR' : 'CREATION'} D'UN PERSONNAGE"`} />
+			<Title title={`${params.id ? 'MISE A JOUR' : 'CREATION'} D'UN PERSONNAGE`} />
 			<div className="pt-8 w-full flex justify-between mb-6">
 				<div
 					className="
@@ -187,7 +187,7 @@ const AddPc = () => {
 						value={culte}
 						emptyValue="Aucun"
 					/>
-					<TextInput value={story} setValue={setStory} placeholder="Histoire du personnage" />
+					<TextInput value={story} onChange={setStory} placeholder="Histoire du personnage" />
 				</div>
 			</div>
 			{!params.id && (
