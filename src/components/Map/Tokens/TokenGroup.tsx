@@ -1,49 +1,48 @@
-import React, {useState} from 'react';
-import {ReactComponent as PersonIcon} from 'assets/icon/person.svg';
-import {useOutsideClicker} from 'hooks';
-import {GroupData, PcType} from 'types';
+import React, { useState } from 'react';
+import { ReactComponent as PersonIcon } from 'assets/icon/person.svg';
+import { useOutsideClicker } from 'hooks';
+import { GroupData, PcType } from 'types';
 import TokenImg from './TokenImg';
 
 type Props = {
-  groupData: GroupData;
-  setEntityDrag: (value : {entityId: number, group: boolean}) => void;
-  groupTokens: (id: number, group: boolean) => void;
-  charactersData?: PcType[];
-  index: number;
-  setIsGrouping: () => void;
+	groupData: GroupData;
+	onEntityDrag: (value: { entityId: number; group: boolean }) => void;
+	groupTokens: (id: number, group: boolean) => void;
+	charactersData?: PcType[];
+	index: number;
+	onGroup: () => void;
 };
 
 const TokenGroups = ({
-  index,
-  setIsGrouping,
-  charactersData,
-  groupData,
-  setEntityDrag,
-  groupTokens,
+	index,
+	onGroup: handleGroup,
+	charactersData,
+	groupData,
+	onEntityDrag: handleEntityDrag,
+	groupTokens,
 }: Props) => {
-  const onClickOutside = () => {
-    setShowCharaters(false);
-    setPcDrag(false);
-  };
-  const tokenRef = useOutsideClicker(onClickOutside);
-  const [showCharacters, setShowCharaters] = useState(false);
-  const [pcDrag, setPcDrag] = useState(false);
-  return (
-    <div
-      onClick={() => {
-        if (!showCharacters) {
-          setShowCharaters(true);
-        }
-      }}
-      ref={tokenRef}
-    >
-      {
-          showCharacters ?
-          <div
-            style={{
-              marginLeft: `-${(groupData.members.length+1) *50}%`,
-            }}
-            className={`
+	const onClickOutside = () => {
+		setShowCharaters(false);
+		setPcDrag(false);
+	};
+	const tokenRef = useOutsideClicker(onClickOutside);
+	const [showCharacters, setShowCharaters] = useState(false);
+	const [pcDrag, setPcDrag] = useState(false);
+	return (
+		<div
+			onClick={() => {
+				if (!showCharacters) {
+					setShowCharaters(true);
+				}
+			}}
+			ref={tokenRef}
+		>
+			{showCharacters ? (
+				<div
+					style={{
+						marginLeft: `-${(groupData.members.length + 1) * 50}%`,
+					}}
+					className={`
               min-w-max
               p-2
               z-10
@@ -60,42 +59,35 @@ const TokenGroups = ({
               transition-opacity
               ${pcDrag && 'opacity-50'}
           `}
-          >
-            {
-              charactersData &&
-                  groupData.members.map((characterID, index) => {
-                    return (
-                      <TokenImg
-                        setIsGrouping={setIsGrouping}
-                        key={index}
-                        groupTokens={
-                          () => {
-                            groupTokens(characterID, false);
-                          }
-                        }
-                        handleDragEnd={() => setPcDrag(false)}
-                        setPcDrag={() => {
-                          setEntityDrag(
-                              {entityId: characterID, group: false});
-                          setPcDrag(true);
-                        }}
-                        pc={charactersData[characterID]}
-                      />
-                    );
-                  },
-                  )
-            }
-          </div> :
-          <div
-            draggable
-            onDragStart={() => setEntityDrag(
-                {entityId: index, group: true},
-            )}
-            onDrop={() => {
-              groupTokens(index, true);
-              setIsGrouping();
-            }}
-            className={`
+				>
+					{charactersData &&
+						groupData.members.map((characterID, index) => {
+							return (
+								<TokenImg
+									onGroup={handleGroup}
+									key={index}
+									groupTokens={() => {
+										groupTokens(characterID, false);
+									}}
+									onDragEnd={() => setPcDrag(false)}
+									onPcDrag={() => {
+										handleEntityDrag({ entityId: characterID, group: false });
+										setPcDrag(true);
+									}}
+									pc={charactersData[characterID]}
+								/>
+							);
+						})}
+				</div>
+			) : (
+				<div
+					draggable
+					onDragStart={() => handleEntityDrag({ entityId: index, group: true })}
+					onDrop={() => {
+						groupTokens(index, true);
+						handleGroup();
+					}}
+					className={`
               relative
               h-6
               w-6
@@ -109,13 +101,11 @@ const TokenGroups = ({
               items-center
               bg-lightBrown
           `}
-          >
-            <div className='relative'>
-              <PersonIcon
-                className='w-4 h-4'
-              />
-              <span
-                className='
+				>
+					<div className="relative">
+						<PersonIcon className="w-4 h-4" />
+						<span
+							className="
                 z-40
                 absolute
                 top-[-3px]
@@ -123,15 +113,15 @@ const TokenGroups = ({
                 left-[5px]
                 text-orange
                 font-semibold
-              '
-              >
-                {groupData.members.length}
-              </span>
-            </div>
-          </div>
-      }
-    </div>
-  );
+              "
+						>
+							{groupData.members.length}
+						</span>
+					</div>
+				</div>
+			)}
+		</div>
+	);
 };
 
 export default TokenGroups;

@@ -256,7 +256,7 @@ const CreateSession = () => {
               ${date.getDate()}
               ${months[date.getMonth()]}`;
 					})}
-					handleChange={handleDateChange}
+					onChange={handleDateChange}
 					value={[selectedDate]}
 				/>
 			</div>
@@ -274,7 +274,7 @@ const CreateSession = () => {
 							width="40"
 							showValue
 							options={MOMENT}
-							handleChange={handleMomentChange}
+							onChange={handleMomentChange}
 							value={[selectedMoment]}
 						/>
 						<span>
@@ -304,7 +304,7 @@ const CreateSession = () => {
 							width="40"
 							showValue
 							options={PLATFORM.map((platform) => platformTrad[platform])}
-							handleChange={handlePlatformChange}
+							onChange={handlePlatformChange}
 							value={[selectedPlatform]}
 						/>
 						<span>
@@ -343,7 +343,7 @@ const CreateSession = () => {
 							platform={irlOrOnline ? 'irl-or-online' : PLATFORM[selectedPlatform % 2]}
 							quest={lastQuest}
 							selectedPc={selectedPcs[index]}
-							setSelectedPc={setSelectedPc}
+							onSelectedPc={setSelectedPc}
 							playerIndex={index}
 							key={index}
 							pcs={characters.filter((pc) => pc.player === playerId)}

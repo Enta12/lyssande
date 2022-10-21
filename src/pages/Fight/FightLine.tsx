@@ -17,9 +17,9 @@ type Props = {
 	index: number;
 	protagonistList: Protagonist[];
 	data: FightPhaseData;
-	updateOposing: (oposing: number, protagonistB: boolean) => void;
-	updateLocal: (newLocal: number, firstLocal: boolean) => void;
-	handleSupress: (indexToSupress: number) => void;
+	onChangeOpposing: (oposing: number, protagonistB: boolean) => void;
+	onChangeLocal: (newLocal: number, firstLocal: boolean) => void;
+	onDelete: (indexToDelete: number) => void;
 };
 const matrice = [
 	[
@@ -588,7 +588,13 @@ const localModif = {
 	},
 };
 
-const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposing }: Props) => {
+const FightLine = ({
+	protagonistList,
+	data,
+	firstLine,
+	onChangeLocal: handleLocalChange,
+	onChangeOpposing: handleOpposingChange,
+}: Props) => {
 	const getOpponentList = () => {
 		const list = protagonistList
 			.filter((temp, index) => {
@@ -688,7 +694,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 							width="[157px]"
 							height="[50px]"
 							options={getOpponentList()}
-							onChange={(protagonist) => updateOposing(protagonist, false)}
+							onChange={(protagonist) => handleOpposingChange(protagonist, false)}
 							value={data.protagonistC}
 						/>
 						<div className="relative w-48">
@@ -698,7 +704,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 								width="[157px]"
 								height="[50px]"
 								options={locals.map((elt) => localsTrad[elt])}
-								onChange={(local) => updateLocal(local, false)}
+								onChange={(local) => handleLocalChange(local, false)}
 								value={data.secondLocal}
 							/>
 						</div>
@@ -759,7 +765,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 					width="[157px]"
 					height="[50px]"
 					options={getOpponentList()}
-					onChange={(protagonist) => updateOposing(protagonist, true)}
+					onChange={(protagonist) => handleOpposingChange(protagonist, true)}
 					value={data.protagonistB}
 				/>
 				<div className="relative w-48">
@@ -769,7 +775,7 @@ const FightLine = ({ protagonistList, data, firstLine, updateLocal, updateOposin
 						width="[157px]"
 						height="[50px]"
 						options={locals.map((elt) => localsTrad[elt])}
-						onChange={(local) => updateLocal(local, true)}
+						onChange={(local) => handleLocalChange(local, true)}
 						value={data.local}
 					/>
 				</div>
