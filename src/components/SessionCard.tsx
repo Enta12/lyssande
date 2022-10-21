@@ -105,11 +105,11 @@ const SessionCard = ({ data, users }: Props) => {
 				</p>
 				<div
 					className="
-            grid
-            grid-cols-auto-fill-220
-            grid-flow-rows
-            gap-5
-            p-5"
+                        grid
+                        grid-cols-auto-fill-220
+                        grid-flow-rows
+                        gap-5
+                        p-5"
 				>
 					{data.characters.map((characterData, index) => (
 						<PcCard key={index} pcData={characterData} />
@@ -118,7 +118,7 @@ const SessionCard = ({ data, users }: Props) => {
 				{past && (
 					<button
 						className="absolute right-2 bottom-2"
-						onClick={() => navigate(`/sessions/${data.id}`)}
+						onClick={() => navigate(`/sessions/edit/${data.id}`)}
 					>
 						<EditButton />
 					</button>

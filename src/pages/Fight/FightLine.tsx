@@ -689,23 +689,21 @@ const FightLine = ({
 							~ <span className="font-bubblegum text-orange">VS</span> ~
 						</span>
 						<InputSelect
-							emptyValue="cible sans nom"
+							required
+							placeholder="cible sans nom"
 							className="text-xl"
-							width="[157px]"
-							height="[50px]"
 							options={getOpponentList()}
-							onChange={(protagonist) => handleOpposingChange(protagonist, false)}
-							value={data.protagonistC}
+							onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], false)}
+							values={[data.protagonistC]}
 						/>
 						<div className="relative w-48">
 							<TargetIcon className="absolute" />
 							<InputSelect
+								required
 								className="text-xl absolute top-0 left-10"
-								width="[157px]"
-								height="[50px]"
 								options={locals.map((elt) => localsTrad[elt])}
-								onChange={(local) => handleLocalChange(local, false)}
-								value={data.secondLocal}
+								onSelectValue={(local) => handleLocalChange(local[0], false)}
+								values={[data.secondLocal]}
 							/>
 						</div>
 					</div>
@@ -760,23 +758,21 @@ const FightLine = ({
 					~ <span className="font-bubblegum text-orange">VS</span> ~
 				</span>
 				<InputSelect
-					emptyValue="cible sans nom"
+					required
+					placeholder="cible sans nom"
 					className="text-xl"
-					width="[157px]"
-					height="[50px]"
 					options={getOpponentList()}
-					onChange={(protagonist) => handleOpposingChange(protagonist, true)}
-					value={data.protagonistB}
+					onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], true)}
+					values={[data.protagonistB]}
 				/>
 				<div className="relative w-48">
 					<TargetIcon className="absolute" />
 					<InputSelect
+						required
 						className="text-xl absolute top-0 left-10"
-						width="[157px]"
-						height="[50px]"
 						options={locals.map((elt) => localsTrad[elt])}
-						onChange={(local) => handleLocalChange(local, true)}
-						value={data.local}
+						onSelectValue={(local) => handleLocalChange(local[0], true)}
+						values={[data.local]}
 					/>
 				</div>
 			</div>

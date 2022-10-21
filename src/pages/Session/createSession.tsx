@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShortSelect } from 'components';
+import { InputSelect } from 'components';
 import PcSessionSelector from 'components/PcSessionSelector';
 import PrimaryButton from 'components/Primary-button';
 import { PcType, Platform, UserInfo } from 'types';
@@ -246,18 +246,18 @@ const CreateSession = () => {
                     gap-2"
 			>
 				<span className="w-8">Le</span>
-				<ShortSelect
-					textEmpty="Aucune date"
-					width="40"
-					showValue
+				<InputSelect
+					required
+					placeholder="Aucune date"
 					options={possibleDates.map((possibleDate) => {
 						const date = new Date(+possibleDate.date);
 						return `${days[date.getDay()]}
-              ${date.getDate()}
-              ${months[date.getMonth()]}`;
+                                ${date.getDate()}
+                                ${months[date.getMonth()]}`;
 					})}
-					onChange={handleDateChange}
-					value={[selectedDate]}
+					onSelectValue={(value) => handleDateChange(value[0])}
+					values={[selectedDate]}
+					className="w-40"
 				/>
 			</div>
 			<div
@@ -270,12 +270,12 @@ const CreateSession = () => {
 				<span className="w-8">En</span>
 				{Object.keys(possibleDates[selectedDate]).length === 3 ? (
 					<>
-						<ShortSelect
-							width="40"
-							showValue
+						<InputSelect
+							required
 							options={MOMENT}
-							onChange={handleMomentChange}
-							value={[selectedMoment]}
+							onSelectValue={(value) => handleMomentChange(value[0])}
+							values={[selectedMoment]}
+							className="w-40"
 						/>
 						<span>
 							{`
@@ -300,12 +300,12 @@ const CreateSession = () => {
 				<span className="w-8">Sur</span>
 				{Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {}).length === 2 ? (
 					<>
-						<ShortSelect
-							width="40"
-							showValue
+						<InputSelect
+							required
 							options={PLATFORM.map((platform) => platformTrad[platform])}
-							onChange={handlePlatformChange}
-							value={[selectedPlatform]}
+							onSelectValue={(value) => handlePlatformChange(value[0])}
+							values={[selectedPlatform]}
+							className="w-40"
 						/>
 						<span>
 							{`

@@ -1,49 +1,46 @@
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {toast} from 'react-toastify';
-import Input from 'components/Input';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Input from 'components/Input/Input';
 import PrimaryButton from 'components/Primary-button';
-import {useApi, useAuth} from 'hooks';
+import { useApi, useAuth } from 'hooks';
 import background from 'assets/images/login-background.png';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const api = useApi();
-  const auth = useAuth();
-  const navigate = useNavigate();
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+	const api = useApi();
+	const auth = useAuth();
+	const navigate = useNavigate();
 
-  const isEmail = () => {
-    const pattern =
-        /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return email.match(pattern);
-  };
+	const isEmail = () => {
+		const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		return email.match(pattern);
+	};
 
-  const handleClick = async () => {
-    if (!isEmail()) {
-      toast.error(
-        email ? 'L\'email n\'est pas au bon format':
-        'L\'email est obligatoire',
-      );
-      return;
-    }
-    if (!password) {
-      toast.error('Mot de passe obligatoire');
-      return;
-    }
-    try {
-      const res = await api.post('/auth/login', {
-        email,
-        password,
-      });
-      auth?.dispatch({type: 'login', payload: {jwt: res.data.token}});
-      navigate('/');
-    } catch (error) {
-      toast.error('Login ou mot de passe incorrect');
-    }
-  };
-  return (
-    <div className="
+	const handleClick = async () => {
+		if (!isEmail()) {
+			toast.error(email ? "L'email n'est pas au bon format" : "L'email est obligatoire");
+			return;
+		}
+		if (!password) {
+			toast.error('Mot de passe obligatoire');
+			return;
+		}
+		try {
+			const res = await api.post('/auth/login', {
+				email,
+				password,
+			});
+			auth?.dispatch({ type: 'login', payload: { jwt: res.data.token } });
+			navigate('/');
+		} catch (error) {
+			toast.error('Login ou mot de passe incorrect');
+		}
+	};
+	return (
+		<div
+			className="
       min-h-screen
       bg-cover
       h-full
@@ -52,13 +49,11 @@ const Login = () => {
       justify-center
       relative
       overflow-hidden
-    ">
-      <img
-        src={background}
-        alt="Session"
-        className='absolute min-h-screen bottom-0 object-cover'
-      />
-      <form className="
+    "
+		>
+			<img src={background} alt="Session" className="absolute min-h-screen bottom-0 object-cover" />
+			<form
+				className="
         flex
         flex-col
         bg-orange/[.8]
@@ -71,26 +66,27 @@ const Login = () => {
         relative
         max-w-4-md
         z-10
-      ">
-        <Input
-          value={email}
-          placeholder="Email"
-          type="email"
-          setValueString={setEmail}
-        />
-        <Input
-          value={password}
-          setValueString={setPassword}
-          placeholder="Mot de passe"
-          type="password"
-        />
-        <PrimaryButton
-          onClick={handleClick}
-          text={'Connexion'}
-        />
-      </form>
-    </div>
-  );
+      "
+			>
+				<Input
+					required
+					value={email}
+					label="Email"
+					placeholder="example@lyssande.fr"
+					type="email"
+					onChange={(e) => setEmail(e.target.value)}
+				/>
+				<Input
+					label="Mot de passe"
+					value={password}
+					required
+					onChange={(e) => setPassword(e.target.value)}
+					type="password"
+				/>
+				<PrimaryButton onClick={handleClick} text={'Connexion'} />
+			</form>
+		</div>
+	);
 };
 
 export default Login;

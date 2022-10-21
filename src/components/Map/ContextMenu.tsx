@@ -1,5 +1,5 @@
 import React from 'react';
-import { PrimaryButton, ShortSelect } from 'components';
+import { PrimaryButton, InputSelect } from 'components';
 import { ReactComponent as BackArrow } from 'assets/icon/back.svg';
 import { ReactComponent as Hike } from 'assets/icon/hike.svg';
 import { useOutsideClicker } from 'hooks';
@@ -44,23 +44,23 @@ const ContextMenu = ({
 				left: x,
 			}}
 		>
-			<ShortSelect
-				value={[data.speed.value]}
-				showValue
+			<InputSelect
+				required
+				values={[data.speed.value]}
 				options={data.speed.options}
-				onChange={(index) => handleChange('speed', index)}
+				onSelectValue={(value) => handleChange('speed', value[0])}
 			/>
-			<ShortSelect
-				value={[data.duration.value]}
-				showValue
+			<InputSelect
+				required
+				values={[data.duration.value]}
 				options={data.duration.options}
-				onChange={(index) => handleChange('duration', index)}
+				onSelectValue={(value) => handleChange('duration', value[0])}
 			/>
-			<ShortSelect
-				value={[data.land.value]}
-				showValue
+			<InputSelect
+				required
+				values={[data.land.value]}
 				options={data.land.options}
-				onChange={(index) => handleChange('land', index)}
+				onSelectValue={(value) => handleChange('land', value[0])}
 			/>
 			{pcIndex !== undefined && (
 				<>

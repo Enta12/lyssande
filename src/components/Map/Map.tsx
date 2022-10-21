@@ -4,7 +4,7 @@ import { MouseEvent, useState, useRef, useEffect } from 'react';
 import { landsMoocked, speedMoocked } from 'moockedData';
 import { GroupData, PcType, UserInfo } from 'types';
 import MapButton from './MapButton';
-import { ShortSelect } from 'components';
+import { InputSelect } from 'components';
 import React from 'react';
 import Token from './Tokens/Token';
 import ContextMenu from './ContextMenu';
@@ -168,16 +168,8 @@ const Map = ({ img, pcs, players, mapName, scale, onSend: handleSend }: Props) =
 			pcIndex: pcIndex,
 		});
 	};
-	const handleChange = (option: number) => {
-		if (playersSorted.some((selectedPlayer) => selectedPlayer === players[option].name)) {
-			setPlayersSorted(
-				playersSorted.filter((selectedPlayer) => {
-					return selectedPlayer !== players[option].name;
-				})
-			);
-		} else {
-			setPlayersSorted([...playersSorted, players[option].name]);
-		}
+	const handleChange = (options: number[]) => {
+		setPlayersSorted(options.map((option) => players[option]?.name));
 	};
 	const placeEntity = (event: MouseEvent<HTMLDivElement>) => {
 		if (entityDrag.entityId > -1 && mapRef.current) {
@@ -439,11 +431,13 @@ const Map = ({ img, pcs, players, mapName, scale, onSend: handleSend }: Props) =
 				{groups}
 			</div>
 			<div className="flex gap-16 mt-4 w-full">
-				<ShortSelect
-					textEmpty="Filtrer par joueur"
+				<InputSelect
+					title="Filtrer par joueur"
+					isMultiselect
 					options={players.map((player) => player.name)}
-					value={playersSorted.map((el) => players.findIndex((player) => player.name === el))}
-					onChange={handleChange}
+					values={playersSorted.map((el) => players.findIndex((player) => player.name === el))}
+					onSelectValue={(value) => handleChange(value)}
+					className="w-64"
 				/>
 			</div>
 			<div className="flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]">
