@@ -141,6 +141,7 @@ const AddPc = () => {
 						}}
 						values={[job]}
 						placeholder="Aucun"
+						className="w-3/4 h-20"
 					/>
 					<InputSelect
 						required
@@ -148,6 +149,7 @@ const AddPc = () => {
 						options={racesMoocked}
 						values={[race]}
 						onSelectValue={(newValue) => setRace(newValue[0])}
+						className="w-3/4 h-20"
 					/>
 					<Input
 						required
@@ -194,6 +196,7 @@ const AddPc = () => {
 						onSelectValue={(newValue) => setCulte(newValue[0])}
 						values={[culte]}
 						placeholder="Aucun"
+						className="w-3/4 h-20"
 					/>
 					<TextInput
 						value={story}

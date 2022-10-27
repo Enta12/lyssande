@@ -49,18 +49,21 @@ const ContextMenu = ({
 				values={[data.speed.value]}
 				options={data.speed.options}
 				onSelectValue={(value) => handleChange('speed', value[0])}
+				className="w-3/4 h-16"
 			/>
 			<InputSelect
 				required
 				values={[data.duration.value]}
 				options={data.duration.options}
 				onSelectValue={(value) => handleChange('duration', value[0])}
+				className="w-3/4 h-16"
 			/>
 			<InputSelect
 				required
 				values={[data.land.value]}
 				options={data.land.options}
 				onSelectValue={(value) => handleChange('land', value[0])}
+				className="w-3/4 h-16"
 			/>
 			{pcIndex !== undefined && (
 				<>

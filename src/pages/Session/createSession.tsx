@@ -257,7 +257,8 @@ const CreateSession = () => {
 					})}
 					onSelectValue={(value) => handleDateChange(value[0])}
 					values={[selectedDate]}
-					className="w-40"
+					className="w-52"
+					type="secondary"
 				/>
 			</div>
 			<div
@@ -275,7 +276,8 @@ const CreateSession = () => {
 							options={MOMENT}
 							onSelectValue={(value) => handleMomentChange(value[0])}
 							values={[selectedMoment]}
-							className="w-40"
+							className="w-52"
+							type="secondary"
 						/>
 						<span>
 							{`
@@ -285,7 +287,7 @@ const CreateSession = () => {
 						</span>
 					</>
 				) : (
-					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-40">
+					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
 						{Object.keys(possibleDates[selectedDate])[1]}
 					</div>
 				)}
@@ -305,7 +307,8 @@ const CreateSession = () => {
 							options={PLATFORM.map((platform) => platformTrad[platform])}
 							onSelectValue={(value) => handlePlatformChange(value[0])}
 							values={[selectedPlatform]}
-							className="w-40"
+							className="w-52"
+							type="secondary"
 						/>
 						<span>
 							{`
@@ -315,7 +318,7 @@ const CreateSession = () => {
 						</span>
 					</>
 				) : (
-					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-40">
+					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
 						{
 							platformTrad[
 								Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {})[0] as

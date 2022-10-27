@@ -80,9 +80,11 @@ const AddUser = () => {
 			/>
 			<InputSelect
 				required
+				title="Role"
 				options={roles}
 				values={[role]}
 				onSelectValue={(value) => setRole(value[0])}
+				className="w-3/4 h-20"
 			/>
 			{password ? (
 				<>

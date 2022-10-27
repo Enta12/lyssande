@@ -655,14 +655,14 @@ const FightLine = ({
 		>
 			<div
 				className={`
-        flex
-        h-20
-        ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
-        w-[177px]
-        rounded-l-2xl
-        p-3
-        items-center
-        justify-around`}
+                    flex
+                    h-20
+                    ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
+                    w-[177px]
+                    rounded-l-2xl
+                    p-3
+                    items-center
+                    justify-around`}
 			>
 				<div className="w-[157px] h-[50px] bg-white rounded-2xl flex items-center justify-center">
 					{protagonistList[data.protagonistA].name || 'Nom indéfinie'}
@@ -672,35 +672,37 @@ const FightLine = ({
 				<>
 					<div
 						className={`
-          flex
-          h-20
-          ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
-          w-[467px]
-          absolute
-          top-[47px] 
-          left-[165px]
-          rounded-2xl
-          p-3
-          items-center
-          justify-around`}
+                            flex
+                            h-20
+                            ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
+                            w-[521px]
+                            absolute
+                            top-[47px] 
+                            left-[165px]
+                            rounded-2xl
+                            p-3
+                            gap-2
+                            items-center`}
 					>
 						<HandBottomIcon />
-						<span className="font-bubblegum text-swamp text-2xl">
-							~ <span className="font-bubblegum text-orange">VS</span> ~
-						</span>
-						<InputSelect
-							required
-							placeholder="cible sans nom"
-							className="text-xl"
-							options={getOpponentList()}
-							onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], false)}
-							values={[data.protagonistC]}
-						/>
-						<div className="relative w-48">
-							<TargetIcon className="absolute" />
+						<div className="flex-1 flex items-center gap-2">
+							<span className="font-bubblegum text-swamp text-2xl min-w-[51px]">
+								~ <span className="font-bubblegum text-orange">VS</span> ~
+							</span>
 							<InputSelect
 								required
-								className="text-xl absolute top-0 left-10"
+								placeholder="cible sans nom"
+								className="text-xl h-[50px]"
+								options={getOpponentList()}
+								onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], false)}
+								values={[data.protagonistC]}
+							/>
+						</div>
+						<div className="relative w-48 flex-1 items-center pl-8">
+							<TargetIcon className="absolute left-0" />
+							<InputSelect
+								required
+								className="text-xl top-0 h-[50px]"
 								options={locals.map((elt) => localsTrad[elt])}
 								onSelectValue={(local) => handleLocalChange(local[0], false)}
 								values={[data.secondLocal]}
@@ -709,24 +711,36 @@ const FightLine = ({
 					</div>
 					<ReverseMarginMiddle
 						className={`
-              ${protagonistList[data.protagonistA].npc ? 'fill-bladeBrown' : 'fill-brown'}
-              top-[23px]
-              relative`}
+                            ${
+															protagonistList[data.protagonistA].npc
+																? 'fill-bladeBrown'
+																: 'fill-brown'
+														}
+                            top-[23px]
+                            relative`}
 					/>
 					<ReverseMarginY
 						className={`
-            ${protagonistList[data.protagonistA].npc ? 'fill-bladeBrown' : 'fill-brown'}
-              right-[38px]
-              bottom-[12px]
-              relative`}
+                            ${
+															protagonistList[data.protagonistA].npc
+																? 'fill-bladeBrown'
+																: 'fill-brown'
+														}
+                            right-[38px]
+                            bottom-[12px]
+                            relative`}
 					/>
 					<ReverseMarginY
 						className={`
-              ${protagonistList[data.protagonistA].npc ? 'fill-bladeBrown' : 'fill-brown'}
-              top-[70px]
-              rotate-[269deg]
-              right-[62px]
-              relative`}
+                            ${
+															protagonistList[data.protagonistA].npc
+																? 'fill-bladeBrown'
+																: 'fill-brown'
+														}
+                            top-[70px]
+                            rotate-[269deg]
+                            right-[62px]
+                            relative`}
 					/>
 					{firstLine && (
 						<Result
@@ -740,36 +754,41 @@ const FightLine = ({
 			)}
 			<div
 				className={`
-        flex
-        h-20
-        ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
-        ${
-					protagonistList[data.protagonistA].secondAt
-						? 'bottom-[46px] left-[165px] absolute rounded-2xl w-[467px]'
-						: 'rounded-r-2xl w-[455px]'
-				}
-        rounded-r-2xl
-        p-3
-        items-center
-        justify-around`}
+                    flex
+                    h-20
+                    ${protagonistList[data.protagonistA].npc ? 'bg-bladeBrown' : 'bg-brown'}
+                    w-[521px]
+                    absolute
+                    ${
+											protagonistList[data.protagonistA].secondAt
+												? 'bottom-[46px] left-[165px] absolute rounded-2xl w-[467px]'
+												: 'rounded-r-2xl w-[455px]'
+										}
+                    left-[165px]
+                    rounded-2xl
+                    p-3
+                    gap-2
+                    items-center`}
 			>
 				{protagonistList[data.protagonistA].secondAt && <HandTopIcon />}
-				<span className="font-bubblegum text-swamp text-2xl">
-					~ <span className="font-bubblegum text-orange">VS</span> ~
-				</span>
-				<InputSelect
-					required
-					placeholder="cible sans nom"
-					className="text-xl"
-					options={getOpponentList()}
-					onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], true)}
-					values={[data.protagonistB]}
-				/>
-				<div className="relative w-48">
-					<TargetIcon className="absolute" />
+				<div className="flex-1 flex items-center gap-2">
+					<span className="font-bubblegum text-swamp text-2xl min-w-[51px]">
+						~ <span className="font-bubblegum text-orange">VS</span> ~
+					</span>
 					<InputSelect
 						required
-						className="text-xl absolute top-0 left-10"
+						placeholder="cible sans nom"
+						className="text-xl top-0 h-[50px]"
+						options={getOpponentList()}
+						onSelectValue={(protagonist) => handleOpposingChange(protagonist[0], true)}
+						values={[data.protagonistB]}
+					/>
+				</div>
+				<div className="relative w-48 flex-1 items-center pl-8">
+					<TargetIcon className="absolute left-0" />
+					<InputSelect
+						required
+						className="text-xl top-0 h-[50px]"
 						options={locals.map((elt) => localsTrad[elt])}
 						onSelectValue={(local) => handleLocalChange(local[0], true)}
 						values={[data.local]}
@@ -804,9 +823,9 @@ const Result = ({
 	return (
 		<div
 			className={`
-      ${position === 'top' ? 'left-[167px] bottom-[45px]' : ''}
-      ${position === 'bottom' ? 'left-[407px] top-[45px]' : ''}
-      ${position === 'center' ? 'left-[10px]' : ''}
+      ${position === 'top' ? 'left-[214px] bottom-[45px]' : ''}
+      ${position === 'bottom' ? 'left-[454px] top-[45px]' : ''}
+      ${position === 'center' ? 'left-[516px]' : ''}
       relative w-60`}
 		>
 			<SwordIcon className="absolute top-2 left-0 w-16 opacity-50" />

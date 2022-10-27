@@ -438,6 +438,7 @@ const Map = ({ img, pcs, players, mapName, scale, onSend: handleSend }: Props) =
 					values={playersSorted.map((el) => players.findIndex((player) => player.name === el))}
 					onSelectValue={(value) => handleChange(value)}
 					className="w-64"
+					type="secondary"
 				/>
 			</div>
 			<div className="flex gap-16 mt-4 w-full pb-5 pl-5 min-h-[100px]">
