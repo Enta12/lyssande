@@ -165,7 +165,7 @@ const FightPage = () => {
         w-screen
         left-0`}
 		>
-			<div className="flex-col mx-7 flex min-w-[856px] gap-4">
+			<div className="flex-col ml-7 flex min-w-[952px] gap-4">
 				<Title title={'Combat'} />
 				{!haveStart &&
 					protagonistList.some((elt) => !elt.npc) &&
