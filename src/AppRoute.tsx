@@ -14,7 +14,7 @@ const Players = lazy(() => import('pages/Player/Players'));
 const Player = lazy(() => import('pages/Player/Player'));
 const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
 const CreateSession = lazy(() => import('pages/Session/createSession'));
-const NotFound = lazy(() => import('pages/NotFound/NotFound'));
+const NotFound = lazy(() => import('pages/404'));
 const SessionPage = lazy(() => import('pages/Session/SessionPage'));
 const SessionEditPage = lazy(() => import('pages/Session/SessionEditPage'));
 const AddUser = lazy(() => import('pages/Player/AddUser'));

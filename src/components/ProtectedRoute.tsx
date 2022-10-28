@@ -10,8 +10,7 @@ type Props = {
 
 const ProtectedRoute = ({ restrictedTo, children }: Props) => {
 	const auth = useAuth();
-	const redirect =
-		restrictedTo && auth?.user?.info?.role ? `/403?authorizedTo=${restrictedTo[0]}` : '/login';
+	const redirect = restrictedTo ? `/403?authorizedTo=${restrictedTo[0]}` : '/login';
 
 	if (!auth?.user.isLogged) {
 		return (
