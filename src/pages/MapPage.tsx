@@ -1,35 +1,31 @@
 import Map from 'components/Map/Map';
 import { mapsMoocked } from 'moockedData';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { PcType, UserInfo } from 'types';
 import { toast } from 'react-toastify';
-import { useAuth } from 'hooks';
+import { useAuth, useData } from 'hooks';
 import useApi from 'hooks/useApi';
 import { ReactComponent as Corner } from 'assets/reverseBorder/corner.svg';
+import { DataCastingContainer } from 'components';
+import { getStatus } from 'hooks/useData';
 
 const noSaveMsg =
 	"Attention, vous pouvez temporairement déplacer vos tokens mais leur position n'est pas enregistrée";
 
 const MapPage = () => {
 	const [mapSelected, setMapSelected] = useState(0);
-	const [pcData, setPcData] = useState<PcType[]>([]);
-	const [players, setPlayers] = useState<UserInfo[]>([]);
 	const auth = useAuth();
 	const api = useApi();
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const characterRes = await api.get('/characters');
-				const usersRes = await api.get('/users');
-				setPcData(characterRes.data);
-				setPlayers(usersRes.data);
-			} catch (error) {
-				toast.error('Impossible de récupérer les personnages');
-			}
-		};
-		fetchData();
-	}, []);
+	const { status: charactersStatus, data: pcData } = useData<PcType[]>(
+		'Impossible de récupérer les personnages',
+		[],
+		'/characters'
+	);
+	const { status: usersStatus, data: players } = useData<UserInfo[]>(
+		'Impossible de récupérer les utilisateurs',
+		[],
+		'/users'
+	);
 
 	const updatePositions = async (
 		newPositions: (
@@ -75,8 +71,9 @@ const MapPage = () => {
 			toast.error('Erreur dans la mise à jour des utilisateurs');
 		}
 	};
+
 	return (
-		<>
+		<DataCastingContainer status={getStatus(usersStatus, charactersStatus)} dataElements="cartes">
 			{auth?.user.info?.role === 'player' && (
 				<p className="m-4 font-bold text-darkBrown text-xl">{noSaveMsg}</p>
 			)}
@@ -105,7 +102,7 @@ const MapPage = () => {
 				pcs={pcData}
 				mapName={mapsMoocked[mapSelected].name}
 			/>
-		</>
+		</DataCastingContainer>
 	);
 };
 
