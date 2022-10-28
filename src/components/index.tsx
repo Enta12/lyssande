@@ -19,3 +19,4 @@ export { default as Title } from './Title';
 export { default as CheckInput } from './CheckInput';
 export { default as SessionCard } from './SessionCard';
 export { default as DataCastingContainer } from './DataCastingContainer';
+export { default as ErrorPage } from './ErrorPage';

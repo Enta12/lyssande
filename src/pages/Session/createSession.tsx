@@ -1,14 +1,15 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DataCastingContainer, InputSelect } from 'components';
+import { DataCastingContainer, ErrorPage, InputSelect } from 'components';
 import PcSessionSelector from 'components/PcSessionSelector';
 import PrimaryButton from 'components/Primary-button';
-import { PcType, Platform, UserInfo } from 'types';
+import { PcType, Platform } from 'types';
 import { days, months } from 'moockedData';
 import { toast } from 'react-toastify';
 import { useAuth, useApi, useData } from 'hooks';
 import { getStatus } from 'hooks/useData';
+import noDataImg from 'assets/images/no-data.png';
 
 type AvailabilitySend = {
 	user: string;
@@ -57,6 +58,7 @@ const CreateSession = () => {
 	const [selectedMoment, setSelectedMoment] = useState(0);
 	const navigate = useNavigate();
 	const api = useApi();
+	const [availabilitiesStatus, setAvailabilitiesStatus] = useState<'loading' | 'data'>('loading');
 	const auth = useAuth();
 
 	useEffect(() => {
@@ -144,6 +146,7 @@ const CreateSession = () => {
 						.map((possibleDates) => removeUselessMoment(possibleDates))
 						.filter((possibleDates) => possibleDates['journée'] || possibleDates['soirée'])
 				);
+				setAvailabilitiesStatus('data');
 			};
 			fetchData();
 		} catch (error) {
@@ -185,8 +188,6 @@ const CreateSession = () => {
 	const getById = (id: string) => {
 		return characters?.filter((el) => el.id === id)[0];
 	};
-
-	const loading = !possibleDates.length;
 
 	const setSelectedPc = (playerIndex: number, pcID: string) => {
 		const selectedPcsTemp = [...selectedPcs];
@@ -245,10 +246,10 @@ const CreateSession = () => {
 
 	return (
 		<DataCastingContainer
-			status={getStatus(charactersStatus, usersStatus)}
+			status={getStatus(charactersStatus, usersStatus, availabilitiesStatus)}
 			dataElements="disponibilités"
 		>
-			{!!possibleDates.length && (
+			{possibleDates.length && (
 				<div className="w-full flex items-center flex-col gap-3 text-brown font-bubblegum text-lg">
 					<div
 						className="
@@ -372,6 +373,21 @@ const CreateSession = () => {
 					)}
 					<PrimaryButton text={'Créer une partie'} onClick={submit} />
 				</div>
+			)}
+			{!possibleDates.length && (
+				<ErrorPage
+					text={{
+						title: 'AUCUNE SESSIONS POSSIBLES',
+						firstLine: "Personne n'a de dispobilité compatible avec les vautres",
+						secondLine:
+							'Si cela vous paret étrange vérifier que vous avez bien remplie vos dispobilité et demander à vos joueurs si eux aussi l’on fait.',
+					}}
+					img={{
+						src: noDataImg,
+						alt: 'Sorcier triste',
+						maxSize: 'max-w-[331px]',
+					}}
+				/>
 			)}
 		</DataCastingContainer>
 	);
