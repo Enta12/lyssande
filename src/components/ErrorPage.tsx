@@ -1,8 +1,9 @@
 import React from 'react';
 import Title from './Title';
+import noDataImg from 'assets/images/no-data.png';
 
 type Props = {
-	img: {
+	img?: {
 		src: string;
 		alt: string;
 		maxSize: string;
@@ -15,7 +16,14 @@ type Props = {
 	};
 };
 
-const ErrorPage = ({ img, text }: Props) => {
+const ErrorPage = ({
+	img = {
+		src: noDataImg,
+		alt: 'Sorcier triste',
+		maxSize: 'max-w-[331px]',
+	},
+	text,
+}: Props) => {
 	return (
 		<div className="sm:justify-between justify-center flex w-full flex-1">
 			<div className="flex flex-col pt-12 gap-2 font-bubblegum text-brown text-2xl">

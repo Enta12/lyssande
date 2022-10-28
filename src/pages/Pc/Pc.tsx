@@ -3,7 +3,7 @@ import PcCard from 'components/PcCard';
 import React from 'react';
 import { PcType } from 'types';
 import { useNavigate } from 'react-router-dom';
-import { useApi, useData } from 'hooks';
+import { useData } from 'hooks';
 import { DataCastingContainer } from 'components';
 
 const Pc = () => {

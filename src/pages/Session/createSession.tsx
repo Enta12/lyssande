@@ -9,7 +9,6 @@ import { days, months } from 'moockedData';
 import { toast } from 'react-toastify';
 import { useAuth, useApi, useData } from 'hooks';
 import { getStatus } from 'hooks/useData';
-import noDataImg from 'assets/images/no-data.png';
 
 type AvailabilitySend = {
 	user: string;
@@ -378,14 +377,9 @@ const CreateSession = () => {
 				<ErrorPage
 					text={{
 						title: 'AUCUNE SESSIONS POSSIBLES',
-						firstLine: "Personne n'a de dispobilité compatible avec les vautres",
+						firstLine: "Personne n'a de dispobilité compatible avec les autres",
 						secondLine:
 							'Si cela vous paret étrange vérifier que vous avez bien remplie vos dispobilité et demander à vos joueurs si eux aussi l’on fait.',
-					}}
-					img={{
-						src: noDataImg,
-						alt: 'Sorcier triste',
-						maxSize: 'max-w-[331px]',
 					}}
 				/>
 			)}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DataCastingContainer, SessionCard } from 'components';
-import { useApi, useData } from 'hooks';
+import { DataCastingContainer, ErrorPage, SessionCard } from 'components';
+import { useData } from 'hooks';
 import { Session, UserInfo } from 'types';
 import { getStatus } from 'hooks/useData';
 
@@ -16,44 +16,56 @@ const SessionPage = () => {
 		[],
 		'/sessions'
 	);
+	const sessionFiltered = sessions.filter((sessionEl) =>
+		pastSession ? new Date(+sessionEl.date) <= new Date() : new Date(+sessionEl.date) > new Date()
+	);
 	return (
 		<DataCastingContainer status={getStatus(sessionStatus, userStatus)} dataElements="sessions">
 			<div className="flex flex-col gap-3 w-full">
 				<div
 					className="
-            flex
-            justify-around
-            font-bold
-            font-bubblegum
-            text-2xl
-            mb-8"
+                        flex
+                        justify-around
+                        font-bold
+                        font-bubblegum
+                        text-2xl
+                        mb-8
+                    "
 				>
 					<button
 						onClick={() => setPastSession(true)}
 						className={`
-                hover:underline hover:text-brown
-                ${pastSession ? 'text-brown underline' : 'text-gray-500'}
-            `}
+                            hover:underline hover:text-brown
+                            ${pastSession ? 'text-brown underline' : 'text-gray-500'}
+                        `}
 					>
 						Parties passées
 					</button>
 					<button
 						onClick={() => setPastSession(false)}
 						className={`
-                hover:underline hover:text-brown
-                ${!pastSession ? 'text-brown underline' : 'text-gray-500'}
-            `}
+                            hover:underline hover:text-brown
+                            ${!pastSession ? 'text-brown underline' : 'text-gray-500'}
+                        `}
 					>
 						Parties à venir
 					</button>
 				</div>
-				{sessions
-					.filter((sessionEl) =>
-						pastSession
-							? new Date(+sessionEl.date) <= new Date()
-							: new Date(+sessionEl.date) > new Date()
-					)
-					.map((sessionEl, index) => (
+				{!sessionFiltered && (
+					<ErrorPage
+						text={{
+							title: `AUCUNE SESSIONS ${pastSession ? 'PASSEES' : 'A VENIR'}`,
+							firstLine: `Vous n'avez ${
+								pastSession ? 'fait aucune session' : 'pas de sessions a venir'
+							}`,
+							secondLine: pastSession
+								? undefined
+								: 'Pensez a mettre vos disponibilités et/ou motivé votre équipe !',
+						}}
+					/>
+				)}
+				{sessionFiltered &&
+					sessionFiltered.map((sessionEl, index) => (
 						<SessionCard key={index} data={sessionEl} users={users} />
 					))}
 			</div>
