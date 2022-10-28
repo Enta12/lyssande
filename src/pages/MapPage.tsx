@@ -71,7 +71,6 @@ const MapPage = () => {
 			toast.error('Erreur dans la mise à jour des utilisateurs');
 		}
 	};
-	console.log(getStatus(usersStatus, charactersStatus));
 
 	return (
 		<DataCastingContainer status={getStatus(usersStatus, charactersStatus)} dataElements="cartes">
