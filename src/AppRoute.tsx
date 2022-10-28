@@ -1,89 +1,167 @@
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import React, {useState} from 'react';
-import Layout from './components/layout';
-import Login from './pages/login/login';
-import Pj from './pages/pj/pj';
-import AddPj from './pages/pj/addPj/addPj';
-import Calendar from './pages/calendar/CalendarPage';
-import MapPage from './pages/MapPage';
-import FightPage from './pages/fight/FightPage';
-import Player from './pages/player/player';
-import DetailPj from './pages/pj/detailPj';
-import Players from './pages/player/players';
-import CreateSession from './pages/session/createSession';
-import jwtDecode from 'jwt-decode';
-import {Token} from './types';
-import NotFound from './pages/notFound/NotFound';
-import SessionPage from './pages/session/SessionPage';
-import SessionEditPage from './pages/session/SessionEditPage';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import Layout from 'components/Layout/Layout';
+import { useAuth } from './hooks';
+import { ProtectedRoute } from 'components';
 
-
-export const AuthContext =
-  React.createContext<{
-    user?: Token,
-    setUser:(user?: Token) => void
-        }>({setUser: () => console.error('no setuser')});
+const Login = lazy(() => import('pages/Login'));
+const Pc = lazy(() => import('pages/Pc/Pc'));
+const AddPc = lazy(() => import('pages/Pc/AddPc/AddPc'));
+const Calendar = lazy(() => import('pages/Calendar/CalendarPage'));
+const MapPage = lazy(() => import('pages/MapPage'));
+const FightPage = lazy(() => import('pages/Fight/FightPage'));
+const Players = lazy(() => import('pages/Player/Players'));
+const Player = lazy(() => import('pages/Player/Player'));
+const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
+const CreateSession = lazy(() => import('pages/Session/createSession'));
+const NotFound = lazy(() => import('pages/NotFound/NotFound'));
+const SessionPage = lazy(() => import('pages/Session/SessionPage'));
+const SessionEditPage = lazy(() => import('pages/Session/SessionEditPage'));
+const AddUser = lazy(() => import('pages/Player/AddUser'));
 
 const AppRoute = () => {
-  const token = localStorage.getItem('lyssandeLocal');
-  const tokenDecode = token ? jwtDecode(token) as Token : null;
-  const [user, setUser] = useState<Token | undefined>(
-    tokenDecode ?
-    {...tokenDecode} : undefined,
-  );
-  return (
-    <AuthContext.Provider value={{user, setUser}}>
-      <Router>
-        {
-          token ?
-          <Routes>
-            <Route path='/pj' element={<Layout Page={<Pj />}/>} />
-            <Route path='/pj/:id' element={<Layout Page={<DetailPj />} />} />
-            <Route path='/editCharacter' element={
-              <Layout Page={<AddPj />} />} />
-            <Route path='/editCharacter/:id' element={
-              <Layout Page={<AddPj />} />} />
-            <Route path='/calendar' element={<Layout Page={<Calendar />} />} />
-            <Route path='/map' element={<Layout Page={<MapPage />} />} />
-            <Route path='/sessions' element={<Layout Page={<SessionPage/>}/>}/>
-            <Route
-              path='/sessions/:id'
-              element={<Layout Page={<SessionEditPage/>}/>}
-            />
-            {
-              (
-                user?.role === 'gm' ||
-                user?.role === 'admin') &&
-                <>
-                  <Route path='/player' element={
-                    <Layout Page={<Players />}/>
-                  } />
-                  <Route path='/player/:id' element={
-                    <Layout Page={<Player />}/>
-                  } />
-                  <Route path='/fight' element={
-                    <Layout Page={<FightPage />}/>
-                  } />
-                  <Route
-                    path='/newSession'
-                    element={
-                      <Layout Page={<CreateSession />} />
-                    }
-                  />
-                </>
-            }
-            <Route path='/' element={
-              <Layout Page={
-                <Player userId={user?.userId} />
-              }/>
-            } />
-            <Route path='*' element={<Layout Page={<NotFound />} />} />
-          </Routes>:
-          <Login />
-        }
-      </Router>
-    </AuthContext.Provider>
-  );
+	const auth = useAuth();
+	auth?.user;
+	return (
+		<Router>
+			<Suspense fallback={<Layout />}>
+				<Routes>
+					<Route path="/login" element={<Login />} />
+					<Route path="/" element={<Layout />}>
+						<Route
+							index
+							element={
+								<ProtectedRoute>
+									<SessionPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="map"
+							element={
+								<ProtectedRoute>
+									<MapPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="calendar"
+							element={
+								<ProtectedRoute>
+									<Calendar />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="fight"
+							element={
+								<ProtectedRoute restricted={{ to: ['gm', 'admin'], redirectPath: '/login' }}>
+									<FightPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route path="sessions">
+							<Route
+								index
+								element={
+									<ProtectedRoute>
+										<SessionPage />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="add"
+								element={
+									<ProtectedRoute restricted={{ to: ['admin', 'gm'], redirectPath: '/login' }}>
+										<CreateSession />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="edit/:id"
+								element={
+									<ProtectedRoute>
+										<SessionEditPage />
+									</ProtectedRoute>
+								}
+							/>
+						</Route>
+						<Route path="players">
+							<Route
+								index
+								element={
+									<ProtectedRoute restricted={{ to: ['gm', 'admin'], redirectPath: '/login' }}>
+										<Players />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path=":id"
+								element={
+									<ProtectedRoute>
+										<Player />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="add"
+								element={
+									<ProtectedRoute restricted={{ to: ['admin'], redirectPath: '/login' }}>
+										<AddUser />
+									</ProtectedRoute>
+								}
+							/>
+						</Route>
+						<Route path="pc">
+							<Route
+								index
+								element={
+									<ProtectedRoute>
+										<Pc />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path=":id"
+								element={
+									<ProtectedRoute>
+										<DetailPc />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path="add"
+								element={
+									<ProtectedRoute>
+										<AddPc />
+									</ProtectedRoute>
+								}
+							/>
+							<Route path="edit">
+								<Route
+									index
+									element={
+										<ProtectedRoute>
+											<NotFound />
+										</ProtectedRoute>
+									}
+								/>
+								<Route
+									path=":id"
+									element={
+										<ProtectedRoute>
+											<AddPc />
+										</ProtectedRoute>
+									}
+								/>
+							</Route>
+						</Route>
+						<Route path="*" element={<NotFound />} />
+					</Route>
+				</Routes>
+			</Suspense>
+		</Router>
+	);
 };
 
 export default AppRoute;

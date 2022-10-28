@@ -5,6 +5,7 @@ import AppRoute from './AppRoute';
 import {createRoot} from 'react-dom/client';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {AuthContextProvider} from './hooks/useAuth';
 
 const root = createRoot(document.getElementById('root')!);
 root.render(
@@ -21,7 +22,9 @@ root.render(
         pauseOnHover
         theme='colored'
       />
-      <AppRoute />
+      <AuthContextProvider>
+        <AppRoute />
+      </AuthContextProvider>
       <div className="
         rounded-bl-full
         w-5/12
