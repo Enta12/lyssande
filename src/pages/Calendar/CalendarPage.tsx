@@ -1,8 +1,9 @@
-import { Title, Calendar, PrimaryButton } from 'components';
+import { Title, Calendar, PrimaryButton, DataCastingContainer } from 'components';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Availability, Platform } from 'types';
 import { toast } from 'react-toastify';
 import useApi from 'hooks/useApi';
+import useData from 'hooks/useData';
 
 type AvailabilitySave = {
 	platform: Platform;
@@ -18,7 +19,22 @@ const tomorrow = new Date(new Date().setHours(0, 0, 0, 0) + oneDay);
 
 const CalendarPage = () => {
 	const [availabilitiesSave, setAvailabilitiesSave] = useState<Availability[]>([]);
-	const [availabilities, setAvailabilities] = useState<Availability[]>([]);
+	const {
+		status,
+		data: availabilities,
+		setData: setAvailabilities,
+	} = useData<Availability[], AvailabilitySave>(
+		'Impossible de récupérer vos disponibilités',
+		[],
+		'/users/availabilities',
+		(el: AvailabilitySave) => ({
+			platform: el.platform,
+			at: {
+				date: new Date(+el.at.date),
+				moment: el.at.moment,
+			},
+		})
+	);
 	const [endDate, setEndDate] = useState<string>(`${tomorrow.getTime() + oneMounth}`);
 	const api = useApi();
 
@@ -56,25 +72,6 @@ const CalendarPage = () => {
 		return availabilitySet;
 	};
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const res = await api.get('/users/availabilities');
-				setAvailabilitiesSave(
-					res.data.map((el: AvailabilitySave) => ({
-						platform: el.platform,
-						at: {
-							date: new Date(+el.at.date),
-							moment: el.at.moment,
-						},
-					}))
-				);
-			} catch (error) {
-				toast.error('Impossible de récupérer vos disponibilités');
-			}
-		};
-		fetchData();
-	}, [setAvailabilitiesSave]);
-	useEffect(() => {
 		const availabilitiesTemp = availabilities.filter(
 			(el) => new Date(el.at.date) < new Date(endDate)
 		);
@@ -111,32 +108,34 @@ const CalendarPage = () => {
 		setAvailabilities(availabilitiesTemp);
 	};
 	return (
-		<div className="pt-8 w-full">
-			<Title title="MES DISPONIBILITES POUR LE PROCHAIN MOIS" />
-			<div className="my-4 text-swamp font-bubblegum text-xl">
-				{"Affiché jusqu'au : "}
-				<input
-					onChange={(e) => setEndDate(e.target.value)}
-					value={endDate}
-					className="
-            outline-none
-            bg-lightBrown
-            text-white
-            p-2
-            border-4
-            border-white
-            rounded-2xl
-            w-44"
-					type="date"
-				/>
+		<DataCastingContainer status={status} dataElements="disponibilités">
+			<div className="pt-8 w-full">
+				<Title title="MES DISPONIBILITES POUR LE PROCHAIN MOIS" />
+				<div className="my-4 text-swamp font-bubblegum text-xl">
+					{"Affiché jusqu'au : "}
+					<input
+						onChange={(e) => setEndDate(e.target.value)}
+						value={endDate}
+						className="
+                            outline-none
+                            bg-lightBrown
+                            text-white
+                            p-2
+                            border-4
+                            border-white
+                            rounded-2xl
+                            w-44"
+						type="date"
+					/>
+				</div>
+				<form>
+					<Calendar onAvailabilityChange={handleChange} availabilities={availabilities} />
+				</form>
+				<div className="m-8 mb-60 flex justify-center">
+					<PrimaryButton text="Enregistrer" onClick={onSubmit} />
+				</div>
 			</div>
-			<form>
-				<Calendar onAvailabilityChange={handleChange} availabilities={availabilities} />
-			</form>
-			<div className="m-8 mb-60 flex justify-center">
-				<PrimaryButton text="Enregistrer" onClick={onSubmit} />
-			</div>
-		</div>
+		</DataCastingContainer>
 	);
 };
 

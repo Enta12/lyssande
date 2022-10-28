@@ -1,13 +1,14 @@
 /* eslint-disable sonarjs/cognitive-complexity */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { InputSelect } from 'components';
+import { DataCastingContainer, InputSelect } from 'components';
 import PcSessionSelector from 'components/PcSessionSelector';
 import PrimaryButton from 'components/Primary-button';
 import { PcType, Platform, UserInfo } from 'types';
 import { days, months } from 'moockedData';
 import { toast } from 'react-toastify';
-import { useAuth, useApi } from 'hooks';
+import { useAuth, useApi, useData } from 'hooks';
+import { getStatus } from 'hooks/useData';
 
 type AvailabilitySend = {
 	user: string;
@@ -41,8 +42,16 @@ const CreateSession = () => {
 	const [selectedPcs, setSelectedPcs] = useState<string[]>([]);
 	const [lastQuest, setLastQuest] = useState('');
 	const [selectedDate, setSelectedDate] = useState<number>(0);
-	const [players, setPlayers] = useState<UserInfo[]>([]);
-	const [characters, setCharacters] = useState<PcType[]>([]);
+	const { status: charactersStatus, data: characters } = useData<PcType[]>(
+		'Impossible de récupérer les personnages',
+		[],
+		'/characters'
+	);
+	const { status: usersStatus, data: players } = useData<PcType[]>(
+		'Impossible de récupérer les joueurs',
+		[],
+		'/users'
+	);
 	const [possibleDates, setPossibleDates] = useState<PossibleDate[]>([]);
 	const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
 	const [selectedMoment, setSelectedMoment] = useState(0);
@@ -84,8 +93,6 @@ const CreateSession = () => {
 				const userRes = await api.get('/users');
 				const charactersRes = await api.get('/characters');
 				const availabilitiesRes = await api.get('/availabilities');
-				setPlayers(userRes.data);
-				setCharacters(charactersRes.data);
 
 				const possibleDatesTemp: PossibleDate[] = [];
 				availabilitiesRes.data.forEach((availabilityRes: AvailabilitySend) => {
@@ -236,131 +243,137 @@ const CreateSession = () => {
 		}
 	};
 
-	return !loading ? (
-		<div className="w-full flex items-center flex-col gap-3 text-brown font-bubblegum text-lg">
-			<div
-				className="
-                    w-full
-                    flex
-                    items-center
-                    gap-2"
-			>
-				<span className="w-8">Le</span>
-				<InputSelect
-					required
-					placeholder="Aucune date"
-					options={possibleDates.map((possibleDate) => {
-						const date = new Date(+possibleDate.date);
-						return `${days[date.getDay()]}
-                                ${date.getDate()}
-                                ${months[date.getMonth()]}`;
-					})}
-					onSelectValue={(value) => handleDateChange(value[0])}
-					values={[selectedDate]}
-					className="w-52"
-					type="secondary"
-				/>
-			</div>
-			<div
-				className="
-                    w-full
-                    flex
-                    items-center
-                    gap-2"
-			>
-				<span className="w-8">En</span>
-				{Object.keys(possibleDates[selectedDate]).length === 3 ? (
-					<>
+	return (
+		<DataCastingContainer
+			status={getStatus(charactersStatus, usersStatus)}
+			dataElements="disponibilités"
+		>
+			{!!possibleDates.length && (
+				<div className="w-full flex items-center flex-col gap-3 text-brown font-bubblegum text-lg">
+					<div
+						className="
+                        w-full
+                        flex
+                        items-center
+                        gap-2"
+					>
+						<span className="w-8">Le</span>
 						<InputSelect
 							required
-							options={MOMENT}
-							onSelectValue={(value) => handleMomentChange(value[0])}
-							values={[selectedMoment]}
+							placeholder="Aucune date"
+							options={possibleDates.map((possibleDate) => {
+								const date = new Date(+possibleDate.date);
+								return `${days[date.getDay()]}
+                                    ${date.getDate()}
+                                    ${months[date.getMonth()]}`;
+							})}
+							onSelectValue={(value) => handleDateChange(value[0])}
+							values={[selectedDate]}
 							className="w-52"
 							type="secondary"
 						/>
-						<span>
-							{`
-                ${getPlayerAvailableOnOtherMoment()}
-                joueur(s) présent(s) en ${MOMENT[(selectedMoment + 1) % 2]}
-              `}
-						</span>
-					</>
-				) : (
-					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
-						{Object.keys(possibleDates[selectedDate])[1]}
 					</div>
-				)}
-			</div>
-			<div
-				className="
-                    w-full
-                    flex
-                    items-center
-                    gap-2"
-			>
-				<span className="w-8">Sur</span>
-				{Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {}).length === 2 ? (
-					<>
-						<InputSelect
-							required
-							options={PLATFORM.map((platform) => platformTrad[platform])}
-							onSelectValue={(value) => handlePlatformChange(value[0])}
-							values={[selectedPlatform]}
-							className="w-52"
-							type="secondary"
-						/>
-						<span>
-							{`
-                ${getPlayerAvailableOnOtherPlatform()}
-                joueur(s) présent(s) en ${platformTrad[PLATFORM[(selectedPlatform + 1) % 2]]}
-              `}
-						</span>
-					</>
-				) : (
-					<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
-						{
-							platformTrad[
-								Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {})[0] as
-									| 'online'
-									| 'just-irl'
-							]
+					<div
+						className="
+                        w-full
+                        flex
+                        items-center
+                        gap-2"
+					>
+						<span className="w-8">En</span>
+						{Object.keys(possibleDates[selectedDate]).length === 3 ? (
+							<>
+								<InputSelect
+									required
+									options={MOMENT}
+									onSelectValue={(value) => handleMomentChange(value[0])}
+									values={[selectedMoment]}
+									className="w-52"
+									type="secondary"
+								/>
+								<span>
+									{`
+                    ${getPlayerAvailableOnOtherMoment()}
+                    joueur(s) présent(s) en ${MOMENT[(selectedMoment + 1) % 2]}
+                `}
+								</span>
+							</>
+						) : (
+							<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
+								{Object.keys(possibleDates[selectedDate])[1]}
+							</div>
+						)}
+					</div>
+					<div
+						className="
+                        w-full
+                        flex
+                        items-center
+                        gap-2"
+					>
+						<span className="w-8">Sur</span>
+						{Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {}).length ===
+						2 ? (
+							<>
+								<InputSelect
+									required
+									options={PLATFORM.map((platform) => platformTrad[platform])}
+									onSelectValue={(value) => handlePlatformChange(value[0])}
+									values={[selectedPlatform]}
+									className="w-52"
+									type="secondary"
+								/>
+								<span>
+									{`
+                    ${getPlayerAvailableOnOtherPlatform()}
+                    joueur(s) présent(s) en ${platformTrad[PLATFORM[(selectedPlatform + 1) % 2]]}
+                `}
+								</span>
+							</>
+						) : (
+							<div className="p-1.5 bg-slate-300 rounded-lg px-3 w-52">
+								{
+									platformTrad[
+										Object.keys(possibleDates[selectedDate]?.[MOMENT[selectedMoment]] || {})[0] as
+											| 'online'
+											| 'just-irl'
+									]
+								}
+							</div>
+						)}
+					</div>
+					<div
+						className="
+                        w-full
+                        flex
+                        items-center
+                        gap-2"
+					></div>
+					{possibleDates[selectedDate]?.[MOMENT[selectedMoment]]?.[PLATFORM[selectedPlatform]]?.map(
+						(playerId, index) => {
+							const irlOrOnline = possibleDates[selectedDate]?.[MOMENT[selectedMoment]]?.[
+								PLATFORM[(selectedPlatform + 1) % 2]
+							]?.some((currentPlayerId) => currentPlayerId === playerId);
+							return (
+								<PcSessionSelector
+									platform={irlOrOnline ? 'irl-or-online' : PLATFORM[selectedPlatform % 2]}
+									quest={lastQuest}
+									selectedPc={selectedPcs[index]}
+									onSelectedPc={setSelectedPc}
+									playerIndex={index}
+									key={index}
+									pcs={characters.filter((pc) => pc.player === playerId)}
+									playerName={
+										players.find((player) => player.id === playerId)?.name || 'User introuvable'
+									}
+								/>
+							);
 						}
-					</div>
-				)}
-			</div>
-			<div
-				className="
-                    w-full
-                    flex
-                    items-center
-                    gap-2"
-			></div>
-			{possibleDates[selectedDate]?.[MOMENT[selectedMoment]]?.[PLATFORM[selectedPlatform]]?.map(
-				(playerId, index) => {
-					const irlOrOnline = possibleDates[selectedDate]?.[MOMENT[selectedMoment]]?.[
-						PLATFORM[(selectedPlatform + 1) % 2]
-					]?.some((currentPlayerId) => currentPlayerId === playerId);
-					return (
-						<PcSessionSelector
-							platform={irlOrOnline ? 'irl-or-online' : PLATFORM[selectedPlatform % 2]}
-							quest={lastQuest}
-							selectedPc={selectedPcs[index]}
-							onSelectedPc={setSelectedPc}
-							playerIndex={index}
-							key={index}
-							pcs={characters.filter((pc) => pc.player === playerId)}
-							playerName={
-								players.find((player) => player.id === playerId)?.name || 'User introuvable'
-							}
-						/>
-					);
-				}
+					)}
+					<PrimaryButton text={'Créer une partie'} onClick={submit} />
+				</div>
 			)}
-			<PrimaryButton text={'Créer une partie'} onClick={submit} />
-		</div>
-	) : (
-		<></>
+		</DataCastingContainer>
 	);
 };
 
