@@ -1,32 +1,33 @@
-import {Role} from 'types';
-import {useAuth} from 'hooks';
-import {Navigate} from 'react-router-dom';
+import { Role } from 'types';
+import { useAuth } from 'hooks';
+import { Navigate } from 'react-router-dom';
 import React from 'react';
 
 type Props = {
-    restricted?: { to: Role[]; redirectPath: string };
-    children: JSX.Element;
+	restrictedTo?: Role[];
+	children: JSX.Element;
 };
 
-const ProtectedRoute= ({restricted, children}: Props) => {
-  const auth = useAuth();
+const ProtectedRoute = ({ restrictedTo, children }: Props) => {
+	const auth = useAuth();
+	const redirect =
+		restrictedTo && auth?.user?.info?.role ? `/403?authorizedTo=${restrictedTo[0]}` : '/login';
 
-  if (!auth?.user.isLogged) {
-    return (
-      <Navigate
-        to={{
-          pathname: `/login`,
-        }}
-      />
-    );
-  }
+	if (!auth?.user.isLogged) {
+		return (
+			<Navigate
+				to={{
+					pathname: `/login`,
+				}}
+			/>
+		);
+	}
 
-  const isNotAllowed = !restricted?.to.includes(
-      auth.user?.info?.role || 'player');
-  if (!!restricted && isNotAllowed) {
-    return <Navigate to={restricted.redirectPath} />;
-  }
-  return children;
+	const isNotAllowed = !restrictedTo?.includes(auth.user?.info?.role || 'player');
+	if (!!restrictedTo && isNotAllowed) {
+		return <Navigate to={redirect} />;
+	}
+	return children;
 };
 
 export default ProtectedRoute;
