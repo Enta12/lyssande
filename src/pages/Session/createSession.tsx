@@ -376,10 +376,10 @@ const CreateSession = () => {
 			{!possibleDates.length && (
 				<ErrorPage
 					text={{
-						title: 'AUCUNE SESSIONS POSSIBLES',
-						firstLine: "Personne n'a de dispobilité compatible avec les autres",
+						title: 'AUCUNE SESSION POSSIBLE',
+						firstLine: "Personne n'est disponible au même moment.",
 						secondLine:
-							'Si cela vous paret étrange vérifier que vous avez bien remplie vos dispobilité et demander à vos joueurs si eux aussi l’on fait.',
+							'Si cela vous paraît étrange, vérifiez que vos disponibilités ainsi que celles de vos joueurs ont bien été complétées.',
 					}}
 				/>
 			)}

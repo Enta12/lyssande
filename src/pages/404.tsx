@@ -6,7 +6,7 @@ const NotFound = () => {
 	return (
 		<ErrorPage
 			text={{
-				pageTitle: 'ACCES INTERDIT',
+				pageTitle: 'PAGE INEXISTANTE',
 				firstLine: "Cette page n'existe pas ou a été suprimée",
 			}}
 			img={{

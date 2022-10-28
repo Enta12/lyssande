@@ -1,10 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { DataCastingContainer, DetailPcCard } from 'components';
 import Title from 'components/Title';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PcType } from 'types';
-import { useApi, useData } from 'hooks';
-import { toast } from 'react-toastify';
+import { useData } from 'hooks';
 
 const DetailPc = () => {
 	const params = useParams();
@@ -35,6 +34,7 @@ const DetailPc = () => {
 					</div>
 				</div>
 			)}
+			{!character && <Navigate to="/404" />}
 		</DataCastingContainer>
 	);
 };

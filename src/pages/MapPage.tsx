@@ -10,7 +10,7 @@ import { DataCastingContainer } from 'components';
 import { getStatus } from 'hooks/useData';
 
 const noSaveMsg =
-	"Attention, vous pouvez temporairement déplacer vos tokens mais leur position n'est pas enregistrée";
+	"Attention, vous pouvez temporairement déplacer vos jetons mais leur position n'est pas enregistrée";
 
 const MapPage = () => {
 	const [mapSelected, setMapSelected] = useState(0);
@@ -71,7 +71,6 @@ const MapPage = () => {
 			toast.error('Erreur dans la mise à jour des utilisateurs');
 		}
 	};
-	console.log(getStatus(usersStatus, charactersStatus));
 
 	return (
 		<DataCastingContainer status={getStatus(usersStatus, charactersStatus)} dataElements="cartes">

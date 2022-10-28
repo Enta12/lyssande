@@ -119,7 +119,7 @@ const SessionEditPage = () => {
 				>
 					<Input
 						label="Nom de la partie"
-						placeholder="Recherche du joyau magique"
+						placeholder="Exemple: Recherche du joyau magique"
 						type="text"
 						value={title}
 						onChange={(e) => setTitle(e.target.value)}

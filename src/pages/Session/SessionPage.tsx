@@ -56,11 +56,11 @@ const SessionPage = () => {
 						text={{
 							title: `AUCUNE SESSIONS ${pastSession ? 'PASSEES' : 'A VENIR'}`,
 							firstLine: `Vous n'avez ${
-								pastSession ? 'fait aucune session' : 'pas de sessions a venir'
+								pastSession ? 'fait aucune session' : 'pas de session à venir'
 							}`,
 							secondLine: pastSession
 								? undefined
-								: 'Pensez a mettre vos disponibilités et/ou motivé votre équipe !',
+								: 'Pensez à mettre vos disponibilités et/ou motiver votre équipe !',
 						}}
 					/>
 				)}

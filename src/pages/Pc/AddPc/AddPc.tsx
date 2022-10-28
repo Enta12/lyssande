@@ -48,7 +48,7 @@ const AddPc = () => {
 					setLoading(false);
 				}
 			} catch {
-				toast.error('impossible de charger les informations du personnages');
+				toast.error('Impossible de charger les informations du personnage');
 			}
 		};
 		if (params.id) {
@@ -211,7 +211,7 @@ const AddPc = () => {
 						<TextInput
 							value={story}
 							onChange={(e) => setStory(e.target.value)}
-							placeholder="Il était une fois ..."
+							placeholder="Il était une fois.."
 							label="Histoire du personnage"
 						/>
 					</div>
