@@ -13,17 +13,9 @@ type Props = {
 };
 
 const NavContainer = ({ title, navlinks }: Props) => {
-	const [isClick, setIsClick] = useState(false);
-	const [isHover, setIsHover] = useState(false);
-	const isOpen = isClick || isHover;
-	const ref = useOutsideClicker(() => setIsClick(false));
+	const [isOpen, setIsOpen] = useState(false);
 	return (
-		<div
-			ref={ref}
-			onClick={() => setIsClick(true)}
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-		>
+		<div onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
 			<span
 				className={cn('text-gray-300 mx-2.5 font-semibold text-2xl flex items-center gap-4', {
 					['underline']: isOpen,

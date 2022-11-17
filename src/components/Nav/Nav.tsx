@@ -7,49 +7,102 @@ import { ReactComponent as BurgerIcon } from 'assets/icon/burger.svg';
 const Nav = () => {
 	const [isOpen, setOpen] = useState(false);
 	const mobileNavModal = useOutsideClicker(() => setOpen(false));
-
 	const auth = useAuth();
+
+	const navData = [
+		{
+			name: 'Calendrier',
+			children: [
+				{
+					name: 'Calendrier',
+					url: '/calendar',
+					access: ['admin', 'gm', 'player'],
+				},
+			],
+		},
+		{
+			name: 'PJS',
+			children: [
+				{
+					name: 'PJS',
+					url: '/pc',
+					access: ['admin', 'gm', 'player'],
+				},
+			],
+		},
+		{
+			name: 'Utilisateurs',
+			children: [
+				{
+					name: auth?.user.info?.role === 'admin' ? 'Voir les utilisateurs' : 'Voir les joueurs',
+					url: '/players',
+					access: ['admin', 'gm'],
+				},
+				{
+					name: 'Création',
+					url: '/players/add',
+					access: ['admin'],
+				},
+			],
+		},
+		{
+			name: 'Paties',
+			children: [
+				{
+					name: 'Mes parties',
+					url: '/sessions',
+					access: ['admin', 'gm', 'player'],
+				},
+				{
+					name: 'Création',
+					url: '/sessions/add',
+					access: ['admin', 'gm'],
+				},
+			],
+		},
+		{
+			name: 'Outils',
+			children: [
+				{
+					name: 'Combat',
+					url: '/fight',
+					access: ['admin', 'gm'],
+				},
+				{
+					name: 'Carte',
+					url: '/map',
+					access: ['admin', 'gm', 'player'],
+				},
+			],
+		},
+	];
+
+	const navFilteredByAccess = navData
+		.map((data) => {
+			const { children, ...rest } = data;
+			const childrenFiltered = children.filter((navElement) =>
+				navElement.access.includes(auth?.user.info?.role || '')
+			);
+			return {
+				...rest,
+				children: childrenFiltered,
+			};
+		})
+		.filter((data) => data.children.length);
+
 	return (
 		<>
 			<nav className="md:flex hidden">
-				<NavLink href="/calendar">Calendrier</NavLink>
-				<NavLink href="/pc">PJS</NavLink>
-				{auth?.user.info?.role === 'gm' && (
-					<>
-						<NavLink href="/players">Joueurs</NavLink>
-					</>
-				)}
-				{auth?.user.info?.role === 'admin' && (
-					<NavContainer
-						title="Joueurs"
-						navlinks={[
-							{ url: '/players', name: 'Tous les joueurs' },
-							{ url: '/players/add', name: 'Création' },
-						]}
-					/>
-				)}
-				{auth?.user.info?.role === 'player' ? (
-					<NavLink href="/sessions">Mes parties</NavLink>
-				) : (
-					<NavContainer
-						title="Parties"
-						navlinks={[
-							{ url: '/sessions/add', name: 'Créer une partie' },
-							{ url: '/sessions', name: 'Mes parties' },
-						]}
-					/>
-				)}
-				{auth?.user.info?.role === 'player' ? (
-					<NavLink href="/map">Carte</NavLink>
-				) : (
-					<NavContainer
-						title="Outils"
-						navlinks={[
-							{ url: '/map', name: 'Carte' },
-							{ url: '/fight', name: 'Combat' },
-						]}
-					/>
-				)}
+				{navFilteredByAccess.map((data, index) => {
+					if (data.children.length > 1) {
+						return <NavContainer key={index} title={data.name} navlinks={data.children} />;
+					}
+					return (
+						<NavLink key={index} href={data.children[0].url}>
+							{data.children[0].name}
+						</NavLink>
+					);
+				})}
 			</nav>
 			<div className="flex flex-col md:hidden">
 				<BurgerIcon className="cursor-pointer" onClick={() => setOpen(true)} />
@@ -58,36 +111,13 @@ const Nav = () => {
 						ref={mobileNavModal}
 						className="z-10 absolute bg-gray-300 rounded-xl flex flex-col right-4 p-4 top-24 items-center"
 					>
-						<NavLink swamp href="/calendar">
-							Calendrier
-						</NavLink>
-						<NavLink swamp href="/pc">
-							PJS
-						</NavLink>
-						<NavLink swamp href="/sessions">
-							Mes parties
-						</NavLink>
-						<NavLink swamp href="/map">
-							Carte
-						</NavLink>
-						{(auth?.user.info?.role === 'gm' || auth?.user.info?.role === 'admin') && (
-							<>
-								<NavLink swamp href="/players">
-									Joueurs
+						{navFilteredByAccess.map((data, catIndex) => {
+							data.children.map((navElement, catNav) => (
+								<NavLink key={`${catIndex}${catNav}`} href={navElement.url}>
+									{navElement.name}
 								</NavLink>
-								<NavLink swamp href="/sessions/add">
-									Créer une partie
-								</NavLink>
-								<NavLink swamp href="/fight">
-									Combat
-								</NavLink>
-							</>
-						)}
-						{auth?.user.info?.role === 'admin' && (
-							<>
-								<NavLink href="/players/add">Créer un joueur</NavLink>
-							</>
-						)}
+							));
+						})}
 					</nav>
 				)}
 			</div>
