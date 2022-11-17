@@ -34,7 +34,7 @@ const NavContainer = ({ title, navlinks }: Props) => {
 			</span>
 			{isOpen && (
 				<div className="pt-4 absolute">
-					<div className="flex-col flex bg-gray-300/[.8] p-4 rounded-xl items-center">
+					<div className="flex-col flex bg-gray-300/[.8] p-3 rounded-xl items-center">
 						{navlinks.map((navlink, index) => (
 							<Navlink swamp key={index} href={navlink.url}>
 								{navlink.name}
