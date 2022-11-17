@@ -1,24 +1,49 @@
 import React from 'react';
 import { useAuth } from 'hooks';
 import NavLink from './NavLink';
+import NavContainer from './NavContainer';
 
 const Nav = () => {
 	const auth = useAuth();
 	return (
-		<nav>
+		<nav className="flex">
 			<NavLink href="/calendar">Calendrier</NavLink>
-			<NavLink href="/sessions">Mes parties</NavLink>
 			<NavLink href="/pc">PJS</NavLink>
-			<NavLink href="/map">Carte</NavLink>
-			{(auth?.user.info?.role === 'admin' || auth?.user.info?.role === 'gm') && (
+			{auth?.user.info?.role === 'gm' && (
 				<>
 					<NavLink href="/players">Joueurs</NavLink>
-					<NavLink href="/fight">Combat</NavLink>
-					<NavLink href="/sessions/add">Créer une partie</NavLink>
 				</>
 			)}
 			{auth?.user.info?.role === 'admin' && (
-				<NavLink href="/players/add">Ajouter un utilisateur</NavLink>
+				<NavContainer
+					title="Joueurs"
+					navlinks={[
+						{ url: '/players', name: 'Tous les joueurs' },
+						{ url: '/players/add', name: 'Création' },
+					]}
+				/>
+			)}
+			{auth?.user.info?.role === 'player' ? (
+				<NavLink href="/sessions">Mes parties</NavLink>
+			) : (
+				<NavContainer
+					title="Parties"
+					navlinks={[
+						{ url: '/sessions/add', name: 'Créer une partie' },
+						{ url: '/sessions', name: 'Mes parties' },
+					]}
+				/>
+			)}
+			{auth?.user.info?.role === 'player' ? (
+				<NavLink href="/map">Carte</NavLink>
+			) : (
+				<NavContainer
+					title="Outils"
+					navlinks={[
+						{ url: '/map', name: 'Carte' },
+						{ url: '/fight', name: 'Combat' },
+					]}
+				/>
 			)}
 		</nav>
 	);
