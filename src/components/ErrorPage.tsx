@@ -31,7 +31,7 @@ const ErrorPage = ({
 					<h1 className="sm:text-start text-center font-bold text-3xl">{text.title}</h1>
 				)}
 				{text.pageTitle && <Title title={text.pageTitle} className="sm:text-start text-center" />}
-				<p className="sm:text-start text-center my-4">Nous sommes désolé.</p>
+				<p className="sm:text-start text-center my-4">Nous sommes désolés.</p>
 				<p className="sm:text-start text-center">{text.firstLine}</p>
 				<p className="sm:text-start text-center">{text.secondLine}</p>
 			</div>
