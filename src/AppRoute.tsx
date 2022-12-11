@@ -14,10 +14,11 @@ const Players = lazy(() => import('pages/Player/Players'));
 const Player = lazy(() => import('pages/Player/Player'));
 const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
 const CreateSession = lazy(() => import('pages/Session/createSession'));
-const NotFound = lazy(() => import('pages/NotFound/NotFound'));
+const NotFound = lazy(() => import('pages/404'));
 const SessionPage = lazy(() => import('pages/Session/SessionPage'));
 const SessionEditPage = lazy(() => import('pages/Session/SessionEditPage'));
 const AddUser = lazy(() => import('pages/Player/AddUser'));
+const Forbidden = lazy(() => import('pages/403'));
 
 const AppRoute = () => {
 	const auth = useAuth();
@@ -28,6 +29,7 @@ const AppRoute = () => {
 				<Routes>
 					<Route path="/login" element={<Login />} />
 					<Route path="/" element={<Layout />}>
+						<Route path="403" element={<Forbidden />} />
 						<Route
 							index
 							element={
@@ -55,7 +57,7 @@ const AppRoute = () => {
 						<Route
 							path="fight"
 							element={
-								<ProtectedRoute restricted={{ to: ['gm', 'admin'], redirectPath: '/login' }}>
+								<ProtectedRoute restrictedTo={['gm', 'admin']}>
 									<FightPage />
 								</ProtectedRoute>
 							}
@@ -72,7 +74,7 @@ const AppRoute = () => {
 							<Route
 								path="add"
 								element={
-									<ProtectedRoute restricted={{ to: ['admin', 'gm'], redirectPath: '/login' }}>
+									<ProtectedRoute restrictedTo={['admin', 'gm']}>
 										<CreateSession />
 									</ProtectedRoute>
 								}
@@ -90,7 +92,7 @@ const AppRoute = () => {
 							<Route
 								index
 								element={
-									<ProtectedRoute restricted={{ to: ['gm', 'admin'], redirectPath: '/login' }}>
+									<ProtectedRoute restrictedTo={['gm', 'admin']}>
 										<Players />
 									</ProtectedRoute>
 								}
@@ -106,7 +108,7 @@ const AppRoute = () => {
 							<Route
 								path="add"
 								element={
-									<ProtectedRoute restricted={{ to: ['admin'], redirectPath: '/login' }}>
+									<ProtectedRoute restrictedTo={['admin', 'admin']}>
 										<AddUser />
 									</ProtectedRoute>
 								}
