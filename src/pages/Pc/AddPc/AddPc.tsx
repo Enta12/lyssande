@@ -53,7 +53,7 @@ const AddPc = () => {
 		};
 		if (params.id) {
 			fetchData();
-		}
+		} else setLoading(false);
 	}, [params]);
 
 	const saveCharacter = async () => {
