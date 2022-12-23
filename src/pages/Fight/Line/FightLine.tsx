@@ -33,11 +33,7 @@ const FightLine = ({
 
 	return (
 		<>
-			<div
-				className={cn('text-xl flex text-brown relative items-center', {
-					['my-[46px]']: activeProtagonist.secondAt,
-				})}
-			>
+			<div className="text-xl flex text-brown relative items-center">
 				<div
 					className={`
                         flex
