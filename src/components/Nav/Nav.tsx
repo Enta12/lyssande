@@ -109,14 +109,21 @@ const Nav = () => {
 				{isOpen && (
 					<nav
 						ref={mobileNavModal}
-						className="z-10 absolute bg-gray-300 rounded-xl flex flex-col right-4 p-4 top-24 items-center"
+						className="z-10 absolute bg-gray-300 rounded-xl flex flex-col gap-2 right-4 p-4 top-24 items-center"
 					>
-						{navFilteredByAccess.map((data, catIndex) => {
-							data.children.map((navElement, catNav) => (
-								<NavLink key={`${catIndex}${catNav}`} href={navElement.url}>
-									{navElement.name}
+						{navFilteredByAccess.map((data, index) => {
+							if (data.children.length > 1) {
+								return data.children.map((navlink, index) => (
+									<NavLink swamp key={index} href={navlink.url}>
+										{navlink.name}
+									</NavLink>
+								));
+							}
+							return (
+								<NavLink swamp key={index} href={data.children[0].url}>
+									{data.children[0].name}
 								</NavLink>
-							));
+							);
 						})}
 					</nav>
 				)}

@@ -17,15 +17,18 @@ const NavContainer = ({ title, navlinks }: Props) => {
 	return (
 		<div onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
 			<span
-				className={cn('text-gray-300 mx-2.5 font-semibold text-2xl flex items-center gap-4', {
-					['underline']: isOpen,
-				})}
+				className={cn(
+					'cursor-pointer text-gray-300 mx-2.5 font-semibold text-2xl flex items-center gap-4 mouse-click',
+					{
+						['underline']: isOpen,
+					}
+				)}
 			>
 				{title}
 				<DownArrow className={cn('transition-transform', { ['rotate-180']: isOpen })} />
 			</span>
 			{isOpen && (
-				<div className="pt-4 absolute">
+				<div className="pt-4 absolute z-10">
 					<div className="flex-col flex bg-gray-300/[.8] p-3 rounded-xl items-center">
 						{navlinks.map((navlink, index) => (
 							<Navlink swamp key={index} href={navlink.url}>
