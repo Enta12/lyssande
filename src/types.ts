@@ -31,7 +31,7 @@ export type WorldMap = {
 export type Pos = { x: number; y: number };
 export type Job = 'Pirate' | 'Menestrel' | 'Mage de Tzintch' | 'Mage' | 'Noble' | 'Ingénieur';
 export type Race = 'Nain' | 'Humain' | 'Demie-elfe' | 'Elfe-noire' | 'Hobbit';
-export type Local = 'head' | 'torso' | 'arm' | 'swordArm' | 'leg' | 'genitals' | 'random';
+export type LocalKey = 'head' | 'torso' | 'arm' | 'swordArm' | 'leg' | 'genitals';
 export type Protagonist = {
 	name: string;
 	at: number;

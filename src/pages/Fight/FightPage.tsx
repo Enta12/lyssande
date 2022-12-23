@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PrimaryButton, Title } from 'components';
 import { locals } from 'moockedData';
 import { FightPhaseData, Protagonist } from 'types';
-import FightLine from './FightLine';
+import FightLine from './Line/FightLine';
 import ProtagonistListForm from './ProtagonistListForm';
 import { ReactComponent as BlowUpButtonRight } from 'assets/icon/blowUpBoutonRight.svg';
 import { ReactComponent as BlowUpButtonLeft } from 'assets/icon/blowUpBoutonLeft.svg';
@@ -173,11 +173,12 @@ const FightPage = () => {
 						<div className="mx-auto relative mb-6">
 							<BlowUpButtonLeft
 								className="
-                absolute
-                top-[-26px]
-                left-[-70px]
-                h-[141px]
-                w-[175px]"
+                                    absolute
+                                    top-[-26px]
+                                    left-[-70px]
+                                    h-[141px]
+                                    w-[175px]
+                                "
 							/>
 							<PrimaryButton
 								className="relative z-10"
@@ -185,11 +186,13 @@ const FightPage = () => {
 								onClick={() => setHaveStart(true)}
 							/>
 							<BlowUpButtonRight
-								className="absolute
-                        top-[-26px]
-                        right-[-70px]
-                        h-[141px]
-                        w-[175px]"
+								className="
+                                    absolute
+                                    top-[-26px]
+                                    right-[-70px]
+                                    h-[141px]
+                                    w-[175px]
+                                "
 							/>
 						</div>
 					)}
@@ -230,12 +233,12 @@ const FightPage = () => {
 				{haveStart && (
 					<span
 						className="
-              m-auto
-              text-[80px]
-            text-orange
-            relative
-            bottom-[84px]
-            h-3"
+                            m-auto
+                            text-[80px]
+                            text-orange
+                            relative
+                            bottom-[84px]
+                            h-3"
 					>
 						. . .
 					</span>
