@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { PrimaryButton, Title } from 'components';
 import { locals } from 'moockedData';
 import { FightPhaseData, Protagonist } from 'types';
-import FightLine from './FightLine';
+import FightLine from './Line/FightLine';
 import ProtagonistListForm from './ProtagonistListForm';
 import { ReactComponent as BlowUpButtonRight } from 'assets/icon/blowUpBoutonRight.svg';
 import { ReactComponent as BlowUpButtonLeft } from 'assets/icon/blowUpBoutonLeft.svg';
+
+const OTHERS_ELEMENT_HEIGHT_PX = 220;
+
+const getLineIndexOnNextTurn = (currentTurn: number, protagnists: number) =>
+	currentTurn + 1 === protagnists ? 0 : currentTurn + 1;
 
 const FightPage = () => {
 	const [protagonistList, setProtagonistList] = useState<Protagonist[]>([]);
@@ -25,20 +30,13 @@ const FightPage = () => {
 		};
 	}, [setScreenHeight, haveStart]);
 
-	let heightLeftLines = screenHeight - 220;
+	let heightLeftLines = screenHeight - OTHERS_ELEMENT_HEIGHT_PX;
 
-	const nextSelected = () => {
-		if (fightElementData.length) {
-			if (turnSelected + 1 === fightElementData.length) {
-				setTurnSelected(0);
-			} else setTurnSelected(turnSelected + 1);
-		}
-	};
 	useEffect(() => {
 		const onPress = (e: KeyboardEvent) => {
 			if (e.key === 'Enter') {
 				if (haveStart) {
-					nextSelected();
+					setTurnSelected(getLineIndexOnNextTurn(turnSelected, protagonistList.length));
 				} else if (
 					protagonistList.some((elt) => !elt.npc) &&
 					protagonistList.some((elt) => elt.npc)
@@ -50,6 +48,7 @@ const FightPage = () => {
 		window.addEventListener('keydown', (e) => onPress(e));
 		return window.removeEventListener('keydown', (e) => onPress(e));
 	});
+
 	const handleDelete = (indexToDelete: number) => {
 		const fightElementDataTemp = fightElementData.filter((el, index) => {
 			return index !== indexToDelete;
@@ -66,9 +65,9 @@ const FightPage = () => {
 		fightElementDataTemp[index][firstLine ? 'local' : 'secondLocal'] = newLocal;
 		setFightElementData(fightElementDataTemp);
 	};
-	const getOrderIndex = (index: number, lenght: number) => {
-		return turnSelected + index < lenght ? turnSelected + index : turnSelected + index - lenght;
-	};
+	const getOrderIndex = (index: number, lenght: number) =>
+		turnSelected + index < lenght ? turnSelected + index : turnSelected + index - lenght;
+
 	const deleteElement = (
 		protagonistsTemp: Protagonist[],
 		fightElementDataTemp: FightPhaseData[],
@@ -88,6 +87,7 @@ const FightPage = () => {
 			setHaveStart(false);
 		}
 	};
+
 	const addTurnIntoCorrectPlace = (
 		protagonist: Protagonist,
 		protagonistsTemp: Protagonist[],
@@ -159,11 +159,12 @@ const FightPage = () => {
 
 	return (
 		<div
-			className={`${haveStart ? 'absolute top-[112px]' : 'relative'}
-        py-7
-        flex
-        w-screen
-        left-0`}
+			className={`
+                    ${haveStart ? 'absolute top-[112px]' : 'relative'}
+                    py-7
+                    flex
+                    w-screen
+                    left-0`}
 		>
 			<div className="flex-col ml-7 flex min-w-[952px] gap-4">
 				<Title title={'Combat'} />
@@ -173,11 +174,12 @@ const FightPage = () => {
 						<div className="mx-auto relative mb-6">
 							<BlowUpButtonLeft
 								className="
-                absolute
-                top-[-26px]
-                left-[-70px]
-                h-[141px]
-                w-[175px]"
+                                    absolute
+                                    top-[-26px]
+                                    left-[-70px]
+                                    h-[141px]
+                                    w-[175px]
+                                "
 							/>
 							<PrimaryButton
 								className="relative z-10"
@@ -185,11 +187,13 @@ const FightPage = () => {
 								onClick={() => setHaveStart(true)}
 							/>
 							<BlowUpButtonRight
-								className="absolute
-                        top-[-26px]
-                        right-[-70px]
-                        h-[141px]
-                        w-[175px]"
+								className="
+                                    absolute
+                                    top-[-26px]
+                                    right-[-70px]
+                                    h-[141px]
+                                    w-[175px]
+                                "
 							/>
 						</div>
 					)}
@@ -221,7 +225,13 @@ const FightPage = () => {
 									index={indexInOrder}
 								/>
 								{!index && haveStart && (
-									<PrimaryButton className="ml-60" onClick={nextSelected} text="Tour suivant" />
+									<PrimaryButton
+										className="ml-60"
+										onClick={() =>
+											setTurnSelected(getLineIndexOnNextTurn(turnSelected, protagonistList.length))
+										}
+										text="Tour suivant"
+									/>
 								)}
 							</React.Fragment>
 						)
@@ -230,19 +240,17 @@ const FightPage = () => {
 				{haveStart && (
 					<span
 						className="
-              m-auto
-              text-[80px]
-            text-orange
-            relative
-            bottom-[84px]
-            h-3"
+                            mx-auto
+                            text-[80px]
+                            text-orange
+                            h-3"
 					>
 						. . .
 					</span>
 				)}
 			</div>
 			<ProtagonistListForm
-				height={haveStart ? screenHeight - 220 : undefined}
+				height={haveStart ? screenHeight - OTHERS_ELEMENT_HEIGHT_PX : undefined}
 				protagonistsLenght={protagonistsLenght}
 				protagonists={protagonistList}
 				onAddProtagonist={(protagonist: Protagonist) => {
