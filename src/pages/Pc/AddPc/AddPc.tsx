@@ -83,8 +83,8 @@ const AddPc = () => {
 		}
 		const body = {
 			name,
-			culte: culte ? culteMoocked[culte] : [],
-			job: job ? jobsMoocked[job] : [],
+			culte: culte !== undefined ? culteMoocked[culte] : null,
+			job: job !== undefined ? jobsMoocked[job] : null,
 			race: racesMoocked[race],
 			level,
 			gold,
