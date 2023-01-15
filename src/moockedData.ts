@@ -1,4 +1,4 @@
-import { Local, WorldMap } from './types';
+import { WorldMap } from './types';
 import fanghMap from './assets/maps/fangh.jpg';
 import CaladieMap from './assets/maps/caladie.jpg';
 import FrostMap from './assets/maps/frost.jpg';
@@ -148,7 +148,6 @@ export const speedMoocked = [
 		speedMod: 100,
 	},
 ];
-export const locals: Local[] = ['head', 'arm', 'leg', 'genitals', 'torso', 'swordArm', 'random'];
 
 export const moralsMoocked = ['GOOD', 'NEUTRAL', 'EVIL'];
 export const lawsMoocked = ['LAWFUL', 'NEUTRAL', 'CHAOTIC'];

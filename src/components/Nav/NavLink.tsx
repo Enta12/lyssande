@@ -1,24 +1,28 @@
 import React from 'react';
 
 type Props = React.PropsWithChildren<{
-    children: string,
-    href: string
-  }>
+	children: string;
+	href: string;
+	swamp?: boolean;
+}>;
 
-const NavLink = ({
-  children,
-  href,
-}: Props) => {
-  return (
-    <a href={href} className="
-          text-gray-300
-          mx-2.5
-          font-semibold
-          text-2xl
-      ">
-      {children}
-    </a>
-  );
+const NavLink = ({ children, href, swamp = false }: Props) => {
+	return (
+		<a
+			href={href}
+			className={`
+                text-center
+                mx-2.5
+                font-semibold
+                text-2xl
+                hover:underline
+                drop-shadow
+                ${swamp ? 'text-swamp' : 'text-gray-300'}
+                `}
+		>
+			{children}
+		</a>
+	);
 };
 
 export default NavLink;
