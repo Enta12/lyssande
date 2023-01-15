@@ -31,7 +31,6 @@ export type WorldMap = {
 export type Pos = { x: number; y: number };
 export type Job = 'Pirate' | 'Menestrel' | 'Mage de Tzintch' | 'Mage' | 'Noble' | 'Ingénieur';
 export type Race = 'Nain' | 'Humain' | 'Demie-elfe' | 'Elfe-noire' | 'Hobbit';
-export type LocalKey = 'head' | 'torso' | 'arm' | 'swordArm' | 'leg' | 'genitals';
 export type Protagonist = {
 	name: string;
 	at: number;
@@ -41,13 +40,7 @@ export type Protagonist = {
 	npc: boolean;
 	id: number;
 };
-export type FightPhaseData = {
-	protagonistA: number;
-	protagonistB: number;
-	protagonistC: number;
-	local: number;
-	secondLocal: number;
-};
+
 export type PossibleDate = {
 	date: Date;
 	moment: 'soirée' | 'journée';

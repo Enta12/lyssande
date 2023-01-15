@@ -34,7 +34,7 @@ const Nav = () => {
 			name: 'Utilisateurs',
 			children: [
 				{
-					name: auth?.user.info?.role === 'admin' ? 'Voir les utilisateurs' : 'Voir les joueurs',
+					name: auth?.user.info?.role === 'admin' ? 'Utilisateurs' : 'Joueurs',
 					url: '/players',
 					access: ['admin', 'gm'],
 				},
@@ -46,7 +46,7 @@ const Nav = () => {
 			],
 		},
 		{
-			name: 'Paties',
+			name: 'Parties',
 			children: [
 				{
 					name: 'Mes parties',
@@ -63,11 +63,6 @@ const Nav = () => {
 		{
 			name: 'Outils',
 			children: [
-				{
-					name: 'Combat',
-					url: '/fight',
-					access: ['admin', 'gm'],
-				},
 				{
 					name: 'Carte',
 					url: '/map',

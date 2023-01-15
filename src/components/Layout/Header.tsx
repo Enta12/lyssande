@@ -8,7 +8,7 @@ const Header = () => {
 	return (
 		<header className="h-28 px-8 lg:px-16 bg-swamp flex items-center justify-between">
 			<button onClick={() => navigate('/')}>
-				<img className="h-24 object-contain" src={logo} alt="logo" />
+				<img className="h-24 object-contain md:pt-4 lg:pt-0" src={logo} alt="logo" />
 			</button>
 			<Nav />
 		</header>

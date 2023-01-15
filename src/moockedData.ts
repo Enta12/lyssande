@@ -1,4 +1,4 @@
-import { LocalKey, WorldMap } from './types';
+import { WorldMap } from './types';
 import fanghMap from './assets/maps/fangh.jpg';
 import CaladieMap from './assets/maps/caladie.jpg';
 import FrostMap from './assets/maps/frost.jpg';
@@ -147,16 +147,6 @@ export const speedMoocked = [
 		name: 'Gallion',
 		speedMod: 100,
 	},
-];
-
-export const locals: Array<LocalKey | 'random'> = [
-	'head',
-	'arm',
-	'leg',
-	'genitals',
-	'torso',
-	'swordArm',
-	'random',
 ];
 
 export const moralsMoocked = ['GOOD', 'NEUTRAL', 'EVIL'];

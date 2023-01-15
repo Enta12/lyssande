@@ -40,7 +40,7 @@ const InputSelect = ({
 	};
 	return (
 		<div
-			className={cn(`flex flex-col ${className}`, {
+			className={cn(`flex flex-col text-2xl ${className}`, {
 				['relative z-20']: isOpen,
 			})}
 		>
@@ -49,7 +49,7 @@ const InputSelect = ({
 				{required && '*'}
 			</label>
 			<div
-				className={'w-full flex-1 text-brown text-center text-2xl drop-shadow font-inter'}
+				className={'w-full flex-1 text-brown text-center drop-shadow font-inter'}
 				ref={selectRef}
 			>
 				<div

@@ -9,7 +9,6 @@ const Pc = lazy(() => import('pages/Pc/Pc'));
 const AddPc = lazy(() => import('pages/Pc/AddPc/AddPc'));
 const Calendar = lazy(() => import('pages/Calendar/CalendarPage'));
 const MapPage = lazy(() => import('pages/MapPage'));
-const FightPage = lazy(() => import('pages/Fight/FightPage'));
 const Players = lazy(() => import('pages/Player/Players'));
 const Player = lazy(() => import('pages/Player/Player'));
 const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
@@ -51,14 +50,6 @@ const AppRoute = () => {
 							element={
 								<ProtectedRoute>
 									<Calendar />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="fight"
-							element={
-								<ProtectedRoute restrictedTo={['gm', 'admin']}>
-									<FightPage />
 								</ProtectedRoute>
 							}
 						/>

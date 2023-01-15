@@ -248,7 +248,7 @@ const CreateSession = () => {
 			status={getStatus(charactersStatus, usersStatus, availabilitiesStatus)}
 			dataElements="disponibilités"
 		>
-			{possibleDates.length && (
+			{!!possibleDates.length && (
 				<div className="w-full flex items-center flex-col gap-3 text-brown font-bubblegum text-lg">
 					<div
 						className="
