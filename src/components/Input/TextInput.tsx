@@ -25,6 +25,7 @@ const TextInput = ({ placeholder, value, onChange: handleChange, label, required
                     text-brown
                     font-inter
                     h-52
+                    whitespace-pre-wrap
                     w-full"
 				placeholder={placeholder}
 				value={value}
