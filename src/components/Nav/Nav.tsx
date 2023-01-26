@@ -59,7 +59,7 @@ const Nav = () => {
 					access: ['admin', 'gm'],
 				},
 			],
-		},
+		} /* TODO: when map is ready
 		{
 			name: 'Outils',
 			children: [
@@ -69,7 +69,7 @@ const Nav = () => {
 					access: ['admin', 'gm', 'player'],
 				},
 			],
-		},
+		},*/,
 	];
 
 	const navFilteredByAccess = navData

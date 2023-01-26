@@ -8,7 +8,7 @@ const Login = lazy(() => import('pages/Login'));
 const Pc = lazy(() => import('pages/Pc/Pc'));
 const AddPc = lazy(() => import('pages/Pc/AddPc/AddPc'));
 const Calendar = lazy(() => import('pages/Calendar/CalendarPage'));
-const MapPage = lazy(() => import('pages/MapPage'));
+//const MapPage = lazy(() => import('pages/MapPage'));
 const Players = lazy(() => import('pages/Player/Players'));
 const Player = lazy(() => import('pages/Player/Player'));
 const DetailPc = lazy(() => import('pages/Pc/DetailPc'));
@@ -37,14 +37,14 @@ const AppRoute = () => {
 								</ProtectedRoute>
 							}
 						/>
-						<Route
+						{/* <Route
 							path="map"
 							element={
 								<ProtectedRoute>
 									<MapPage />
 								</ProtectedRoute>
 							}
-						/>
+						/> */}
 						<Route
 							path="calendar"
 							element={
