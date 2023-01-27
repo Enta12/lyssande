@@ -1,5 +1,4 @@
 export { default as ProtectedRoute } from './ProtectedRoute';
-export { default as Calendar } from './Calendar/Calendar';
 export { default as LoadWizard } from './LoadWizard';
 export { default as Map } from './Map/Map';
 export { default as DetailPcCard } from './DetailPcCard';
