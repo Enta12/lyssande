@@ -38,7 +38,8 @@ const getFormatedAvailabilities = (availabilities: Availability[]) => {
 };
 
 const Calendar = ({ availabilities, numbersOfDays, updateAvailabilities }: Props) => {
-	const pastDate = numbersOfDays - availabilities.length / 2;
+	const pastDate =
+		numbersOfDays - availabilities.length / 2 > -1 ? numbersOfDays - availabilities.length / 2 : 0;
 	let weekIsOdd = false;
 	const formattedAvailabilities = getFormatedAvailabilities(availabilities);
 	if (availabilities.length === 0)
