@@ -47,7 +47,9 @@ const CalendarPage = () => {
 		})
 	);
 
-	useEffect(() => initiateMonthAvailabilities(), [selectedMonth]);
+	useEffect(() => {
+		if (status === 'data') initiateMonthAvailabilities();
+	}, [selectedMonth, status]);
 
 	const initiateMonthAvailabilities = () => {
 		const newAvailabilities: Availability[] = [];
