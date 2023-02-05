@@ -1,9 +1,20 @@
-import { Title, Calendar, PrimaryButton, DataCastingContainer } from 'components';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Title, PrimaryButton, DataCastingContainer } from 'components';
+import Calendar from './Calendar/Calendar';
+import React, { useEffect, useState } from 'react';
 import { Availability, Platform } from 'types';
 import { toast } from 'react-toastify';
 import useApi from 'hooks/useApi';
 import useData from 'hooks/useData';
+import dayjs from 'dayjs';
+import { months } from 'moockedData';
+import { ReactComponent as Arrow } from 'assets/icon/arrow.svg';
+import cn from 'classnames';
+import availabilityNone from 'assets/icon/availabilityNone.svg';
+import availabilityIrl from 'assets/icon/availabilityIrl.svg';
+import availabilityIrlOrIl from 'assets/icon/availabilityIrlOrIl.svg';
+import availabilityIl from 'assets/icon/availabilityIl.svg';
+import availabilityIG from 'assets/icon/availabilityIG.svg';
+import availabilityRest from 'assets/icon/availabilityRest.svg';
 
 type AvailabilitySave = {
 	platform: Platform;
@@ -13,12 +24,12 @@ type AvailabilitySave = {
 	};
 };
 
-const oneDay = 86400000;
-const oneMounth = oneDay * 31;
-const tomorrow = new Date(new Date().setHours(0, 0, 0, 0) + oneDay);
-
 const CalendarPage = () => {
-	const [availabilitiesSave, setAvailabilitiesSave] = useState<Availability[]>([]);
+	const [selectedMonth, setselectedMonth] = useState(
+		new Date(dayjs(new Date()).add(1, 'day').toDate())
+	);
+	const numbersOfDays = dayjs(selectedMonth).daysInMonth();
+	const api = useApi();
 	const {
 		status,
 		data: availabilities,
@@ -35,56 +46,37 @@ const CalendarPage = () => {
 			},
 		})
 	);
-	const [endDate, setEndDate] = useState<string>(`${tomorrow.getTime() + oneMounth}`);
-	const api = useApi();
 
-	const initOrUpdateAvalabilitiess = useCallback(
-		(startDate: Date) => {
-			const pattern = /^[0-9]+$/;
-			const dateEnd = new Date(pattern.test(endDate) ? +endDate : endDate);
-			const availabilities: Availability[] = [];
-			let currentDate = startDate.getTime();
-			while (currentDate < dateEnd.getTime()) {
-				availabilities.push(setInitialAvailability(new Date(currentDate), 'journée'));
-				availabilities.push(setInitialAvailability(new Date(currentDate), 'soirée'));
-				currentDate = currentDate + oneDay;
+	useEffect(() => initiateMonthAvailabilities(), [selectedMonth]);
+
+	const initiateMonthAvailabilities = () => {
+		const newAvailabilities: Availability[] = [];
+		for (let i = 0; i < numbersOfDays; i++) {
+			const day = dayjs(selectedMonth).date(i);
+			if (
+				!availabilities.find((el) => dayjs(el.at.date).isSame(day, 'day')) &&
+				dayjs(day).isAfter(dayjs(), 'day')
+			) {
+				newAvailabilities.push(
+					{
+						platform: day.day() === 0 || day.day() === 6 ? 'irl-or-online' : 'none',
+						at: {
+							date: day.toDate(),
+							moment: 'journée',
+						},
+					},
+					{
+						platform: day.day() === 0 || day.day() === 6 ? 'irl-or-online' : 'none',
+						at: {
+							date: day.toDate(),
+							moment: 'soirée',
+						},
+					}
+				);
 			}
-			return availabilities;
-		},
-		[availabilitiesSave, endDate]
-	);
-	const setInitialAvailability = (newDate: Date, newMoment: 'journée' | 'soirée') => {
-		const date = newDate.setHours(0, 0, 0, 0);
-		const index = availabilitiesSave.findIndex((el) => {
-			const currentDate = el.at.date.setHours(0, 0, 0, 0);
-			return date === currentDate && newMoment === el.at.moment;
-		});
-		if (index !== -1) {
-			return availabilitiesSave[index];
 		}
-		const availabilitySet: Availability = {
-			platform: newDate.getDay() === 6 ? 'irl-or-online' : 'none',
-			at: {
-				date: newDate,
-				moment: newMoment,
-			},
-		};
-		return availabilitySet;
+		setAvailabilities([...availabilities, ...newAvailabilities]);
 	};
-	useEffect(() => {
-		const availabilitiesTemp = availabilities.filter(
-			(el) => new Date(el.at.date) < new Date(endDate)
-		);
-		setAvailabilities([
-			...availabilitiesTemp,
-			...initOrUpdateAvalabilitiess(
-				availabilitiesTemp.length - 1 > 0
-					? new Date(availabilitiesTemp[availabilitiesTemp.length - 1].at.date.getTime() + oneDay)
-					: tomorrow
-			),
-		]);
-	}, [endDate, setAvailabilities, initOrUpdateAvalabilitiess]);
-
 	const onSubmit = async () => {
 		try {
 			await api.put(
@@ -102,37 +94,63 @@ const CalendarPage = () => {
 			toast.error('Impossible de mettre à jour vos disponibilités');
 		}
 	};
-	const handleChange = (newPlatForm: Platform, index: number) => {
-		const availabilitiesTemp = [...availabilities];
-		availabilitiesTemp[index].platform = newPlatForm;
-		setAvailabilities(availabilitiesTemp);
-	};
 	return (
 		<DataCastingContainer status={status} dataElements="disponibilités">
-			<div className="pt-8 w-full">
-				<Title title="MES DISPONIBILITES POUR LE PROCHAIN MOIS" />
-				<div className="my-4 text-swamp font-bubblegum text-xl">
-					{"Affiché jusqu'au : "}
-					<input
-						onChange={(e) => setEndDate(e.target.value)}
-						value={endDate}
-						className="
-                            outline-none
-                            bg-lightBrown
-                            text-white
-                            p-2
-                            border-4
-                            border-white
-                            rounded-2xl
-                            w-44"
-						type="date"
+			<div className="flex flex-col gap-3 min-w-full">
+				<div className="mx-auto bg-lightBrown font-bubblegum w-full max-w-[1000px] sm:rounded-xl overflow-hidden">
+					<div className="h-24 flex items-center justify-center">
+						<div className="h-20 flex items-center justify-between px-4 bg-white w-44 rounded-2xl drop-shadow">
+							{!dayjs().isSame(selectedMonth, 'month') ? (
+								<button
+									onClick={() =>
+										setselectedMonth(dayjs(selectedMonth).subtract(1, 'month').toDate())
+									}
+								>
+									<Arrow className={cn({ grayscale: dayjs().isSame(selectedMonth, 'month') })} />
+								</button>
+							) : (
+								<div className="w-[40px]"></div>
+							)}
+							<div className="text-3xl text-darkBrown">{months[dayjs(selectedMonth).month()]}</div>
+							<button
+								onClick={() => setselectedMonth(dayjs(selectedMonth).add(1, 'month').toDate())}
+							>
+								<Arrow className="rotate-180" />
+							</button>
+						</div>
+					</div>
+					<Calendar
+						numbersOfDays={numbersOfDays}
+						availabilities={availabilities.filter((availability) =>
+							dayjs(availability.at.date).isSame(selectedMonth, 'month')
+						)}
+						updateAvailabilities={setAvailabilities}
 					/>
 				</div>
-				<form>
-					<Calendar onAvailabilityChange={handleChange} availabilities={availabilities} />
-				</form>
-				<div className="m-8 mb-60 flex justify-center">
-					<PrimaryButton text="Enregistrer" onClick={onSubmit} />
+				<PrimaryButton text={'Envoyer'} className="self-center" onClick={onSubmit} />
+				<div className="flex flex-col gap-1">
+					<Title subtitle title="Légende" />
+					<div className="flex gap-3 items-center">
+						<img src={availabilityIl} alt="en ligne" /> Disponible en ligne
+					</div>
+					<div className="flex gap-3 items-center">
+						<img src={availabilityIrlOrIl} alt="en ligne ou IRL" />
+						Disponible en ligne ou IRL
+					</div>
+					<div className="flex gap-3 items-center">
+						<img src={availabilityIrl} alt="irl" />
+						Disponible IRL
+					</div>
+					<div className="flex gap-3 items-center">
+						<img src={availabilityNone} alt="non dispo" />
+						Non Disponible
+					</div>
+					<div className="flex gap-3 items-center">
+						<img src={availabilityRest} alt="en repos" />A une partie ce jour
+					</div>
+					<div className="flex gap-3 items-center">
+						<img src={availabilityIG} alt="en jeu" />A une partie à ce moment
+					</div>
 				</div>
 			</div>
 		</DataCastingContainer>
