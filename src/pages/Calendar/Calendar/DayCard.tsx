@@ -44,7 +44,7 @@ const DayCard = ({
 						checkboxState={eveningAvailability || 'none'}
 						moment="evenning"
 						onChange={(newPlatform: Platform) => {
-							handleChange(newPlatform, day, 'day');
+							handleChange(newPlatform, day, 'evenning');
 						}}
 					/>
 				</>

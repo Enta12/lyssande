@@ -42,7 +42,11 @@ const Calendar = ({ availabilities, numbersOfDays, updateAvailabilities }: Props
 	let weekIsOdd = false;
 	const formattedAvailabilities = getFormatedAvailabilities(availabilities);
 	if (availabilities.length === 0)
-		return <p className="bg-brown text-2xl text-center">Chargement</p>;
+		return (
+			<p className="bg-brown text-2xl text-center px-2">
+				Chargement (si cela persiste changer de mois ou recharger la page)
+			</p>
+		);
 
 	const updateAvailability = (
 		newPlatform: Platform,
