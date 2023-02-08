@@ -25,7 +25,6 @@ const createPassword = (
 	for (let i = 0; i < lenght; i++) {
 		password += array[Math.floor(Math.random() * array.length)];
 	}
-	navigator.clipboard.writeText(password);
 	return password;
 };
 
@@ -33,10 +32,11 @@ const AddUser = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [role, setRole] = useState(0);
-	const [password, setPassword] = useState('');
+	const [password, setPassword] = useState(createPassword(5, true, true, true));
 	const api = useApi();
 	const submit = async () => {
 		try {
+			navigator.clipboard.writeText(password);
 			const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 			if (!email.match(pattern)) {
 				toast.error('Email pas au bon format');
@@ -86,30 +86,18 @@ const AddUser = () => {
 				onSelectValue={(value) => setRole(value[0])}
 				className="w-3/4 h-20"
 			/>
-			{password ? (
-				<>
-					Son mot de passe sera (copier dans le presse papier):
-					<span
-						className="
-              border-4
-              rounded-xl
-              border-gray-200
-              bg-white
-              p-2
-              flex
-              w-max
-              justify-center"
-					>
-						{password}
-					</span>
-					<PrimaryButton text="Créer l'utilisateur" onClick={submit} />
-				</>
-			) : (
-				<PrimaryButton
-					text="généré un mot de passe"
-					onClick={() => setPassword(createPassword(5, true, true, true))}
+			<>
+				Son mot de passe sera (copier dans le presse papier):
+				<Input
+					required
+					placeholder="password"
+					type="text"
+					onChange={(e) => setPassword(e.target.value)}
+					value={password}
+					label="Mot de passe"
 				/>
-			)}
+				<PrimaryButton text="Créer l'utilisateur" onClick={submit} />
+			</>
 		</div>
 	);
 };

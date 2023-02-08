@@ -28,7 +28,7 @@ const DetailPc = () => {
 					</div>
 					<div className="flex flex-col flex-1">
 						<Title title="SON HISTOIRE" />
-						<p className="font-bubblegum mt-6 mb-8">{character.story}</p>
+						<p className="font-bubblegum mt-6 mb-8 whitespace-pre-line">{character.story}</p>
 						<Title title="SES QUÊTES" />
 						<p className="font-bubblegum mt-6 mb-8">Bientôt disponible</p>
 					</div>
