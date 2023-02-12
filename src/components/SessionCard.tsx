@@ -72,6 +72,7 @@ const SessionCard = ({ data, users }: Props) => {
 			<div className="relative">
 				<hr />
 				<p
+
 					className={cn('text-white font-bubblegum my-4 whitespace-pre-wrap', {
 						['text-center']: !data.description,
 					})}
