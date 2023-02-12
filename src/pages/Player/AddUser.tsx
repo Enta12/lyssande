@@ -32,12 +32,12 @@ const AddUser = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [role, setRole] = useState(0);
-	const [password, setPassword] = useState(createPassword(5, true, true, true));
+	const [password, setPassword] = useState(createPassword(10, true, true, true));
 	const api = useApi();
 	const submit = async () => {
 		try {
 			navigator.clipboard.writeText(password);
-			const pattern = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+			const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 			if (!email.match(pattern)) {
 				toast.error('Email pas au bon format');
 				return;
