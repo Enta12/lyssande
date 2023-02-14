@@ -3,38 +3,12 @@ import React from 'react';
 import { days } from 'moockedData';
 import DayCard from './DayCard';
 import dayjs from 'dayjs';
+import { getFormatedAvailabilities } from 'lib';
 
 type Props = {
 	availabilities: Availability[];
 	numbersOfDays: number;
 	updateAvailabilities: (newAvailabilities: Availability[]) => void;
-};
-
-type formattedAvailabilities = {
-	day?: Platform;
-	evenning?: Platform;
-	date: dayjs.Dayjs;
-};
-
-const getFormatedAvailabilities = (availabilities: Availability[]) => {
-	const formattedAvailabilities: formattedAvailabilities[] = [];
-	availabilities.forEach((availability) => {
-		const formattedAvailabilityElement = formattedAvailabilities.find((availabilityFormatted) =>
-			dayjs(availability.at.date).isSame(availabilityFormatted.date, 'day')
-		);
-		if (formattedAvailabilityElement) {
-			availability.at.moment === 'soirée'
-				? (formattedAvailabilityElement.evenning = availability.platform)
-				: (formattedAvailabilityElement.day = availability.platform);
-		} else {
-			formattedAvailabilities.push({
-				date: dayjs(availability.at.date),
-				evenning: availability.at.moment === 'soirée' ? availability.platform : undefined,
-				day: availability.at.moment === 'journée' ? availability.platform : undefined,
-			});
-		}
-	});
-	return formattedAvailabilities.sort((a, b) => a.date.diff(b.date));
 };
 
 const Calendar = ({ availabilities, numbersOfDays, updateAvailabilities }: Props) => {

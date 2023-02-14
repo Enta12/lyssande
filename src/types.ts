@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export type PcType = {
 	name: string;
 	img: string;
@@ -72,6 +74,14 @@ export type Platform = 'none' | 'online' | 'just-irl' | 'irl-or-online' | 'in-ga
 export type Availability = {
 	platform: Platform;
 	at: PossibleDate;
+	user?: string;
+};
+
+export type FormattedAvailabilities = {
+	day?: Platform;
+	evenning?: Platform;
+	date: dayjs.Dayjs;
+	user?: string;
 };
 
 export type Session = {
