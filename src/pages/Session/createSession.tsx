@@ -9,6 +9,7 @@ import { days, months } from 'moockedData';
 import { toast } from 'react-toastify';
 import { useAuth, useApi, useData } from 'hooks';
 import { getStatus } from 'hooks/useData';
+import dayjs from 'dayjs';
 
 type AvailabilitySend = {
 	user: string;
@@ -25,7 +26,7 @@ type PossiblePlatform = {
 };
 
 type PossibleDate = {
-	date: number;
+	date: dayjs.Dayjs;
 	journée?: PossiblePlatform;
 	soirée?: PossiblePlatform;
 };
@@ -52,6 +53,11 @@ const CreateSession = () => {
 		[],
 		'/users'
 	);
+	const { status: availabilityStatus, data: availabilitiesRes } = useData<AvailabilitySend[]>(
+		'Impossible de récupérer les disponibilités',
+		[],
+		'/availabilities'
+	);
 	const [possibleDates, setPossibleDates] = useState<PossibleDate[]>([]);
 	const [selectedPlatform, setSelectedPlatform] = useState<number>(0);
 	const [selectedMoment, setSelectedMoment] = useState(0);
@@ -61,97 +67,98 @@ const CreateSession = () => {
 	const auth = useAuth();
 
 	useEffect(() => {
-		try {
-			const removeUselessPlatform = (possiblePlatform?: PossiblePlatform) => {
-				const removeUselessAvailability = (
-					platform: 'just-irl' | 'online',
-					gmId: string,
-					tempData: PossiblePlatform
-				) => {
-					const platformData = possiblePlatform?.[platform];
-					if (platformData && platformData.includes(gmId)) {
-						const playersOfAvailabilityFiltered = platformData.filter((player) => player !== gmId);
-						if (playersOfAvailabilityFiltered.length > 0)
-							tempData[platform] = playersOfAvailabilityFiltered;
-					}
+		if (availabilityStatus === 'data')
+			try {
+				const removeUselessPlatform = (possiblePlatform?: PossiblePlatform) => {
+					const removeUselessAvailability = (
+						platform: 'just-irl' | 'online',
+						gmId: string,
+						tempData: PossiblePlatform
+					) => {
+						const platformData = possiblePlatform?.[platform];
+						if (platformData && platformData.includes(gmId)) {
+							const playersOfAvailabilityFiltered = platformData.filter(
+								(player) => player !== gmId
+							);
+							if (playersOfAvailabilityFiltered.length > 0)
+								tempData[platform] = playersOfAvailabilityFiltered;
+						}
+					};
+					const tempData: PossiblePlatform = {};
+					const gmId = auth?.user.info?.id;
+					if (!gmId) return tempData;
+					removeUselessAvailability('just-irl', gmId, tempData);
+					removeUselessAvailability('online', gmId, tempData);
+					return tempData;
 				};
-				const tempData: PossiblePlatform = {};
-				const gmId = auth?.user.info?.id;
-				if (!gmId) return tempData;
-				removeUselessAvailability('just-irl', gmId, tempData);
-				removeUselessAvailability('online', gmId, tempData);
-				return tempData;
-			};
-			const removeUselessMoment = (possibleDate: PossibleDate) => {
-				const tempData: PossibleDate = { date: possibleDate.date };
-				if (possibleDate.journée?.['just-irl'] || possibleDate.journée?.online)
-					tempData.journée = possibleDate.journée;
-				if (possibleDate.soirée?.['just-irl'] || possibleDate.soirée?.online)
-					tempData.soirée = possibleDate.soirée;
-				return tempData;
-			};
-			const fetchData = async () => {
-				const userRes = await api.get('/users');
-				const charactersRes = await api.get('/characters');
-				const availabilitiesRes = await api.get('/availabilities');
-
-				const possibleDatesTemp: PossibleDate[] = [];
-				availabilitiesRes.data.forEach((availabilityRes: AvailabilitySend) => {
-					if (
-						availabilityRes.platform !== 'none' &&
-						availabilityRes.platform !== 'rest' &&
-						availabilityRes.platform !== 'in-game'
-					) {
-						let index = possibleDatesTemp.findIndex(
-							(possibleDates) => possibleDates.date === availabilityRes.at.date
-						);
-						if (index === -1) {
-							possibleDatesTemp.push({
-								date: availabilityRes.at.date,
-								journée: {
-									online: [],
-									'just-irl': [],
-								},
-								soirée: {
-									online: [],
-									'just-irl': [],
-								},
+				const removeUselessMoment = (possibleDate: PossibleDate) => {
+					const tempData: PossibleDate = { date: possibleDate.date };
+					if (possibleDate.journée?.['just-irl'] || possibleDate.journée?.online)
+						tempData.journée = possibleDate.journée;
+					if (possibleDate.soirée?.['just-irl'] || possibleDate.soirée?.online)
+						tempData.soirée = possibleDate.soirée;
+					return tempData;
+				};
+				const fetchData = async () => {
+					const possibleDatesTemp: PossibleDate[] = [];
+					availabilitiesRes.forEach((availabilityRes: AvailabilitySend) => {
+						if (
+							availabilityRes.platform !== 'none' &&
+							availabilityRes.platform !== 'rest' &&
+							availabilityRes.platform !== 'in-game'
+						) {
+							const availabilityDate = dayjs(Number(availabilityRes.at.date));
+							let index = possibleDatesTemp.findIndex((possibleDateEl) => {
+								const possibleDate = dayjs(Number(possibleDateEl.date));
+								return possibleDate.isSame(availabilityDate, 'day');
 							});
-							index = possibleDatesTemp.length - 1;
+							if (index === -1) {
+								possibleDatesTemp.push({
+									date: availabilityDate,
+									journée: {
+										online: [],
+										'just-irl': [],
+									},
+									soirée: {
+										online: [],
+										'just-irl': [],
+									},
+								});
+								index = possibleDatesTemp.length - 1;
+							}
+							if (availabilityRes.platform === 'irl-or-online') {
+								possibleDatesTemp[index][availabilityRes.at.moment]?.['just-irl']?.push(
+									availabilityRes.user
+								);
+								possibleDatesTemp[index][availabilityRes.at.moment]?.['online']?.push(
+									availabilityRes.user
+								);
+							} else {
+								possibleDatesTemp[index][availabilityRes.at.moment]?.[
+									availabilityRes.platform
+								]?.push(availabilityRes.user);
+							}
 						}
-						if (availabilityRes.platform === 'irl-or-online') {
-							possibleDatesTemp[index][availabilityRes.at.moment]?.['just-irl']?.push(
-								availabilityRes.user
-							);
-							possibleDatesTemp[index][availabilityRes.at.moment]?.['online']?.push(
-								availabilityRes.user
-							);
-						} else {
-							possibleDatesTemp[index][availabilityRes.at.moment]?.[availabilityRes.platform]?.push(
-								availabilityRes.user
-							);
-						}
-					}
-				});
-				setPossibleDates(
-					possibleDatesTemp
-						.map((possibleDate) => {
-							return {
-								date: possibleDate.date,
-								journée: removeUselessPlatform(possibleDate.journée),
-								soirée: removeUselessPlatform(possibleDate.soirée),
-							};
-						})
-						.map((possibleDates) => removeUselessMoment(possibleDates))
-						.filter((possibleDates) => possibleDates['journée'] || possibleDates['soirée'])
-				);
-				setAvailabilitiesStatus('data');
-			};
-			fetchData();
-		} catch (error) {
-			toast.error('Erreur lors de la récupération des données');
-		}
-	}, []);
+					});
+					setPossibleDates(
+						possibleDatesTemp
+							.map((possibleDate) => {
+								return {
+									date: possibleDate.date,
+									journée: removeUselessPlatform(possibleDate.journée),
+									soirée: removeUselessPlatform(possibleDate.soirée),
+								};
+							})
+							.map((possibleDates) => removeUselessMoment(possibleDates))
+							.filter((possibleDates) => possibleDates['journée'] || possibleDates['soirée'])
+					);
+					setAvailabilitiesStatus('data');
+				};
+				fetchData();
+			} catch (error) {
+				toast.error('Erreur lors de la récupération des données');
+			}
+	}, [availabilityStatus]);
 	useEffect(() => {
 		const date = possibleDates[selectedDate];
 		if (date) {

@@ -68,7 +68,7 @@ const CalendarPage = () => {
 						},
 					},
 					{
-						platform: day.day() === 0 || day.day() === 6 ? 'irl-or-online' : 'none',
+						platform: day.day() === 6 ? 'irl-or-online' : 'none',
 						at: {
 							date: day.toDate(),
 							moment: 'soirée',
@@ -96,6 +96,20 @@ const CalendarPage = () => {
 			toast.error('Impossible de mettre à jour vos disponibilités');
 		}
 	};
+
+	const updateAvailabilities = (newAvailability: Availability[]) => {
+		const availabilitiesTemp = [...availabilities];
+		newAvailability.forEach((el) => {
+			const index = availabilitiesTemp.findIndex(
+				(availability) =>
+					dayjs(availability.at.date).isSame(el.at.date, 'day') &&
+					availability.at.moment === el.at.moment
+			);
+			if (index !== -1) availabilitiesTemp[index] = el;
+		});
+		setAvailabilities(availabilitiesTemp);
+	};
+
 	return (
 		<DataCastingContainer status={status} dataElements="disponibilités">
 			<div className="flex flex-col gap-3 min-w-full">
@@ -126,7 +140,7 @@ const CalendarPage = () => {
 						availabilities={availabilities.filter((availability) =>
 							dayjs(availability.at.date).isSame(selectedMonth, 'month')
 						)}
-						updateAvailabilities={setAvailabilities}
+						updateAvailabilities={updateAvailabilities}
 					/>
 				</div>
 				<PrimaryButton text={'Envoyer'} className="self-center" onClick={onSubmit} />
