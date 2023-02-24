@@ -238,13 +238,13 @@ const CreateSession = () => {
 		}
 		try {
 			await api.post('/sessions', {
-				date: `${possibleDates[selectedDate].date}`,
+				date: `${possibleDates[selectedDate].date.toDate().getTime()}`,
 				moment: MOMENT[selectedMoment],
 				platform: PLATFORM[selectedPlatform],
 				characters: selectedPcs.filter((el) => !!el),
 			});
 			toast.success('La partie à été créer avec succès');
-			navigate('/map');
+			navigate('/sessions');
 		} catch (error) {
 			toast.error('Impossible de créer la partie');
 		}
