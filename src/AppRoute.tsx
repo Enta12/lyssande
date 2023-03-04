@@ -18,6 +18,7 @@ const SessionPage = lazy(() => import('pages/Session/SessionPage'));
 const SessionEditPage = lazy(() => import('pages/Session/SessionEditPage'));
 const AddUser = lazy(() => import('pages/Player/AddUser'));
 const Forbidden = lazy(() => import('pages/403'));
+const Invitation = lazy(() => import('pages/Invitation'));
 
 const AppRoute = () => {
 	const auth = useAuth();
@@ -26,6 +27,7 @@ const AppRoute = () => {
 		<Router>
 			<Suspense fallback={<Layout />}>
 				<Routes>
+					<Route path="/invitation" element={<Invitation />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/" element={<Layout />}>
 						<Route path="403" element={<Forbidden />} />

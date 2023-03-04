@@ -30,6 +30,7 @@ module.exports = {
 			},
 			fontFamily: {
 				bubblegum: "'Bubblegum Sans', cursive",
+				Merriweather: "'Merriweather', serif",
 				inter: "'Inter', sans-serif",
 			},
 			gridTemplateColumns: {
