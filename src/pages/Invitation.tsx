@@ -16,14 +16,14 @@ const Invitation = () => {
 			</div>
 			<div className="sm:max-w-[400px] md:max-w-[600px] flex flex-col gap-4 rounded-2xl sm:bg-[#E2E9C8] relative z-10 w-fit p-4 drop-shadow">
 				<p>Merci de remplir le formulaire suivant pour nous informer de votre présence :</p>
-				<ListItem link="" description="J'informe de ma présence" />
+				<ListItem link="https://docs.google.com/forms/d/e/1FAIpQLSfdRQF744mLgalfUu-jzEF3c2wJhcf2lks0uKtzU0sKDOvVYQ/viewform?usp=pp_url" description="J'informe de ma présence" />
 				<p>Afin d’avoir un buffet diversifié, si vous ramenez un plat merci d’indiquer lequel :</p>
 				<ListItem
 					link="https://docs.google.com/spreadsheets/d/15zHLTd4iaq45uJsM4nBa7UFiOyF9HkJpq1hGOKKQDOM/edit?usp=sharing"
 					description="Je ramène..."
 				/>
 				<p>Enfin, si vous souhaitez participer à la cagnotte :</p>
-				<ListItem link="" description="Je participe !" />
+				<ListItem link="https://lydia-app.com/pots?id=22413-fiancailles-baptiste-et-yasmine" description="Je participe !" />
 			</div>
 			<div className="min-h-screen absolute w-full h-full bg-white">
 				<img
