@@ -2,6 +2,7 @@
 
 ## setup project
 
+
 ### first setup 
 - install nginx
 - config nginx into reverse proxy
